@@ -11,28 +11,29 @@ h1, h2, h3, h4, h5, h6 {
 	font-style: normal;
 	font-weight: 400;
 }
-
-.header{
+.header {
 	width: 100%;
 	height: auto;
 	padding-top: 24px;
-	
 }
-.headerContent{
+.headerContent {
 	width: 800px;
 	height: auto;
 	margin: 0 auto;
 }
-.nav{
+/*
+top nav---------------------------------------------------------------------------------------------------------------------------
+*/
+.nav {
 	hight: 100%;
 }
 .nav ul {
 	text-align: center;
 }
-.nav ul li{
+.nav ul li {
 	list-style: none;
 }
-.nav ul li a{
+.nav ul li a {
 	float: left;
 	display: block;
 	padding: 0px 50px 50px;
@@ -40,13 +41,49 @@ h1, h2, h3, h4, h5, h6 {
 	color: ivory;
 	font-weight: 400;
 	font-size: 30px;
-	
 }
-.nav ul li a:hover{
+.nav ul li a:hover {
 	color: blueviolet;
 }
-#imgCenter{
+/*
+image center----------------------------------------------------------------------------------------------------------------------
+*/
+#imgCenter {
 	background-repeat: repeat-x 2;
+}
+/*
+footer----------------------------------------------------------------------------------------------------------------------------
+*/
+.footer {
+	width: 100%;
+	padding-top: 24px;
+}
+.footerContent {
+	width: auto%;
+	height: auto;
+	margin: auto;
+	background: #C12225;
+}
+/*
+top nav---------------------------------------------------------------------------------------------------------------------------
+*/
+.nav2 {
+	
 	
 }
-
+.nav2 ul {
+	
+}
+.nav2 ul li {
+	list-style: none;
+}
+.nav2 ul li a {
+	float: left;
+	display: block;
+	padding: 0px 70px 50px 70px;
+	font-weight: 400;
+	font-size: 30px;
+}
+.nav2 ul li a:hover {
+	color: blueviolet;
+}
