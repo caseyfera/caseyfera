@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* General styles*/
+/*Define your own styles in this stylesheet*/
+body {
+	background-image: url('Website Design/HOMEPAGE/IMAGES/POQ1esB.jpg');
+	width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'volt';
+	color: ivory;
+	font-style: normal;
+	font-weight: 400;
+}
+
+.header{
+	width: 100%;
+	height: auto;
+	padding-top: 24px;
+	
+}
+.headerContent{
+	width: 800px;
+	height: auto;
+	margin: 0 auto;
+}
+.nav{
+	hight: 100%;
+}
+.nav ul {
+	text-align: center;
+}
+.nav ul li{
+	list-style: none;
+}
+.nav ul li a{
+	float: left;
+	display: block;
+	padding: 0px 50px 50px;
+	font-family: 'volt';
+	color: ivory;
+	font-weight: 400;
+	font-size: 30px;
+	
+}
+.nav ul li a:hover{
+	color: blueviolet;
+}
+#imgCenter{
+	background-repeat: repeat-x 2;
+	
+}
+
