@@ -2,8 +2,8 @@
 /* General styles*/
 /*Define your own styles in this stylesheet*/
 body {
-	background-image: url('https://raw.githubusercontent.com/caseyfera/caseyfera/gh-pages/images/POQ1esB.jpg');
-	width: 100%;
+	background-image: url('Website Design/HOMEPAGE/IMAGES/POQ1esB.jpg');
+	width: 1000px;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'volt';
@@ -12,78 +12,52 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: 400;
 }
 .header {
-	width: 100%;
-	height: auto;
-	padding-top: 24px;
+	margin-top: 25px; 
+	margin-left: 305px;
+	padding: 0px 0px 35px 0px;
+	width: 1000px;
+	
 }
 .headerContent {
-	width: 800px;
-	height: auto;
-	margin: 0 auto;
+	; 
 }
-/*
-top nav---------------------------------------------------------------------------------------------------------------------------
-*/
 .nav {
-	hight: 100%;
+	background-color: black;
 }
 .nav ul {
+	background-color: darkorange;
 	text-align: center;
 }
 .nav ul li {
+	float: left;
+	
 	list-style: none;
 }
 .nav ul li a {
 	float: left;
 	display: block;
-	padding: 0px 50px 50px;
 	font-family: 'volt';
 	color: ivory;
 	font-weight: 400;
 	font-size: 30px;
+	padding: 0px 55px 0px 55px;
 }
-.nav ul li a:hover {
+ul li a:hover {
 	color: blueviolet;
 }
-/*
-image center----------------------------------------------------------------------------------------------------------------------
-*/
 #imgCenter {
-	background-repeat: repeat-x 2;
-}
-/*
-footer----------------------------------------------------------------------------------------------------------------------------
-*/
-.footer {
-	width: 100%;
-	padding-top: 24px;
-}
-.footerContent {
-	width: auto%;
-	height: auto;
-	margin: auto;
-	background: #C12225;
-}
-/*
-top nav---------------------------------------------------------------------------------------------------------------------------
-*/
-.nav2 {
-	
-	
-}
-.nav2 ul {
-	
-}
-.nav2 ul li {
-	list-style: none;
-}
-.nav2 ul li a {
-	float: left;
 	display: block;
-	padding: 0px 70px 50px 70px;
-	font-weight: 400;
-	font-size: 30px;
+	margin-left: 400px;
+	background-image: url("https://raw.githubusercontent.com/caseyfera/caseyfera/gh-pages/Liam%20Lynch_files/HomePageSized.jpg"); 
+	background-repeat: repeat-x;
 }
-.nav2 ul li a:hover {
-	color: blueviolet;
+.p {
+	float: left;
+	margin-left: 325px;
+	width: 1000px;
+	margin-top: 25px
+}
+.p2 {
+	float: left;
+	padding: 0px 75px 0px 75px;
 }
