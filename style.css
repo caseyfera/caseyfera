@@ -3,7 +3,7 @@
 /*Define your own styles in this stylesheet*/
 body {
 	
-	background: #00ff00 url("caseyfera/blob/gh-pages/images/POQ1esB.jpg") no-repeat fixed center; 
+	background: #00ff00 url("https://raw.githubusercontent.com/caseyfera/caseyfera/gh-pages/images/POQ1esB.jpg") no-repeat fixed center; 
 	width: 1000px;
 }
 h1, h2, h3, h4, h5, h6 {
