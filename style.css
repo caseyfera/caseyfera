@@ -37,7 +37,8 @@ h1, h2, h3, h4, h5, h6 {
 .nav ul li a {
 	float: left;
 	display: block;
-	font-family: 'volt';
+	font-family: volt;
+	src:url("volt");
 	color: ivory;
 	font-weight: 400;
 	font-size: 30px;
