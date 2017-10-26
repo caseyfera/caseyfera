@@ -111,22 +111,4 @@
       <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
     </image:image>
   </url>
-  <url>
-    <loc>http://caseyfera.com/untitled-8.html</loc>
-    <lastmod>2017-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/youtube.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/twitter-512.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/icons8-windows-8-cinema-imdb-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
-    </image:image>
-  </url>
 </urlset>
