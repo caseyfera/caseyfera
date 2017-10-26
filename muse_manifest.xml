@@ -1,0 +1,83 @@
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509021664103">
+  <folder name="css">
+    <file name="site_global.css" crc="443350757"/>
+    <file name="master_a-master.css" crc="180667849" ref="music:videos:merch:untitled-8:about:science:index"/>
+    <file name="music.css" crc="367646466" ref="music"/>
+    <file name="videos.css" crc="530617088" ref="videos"/>
+    <file name="merch.css" crc="371655018" ref="merch"/>
+    <file name="untitled-8.css" crc="4199979634" ref="untitled-8"/>
+    <file name="about.css" crc="4271349361" ref="about"/>
+    <file name="science.css" crc="4068229302" ref="science"/>
+    <file name="index.css" crc="426920145" ref="index"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="museutils.js" crc="46400467" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="whatinput.js" crc="86476730" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="museconfig.js" crc="436936948" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index"/>
+    <file name="jquery.watch.js" crc="4178585335" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="jquery.musemenu.js" crc="3936200140" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="require.js" crc="85721165" ref="index:about:videos:music:science:merch:untitled-8"/>
+  </folder>
+  <folder name="images">
+    <file name="poq1esb.jpg" crc="49154138" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="cf logo.svg" crc="4052868530" ref="index"/>
+    <file name="cf logo_poster_u691.png" crc="166325216" ref="index"/>
+    <file name="youtube.png" crc="419921834" seo="true" ref="index:about:videos:music:science:merch:untitled-8">
+      <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="videos" alt=""/>
+    </file>
+    <file name="twitter-512.png" crc="3894282329" seo="true" ref="index:about:videos:music:science:merch:untitled-8">
+      <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="videos" alt=""/>
+    </file>
+    <file name="icons8-windows-8-cinema-imdb-1.png" crc="3944585842" seo="true" ref="index:about:videos:music:science:merch:untitled-8">
+      <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="videos" alt=""/>
+    </file>
+    <file name="u498-4.png" crc="481001135" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="u507-4.png" crc="311058532" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="u542-4.png" crc="4124681393" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="u570-4.png" crc="453552622" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="u598-4.png" crc="535262843" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="u626-4.png" crc="3821168289" ref="index:about:videos:music:science:merch:untitled-8"/>
+    <file name="facebook-2.png" crc="132526808" seo="true" ref="index:about:videos:music:science:merch:untitled-8">
+      <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="videos" alt=""/>
+    </file>
+    <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="417194597" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+  </folder>
+  <file name="index.html" crc="3912317181" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="about.html" crc="4178136011" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="videos.html" crc="4196936385" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="music.html" crc="4207888473" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="science.html" crc="4243003714" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="merch.html" crc="4180636585" seo="true" mt="1509021641735" redirect="true"/>
+  <file name="untitled-8.html" crc="463118550" seo="true" mt="1509021641735" redirect="true"/>
+</manifest>
