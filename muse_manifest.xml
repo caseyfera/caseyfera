@@ -1,4 +1,4 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509100975330">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509101802896">
   <folder name="assets">
     <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
   </folder>
@@ -8,7 +8,7 @@
     <file name="music.css" crc="367646466" ref="music"/>
     <file name="videos.css" crc="4052114580" ref="videos"/>
     <file name="merch.css" crc="4100336475" ref="merch"/>
-    <file name="about.css" crc="397512196" ref="about"/>
+    <file name="about.css" crc="3915119166" ref="about"/>
     <file name="science.css" crc="4291571001" ref="science"/>
     <file name="index.css" crc="426920145" ref="index"/>
   </folder>
@@ -17,42 +17,43 @@
     <file name="museutils.js" crc="46400467" ref="index:about:videos:music:science:merch"/>
     <file name="whatinput.js" crc="86476730" ref="index:about:videos:music:science:merch"/>
     <file name="museconfig.js" crc="436936948" ref="index:about:videos:music:science:merch"/>
-    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index:about"/>
     <file name="jquery.watch.js" crc="4178585335" ref="index:about:videos:music:science:merch"/>
     <file name="jquery.musemenu.js" crc="3936200140" ref="index:about:videos:music:science:merch"/>
     <file name="html5shiv.js" crc="4241844378" ref="index:about:videos:music:science:merch"/>
     <file name="require.js" crc="85721165" ref="index:about:videos:music:science:merch"/>
   </folder>
   <folder name="images">
-    <file name="poq1esb.jpg" crc="49154138" ref="index">
+    <file name="poq1esb.jpg" crc="49154138" ref="index:about">
       <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="cf logo.svg" crc="3782996909" ref="index"/>
+    <file name="cf logo.svg" crc="3782996909" ref="index:about"/>
     <file name="youtube.png" crc="419921834" seo="true" ref="index:about:videos:music:science:merch">
-      <caption webpage="index" alt=""/>
       <caption webpage="videos" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
       <caption webpage="science" alt=""/>
     </file>
     <file name="twitter-512.png" crc="3894282329" seo="true" ref="index:about:videos:music:science:merch">
-      <caption webpage="index" alt=""/>
       <caption webpage="videos" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
       <caption webpage="science" alt=""/>
     </file>
     <file name="icons8-windows-8-cinema-imdb-1.png" crc="3944585842" seo="true" ref="index:about:videos:music:science:merch">
-      <caption webpage="index" alt=""/>
       <caption webpage="videos" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
       <caption webpage="science" alt=""/>
     </file>
     <file name="u498-4.png" crc="481001135" ref="index:about:videos:music:science:merch"/>
@@ -62,18 +63,18 @@
     <file name="u598-4.png" crc="535262843" ref="index:about:videos:music:science:merch"/>
     <file name="u626-4.png" crc="3821168289" ref="index:about:videos:music:science:merch"/>
     <file name="facebook-2.png" crc="132526808" seo="true" ref="index:about:videos:music:science:merch">
-      <caption webpage="index" alt=""/>
       <caption webpage="videos" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
       <caption webpage="science" alt=""/>
     </file>
     <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="417194597" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cf logo_poster_u1142.png" crc="3991396388" ref="index"/>
+    <file name="cf logo_poster_u1142.png" crc="3991396388" ref="index:about"/>
     <file name="26025.svg" crc="55519422" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
@@ -90,8 +91,8 @@
     </file>
   </folder>
   <file name="index.html" crc="478009959" seo="true" mt="1509092205032" redirect="true"/>
-  <file name="about.html" crc="221322261" seo="true" mt="1509100406597" redirect="true"/>
-  <file name="videos.html" crc="536574351" seo="true" mt="1509098890937" redirect="true"/>
+  <file name="about.html" crc="3979645980" seo="true" mt="1509101773900" redirect="true"/>
+  <file name="videos.html" crc="218181894" seo="true" mt="1509101352715" redirect="true"/>
   <file name="music.html" crc="4047198634" seo="true" mt="1509092205032" redirect="true"/>
   <file name="science.html" crc="4212327921" seo="true" mt="1509092205032" redirect="true"/>
   <file name="merch.html" crc="429444917" seo="true" mt="1509092205032" redirect="true"/>
