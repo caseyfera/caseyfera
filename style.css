@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* General styles*/
+/*Define your own styles in this stylesheet*/
+body {
+	
+	background: #00ff00 url("https://raw.githubusercontent.com/caseyfera/caseyfera/gh-pages/images/POQ1esB.jpg") no-repeat fixed center; 
+	width: 1000px;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'volt';
+	color: ivory;
+	font-style: normal;
+	font-weight: 400;
+}
+.header {
+	margin-top: 25px; 
+	margin-left: 305px;
+	padding: 0px 0px 35px 0px;
+	width: 1000px;
+	
+}
+.headerContent {
+	; 
+}
+.nav {
+	background-color: black;
+}
+.nav ul {
+	background-color: darkorange;
+	text-align: center;
+}
+.nav ul li {
+	float: left;
+	
+	list-style: none;
+}
+.nav ul li a {
+	float: left;
+	display: block;
+	font-family: volt;
+	src:url("volt");
+	color: ivory;
+	font-weight: 400;
+	font-size: 30px;
+	padding: 0px 55px 0px 55px;
+}
+ul li a:hover {
+	color: blueviolet;
+}
+#imgCenter {
+	display: block;
+	margin-left: 400px;
+	background-image: url("https://raw.githubusercontent.com/caseyfera/caseyfera/gh-pages/Liam%20Lynch_files/HomePageSized.jpg"); 
+	background-repeat: repeat-x;
+}
+.p {
+	float: left;
+	margin-left: 325px;
+	width: 1000px;
+	margin-top: 25px
+}
+.p2 {
+	float: left;
+	padding: 0px 75px 0px 75px;
+}
