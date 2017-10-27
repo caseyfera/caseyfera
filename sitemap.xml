@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com/index.html</loc>
-    <lastmod>2017-10-26</lastmod>
+    <lastmod>2017-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -22,26 +22,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://caseyfera.com/about.html</loc>
-    <lastmod>2017-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/youtube.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/twitter-512.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/icons8-windows-8-cinema-imdb-1.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
-    </image:image>
-  </url>
-  <url>
     <loc>http://caseyfera.com/videos.html</loc>
-    <lastmod>2017-10-26</lastmod>
+    <lastmod>2017-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -58,8 +40,8 @@
     </image:image>
   </url>
   <url>
-    <loc>http://caseyfera.com/music.html</loc>
-    <lastmod>2017-10-26</lastmod>
+    <loc>http://caseyfera.com/about.html</loc>
+    <lastmod>2017-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -73,11 +55,41 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/26025.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/arrow-representing-a-download_318-481.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/rss-5-xxl.png</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com/science.html</loc>
-    <lastmod>2017-10-26</lastmod>
+    <lastmod>2017-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/youtube.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/twitter-512.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/icons8-windows-8-cinema-imdb-1.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/hold_your_horses.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://caseyfera.com/music.html</loc>
+    <lastmod>2017-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -95,7 +107,7 @@
   </url>
   <url>
     <loc>http://caseyfera.com/merch.html</loc>
-    <lastmod>2017-10-26</lastmod>
+    <lastmod>2017-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -110,5 +122,14 @@
     <image:image>
       <image:loc>http://caseyfera.com/images/facebook-2.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com/images/hold_your_horses.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>http://caseyfera.com/assets/casey_final.mp3</loc>
+    <lastmod>2017-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
