@@ -1,4 +1,4 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509184112830">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509184390247">
   <folder name="assets">
     <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
   </folder>
@@ -17,18 +17,18 @@
     <file name="museutils.js" crc="46400467" ref="index:about:videos:music:science:merch"/>
     <file name="whatinput.js" crc="86476730" ref="index:about:videos:music:science:merch"/>
     <file name="museconfig.js" crc="436936948" ref="index:about:videos:music:science:merch"/>
-    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index:about"/>
     <file name="jquery.watch.js" crc="4178585335" ref="index:about:videos:music:science:merch"/>
     <file name="jquery.musemenu.js" crc="3936200140" ref="index:about:videos:music:science:merch"/>
     <file name="html5shiv.js" crc="4241844378" ref="index:about:videos:music:science:merch"/>
     <file name="require.js" crc="85721165" ref="index:about:videos:music:science:merch"/>
   </folder>
   <folder name="images">
-    <file name="poq1esb.jpg" crc="4141420674" ref="index">
+    <file name="poq1esb.jpg" crc="4141420674" ref="index:about">
       <caption webpage="index" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
-    <file name="cf logo.svg" crc="3782996909" ref="index"/>
+    <file name="cf logo.svg" crc="3782996909" ref="index:about"/>
     <file name="youtube.png" crc="419921834" seo="true" ref="index:about:videos:music:science:merch">
       <caption webpage="about" alt=""/>
       <caption webpage="untitled-8" alt=""/>
@@ -74,7 +74,7 @@
     <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="417194597" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cf logo_poster_u1142.png" crc="3991396388" ref="index"/>
+    <file name="cf logo_poster_u1142.png" crc="3991396388" ref="index:about"/>
     <file name="26025.svg" crc="55519422" seo="true" ref="about">
       <caption webpage="about" alt=""/>
     </file>
@@ -91,7 +91,7 @@
     </file>
   </folder>
   <file name="index.html" crc="131332703" seo="true" mt="1509184100319" redirect="true"/>
-  <file name="about.html" crc="396602660" seo="true" mt="1509184100319" redirect="true"/>
+  <file name="about.html" crc="520284176" seo="true" mt="1509184277453" redirect="true"/>
   <file name="videos.html" crc="3888990440" seo="true" mt="1509184100319" redirect="true"/>
   <file name="music.html" crc="22344157" seo="true" mt="1509184100319" redirect="true"/>
   <file name="science.html" crc="4098193169" seo="true" mt="1509184100319" redirect="true"/>
