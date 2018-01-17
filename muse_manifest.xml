@@ -1,99 +1,196 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com" resolutions="1x" timestamp="1509184624463">
-  <folder name="assets">
-    <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
-  </folder>
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516186608705">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="4138118231" ref="music:videos:merch:about:science:index"/>
-    <file name="music.css" crc="208931477" ref="music"/>
-    <file name="videos.css" crc="51773287" ref="videos"/>
-    <file name="merch.css" crc="4289699979" ref="merch"/>
-    <file name="about.css" crc="338916408" ref="about"/>
-    <file name="science.css" crc="4104093794" ref="science"/>
-    <file name="index.css" crc="3972738968" ref="index"/>
+    <file name="master_a-master.css" crc="400667757" ref="science:about:music:index:merch:videos"/>
+    <file name="nomq_preview_master_a-master.css" crc="3804773027" ref="science:about:music:index:merch:videos"/>
+    <file name="science.css" crc="3797782172" ref="science"/>
+    <file name="nomq_science.css" crc="423678624" ref="science"/>
+    <file name="about.css" crc="166411139" ref="about"/>
+    <file name="nomq_about.css" crc="469036531" ref="about"/>
+    <file name="music.css" crc="4174640258" ref="music"/>
+    <file name="nomq_music.css" crc="4106403837" ref="music"/>
+    <file name="index.css" crc="4275701716" ref="index"/>
+    <file name="nomq_index.css" crc="296813501" ref="index"/>
+    <file name="merch.css" crc="4256534882" ref="merch"/>
+    <file name="nomq_merch.css" crc="3853254279" ref="merch"/>
+    <file name="videos.css" crc="323944073" ref="videos"/>
+    <file name="nomq_videos.css" crc="378883692" ref="videos"/>
+  </folder>
+  <folder name="assets">
+    <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:about:videos:music:science:merch"/>
     <file name="museutils.js" crc="46400467" ref="index:about:videos:music:science:merch"/>
     <file name="whatinput.js" crc="86476730" ref="index:about:videos:music:science:merch"/>
     <file name="museconfig.js" crc="436936948" ref="index:about:videos:music:science:merch"/>
-    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index"/>
     <file name="jquery.watch.js" crc="4178585335" ref="index:about:videos:music:science:merch"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index:about"/>
+    <file name="webpro.js" crc="4152390327" ref="index:about:videos:music:science:merch"/>
+    <file name="musewpdisclosure.js" crc="204784597" ref="index:about:videos:music:science:merch"/>
     <file name="jquery.musemenu.js" crc="3936200140" ref="index:about:videos:music:science:merch"/>
+    <file name="jquery.scrolleffects.js" crc="410690402" ref="index"/>
     <file name="html5shiv.js" crc="4241844378" ref="index:about:videos:music:science:merch"/>
+    <file name="jquery.museresponsive.js" crc="52098982" ref="index:about:videos:music:science:merch"/>
     <file name="require.js" crc="85721165" ref="index:about:videos:music:science:merch"/>
   </folder>
   <folder name="images">
-    <file name="poq1esb.jpg" crc="4141420674" ref="index">
+    <file name="cf logo.svg" crc="3775750170" ref="index:about:videos"/>
+    <file name="cf logo_poster_u12788.png" crc="90432454" ref="index:about:videos"/>
+    <file name="youtube.svg" crc="496682058" seo="true" ref="index:about:videos:music:science:merch">
       <caption webpage="index" alt=""/>
-      <caption webpage="about" alt=""/>
-    </file>
-    <file name="cf logo.svg" crc="3782996909" ref="index"/>
-    <file name="youtube.png" crc="419921834" seo="true" ref="index:about:videos:music:science:merch">
-      <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
       <caption webpage="merch" alt=""/>
-      <caption webpage="index" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="science" alt=""/>
-      <caption webpage="videos" alt=""/>
-    </file>
-    <file name="twitter-512.png" crc="3894282329" seo="true" ref="index:about:videos:music:science:merch">
+      <caption webpage="science" alt=""/>
+      <caption webpage="science" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
-      <caption webpage="merch" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="youtube_poster_.png" crc="221893240" ref="index"/>
+    <file name="twiter.svg" crc="335481440" seo="true" ref="index:about:videos:music:science:merch">
       <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="science" alt=""/>
-      <caption webpage="videos" alt=""/>
-    </file>
-    <file name="icons8-windows-8-cinema-imdb-1.png" crc="3944585842" seo="true" ref="index:about:videos:music:science:merch">
+      <caption webpage="science" alt=""/>
+      <caption webpage="science" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
-      <caption webpage="merch" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="twiter_poster_.png" crc="85616377" ref="index"/>
+    <file name="imdb.svg" crc="27721402" seo="true" ref="index:about:videos:music:science:merch">
       <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="science" alt=""/>
-      <caption webpage="videos" alt=""/>
-    </file>
-    <file name="u498-4.png" crc="481001135" ref="index:about:videos:music:science:merch"/>
-    <file name="u507-4.png" crc="311058532" ref="index:about:videos:music:science:merch"/>
-    <file name="u542-4.png" crc="4124681393" ref="index:about:videos:music:science:merch"/>
-    <file name="u570-4.png" crc="453552622" ref="index:about:videos:music:science:merch"/>
-    <file name="u598-4.png" crc="535262843" ref="index:about:videos:music:science:merch"/>
-    <file name="u626-4.png" crc="3821168289" ref="index:about:videos:music:science:merch"/>
-    <file name="facebook-2.png" crc="132526808" seo="true" ref="index:about:videos:music:science:merch">
+      <caption webpage="science" alt=""/>
+      <caption webpage="science" alt=""/>
       <caption webpage="about" alt=""/>
-      <caption webpage="untitled-8" alt=""/>
-      <caption webpage="merch" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="imdb_poster_.png" crc="351163032" ref="index"/>
+    <file name="facebook.svg" crc="87461298" seo="true" ref="index:about:videos:music:science:merch">
       <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="videos" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="science" alt=""/>
-      <caption webpage="videos" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
     </file>
-    <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="417194597" seo="true" ref="index">
+    <file name="facebook_poster_.png" crc="215717486" ref="index"/>
+    <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="3779911783" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="cf logo_poster_u1142.png" crc="3991396388" ref="index"/>
-    <file name="26025.svg" crc="55519422" seo="true" ref="about">
+    <file name="poq1esb.jpg" crc="368883721" ref="index">
+      <caption webpage="index" alt="video"/>
+    </file>
+    <file name="poq1esb-u34258-4-fr.jpg" crc="4263744890" ref="index"/>
+    <file name="play.svg" crc="55519422" seo="true" ref="index:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
-    <file name="26025_poster_.png" crc="72124251" ref="about"/>
-    <file name="arrow-representing-a-download_318-481.jpg" crc="202845844" seo="true" ref="about">
+    <file name="play_poster_.png" crc="72124251" ref="index"/>
+    <file name="arrow-representing-a-download_318-481.jpg" crc="202845844" seo="true" ref="index:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
-    <file name="rss-5-xxl.png" crc="50704696" seo="true" ref="about">
+    <file name="rss-5-xxl.png" crc="50704696" seo="true" ref="index:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
       <caption webpage="about" alt=""/>
     </file>
+    <file name="10583862_10152682622902445_8607667721636510643_n-u19848-fr.jpg" crc="3858830522" ref="index"/>
+    <file name="menu-alt-512.png" crc="486695812" ref="index:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="x.png" crc="486460471" ref="index:about">
+      <caption webpage="index" alt=""/>
+      <caption webpage="about" alt=""/>
+      <caption webpage="about" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index:about:videos:music:science:merch"/>
+    <file name="poq1esb-u34258-4-fr2.jpg" crc="4009153610" ref="index"/>
+    <file name="poq1esb-u34620-4-fr.jpg" crc="4212506392" ref="index"/>
+    <file name="poq1esb-u34629-9-fr.jpg" crc="422709198" ref="index"/>
+    <file name="u11376-4.png" crc="124136903" ref="index:about:videos:music:science:merch"/>
+    <file name="u11383-4.png" crc="4178693126" ref="index:about:videos:music:science:merch"/>
+    <file name="u11390-4.png" crc="301007341" ref="index:about:videos:music:science:merch"/>
+    <file name="u11353-4.png" crc="202274187" ref="index:about:videos:music:science:merch"/>
+    <file name="u11362-4.png" crc="526927665" ref="index:about:videos:music:science:merch"/>
+    <file name="u11367-4.png" crc="51294650" ref="index:about:videos:music:science:merch"/>
     <file name="hold_your_horses.jpg" crc="3895945333" seo="true" ref="science:merch">
       <caption webpage="science" alt=""/>
+      <caption webpage="science" alt=""/>
+      <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
     </file>
+    <file name="hold_your_horses146x146.jpg" crc="88292592" seo="true" ref="science">
+      <caption webpage="science" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="198685038" seo="true" mt="1509184604447" redirect="true"/>
-  <file name="about.html" crc="4087633684" seo="true" mt="1509184604447" redirect="true"/>
-  <file name="videos.html" crc="4275183679" seo="true" mt="1509184604447" redirect="true"/>
-  <file name="music.html" crc="238345654" seo="true" mt="1509184604447" redirect="true"/>
-  <file name="science.html" crc="35968990" seo="true" mt="1509184604447" redirect="true"/>
-  <file name="merch.html" crc="4262423168" seo="true" mt="1509184604447" redirect="true"/>
+  <file name="index.html" crc="377008116" seo="true" mt="1516186483520" redirect="true"/>
+  <file name="about.html" crc="4194886109" seo="true" mt="1516186483520" redirect="true"/>
+  <file name="videos.html" crc="3906246981" seo="true" mt="1516186483520" redirect="true"/>
+  <file name="music.html" crc="244508575" seo="true" mt="1516186483520" redirect="true"/>
+  <file name="science.html" crc="4089162955" seo="true" mt="1516186483520" redirect="true"/>
+  <file name="merch.html" crc="4048973173" seo="true" mt="1516186483520" redirect="true"/>
 </manifest>
