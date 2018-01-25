@@ -32,7 +32,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
     <!--custom head HTML-->
   <script type="text/javascript">
 		var host = "caseyfera.com";
-		if ((host  == window.location.host) && (window.location.porotocol != "https:"))
+		if ((host == window.location.host) && (window.location.porotocol != "https:"))
 		window.loacation.portocol = "https"
 	</script>
   <!--HTML Widget code-->
@@ -426,13 +426,13 @@ Muse.Utils.requestAnimationFrame(function() { $('body').addClass('initialized');
 Muse.Utils.fullPage('#page');/* 100% height page */
 Muse.Utils.initWidget('#accordionu30741', ['#bp_756'], function(elem) { return new WebPro.Widget.Accordion(elem, {canCloseAll:true,defaultIndex:-1}); });/* #accordionu30741 */
 Muse.Utils.initWidget('.MenuBar', ['#bp_756'], function(elem) { return $(elem).museMenu(); });/* unifiedNavBar */
-$('#bp_756').one('muse_this_bp_activate', function(){
-$('#accordionu30741').registerPositionScrollEffect([{"speed":[0,0],"in":[-Infinity,7.3]},{"speed":[0,0],"in":[7.3,Infinity]}], $(this)); /* scroll effect */
-});/* scroll effects for one breakpoint */
 $('#bp_infinity').one('muse_this_bp_activate', function(){
 $('#u19848').registerOpacityScrollEffect([{"opacity":0,"fade":228,"in":[-Infinity,22.5]},{"opacity":100,"in":[22.5,22.5]},{"opacity":0,"fade":728,"in":[22.5,Infinity]}], $(this)); /* scroll effect */
 $('#u63684-bw').registerPositionScrollEffect([{"speed":[null,-1],"in":[-Infinity,152.35]},{"speed":[null,0],"in":[152.35,Infinity]}], $(this)); /* scroll effect */
 $('#u41066').registerPositionScrollEffect([{"speed":[0,-1],"in":[-Infinity,155.65]},{"speed":[0,0],"in":[155.65,Infinity]}], $(this)); /* scroll effect */
+});/* scroll effects for one breakpoint */
+$('#bp_756').one('muse_this_bp_activate', function(){
+$('#accordionu30741').registerPositionScrollEffect([{"speed":[0,0],"in":[-Infinity,7.3]},{"speed":[0,0],"in":[7.3,Infinity]}], $(this)); /* scroll effect */
 });/* scroll effects for one breakpoint */
 $( '.breakpoint' ).registerBreakpoint();/* Register breakpoints */
 Muse.Utils.transformMarkupToFixBrowserProblems();/* body */
