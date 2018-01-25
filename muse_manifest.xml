@@ -1,10 +1,10 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516885444073">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516886094884">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="4148105379" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4243183366" ref="index:merch"/>
-    <file name="index.css" crc="3792266094" ref="index"/>
-    <file name="nomq_index.css" crc="4211673116" ref="index"/>
+    <file name="index.css" crc="291180199" ref="index"/>
+    <file name="nomq_index.css" crc="4100982332" ref="index"/>
     <file name="merch.css" crc="292478173" ref="merch"/>
     <file name="nomq_merch.css" crc="315356407" ref="merch"/>
   </folder>
@@ -182,6 +182,6 @@
     <file name="a-master-favicon.ico" crc="3769894731" ref="index"/>
     <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
   </folder>
-  <file name="index.html" crc="487928805" seo="true" mt="1516885414458" redirect="true"/>
+  <file name="index.html" crc="231419378" seo="true" mt="1516886025821" redirect="true"/>
   <file name="merch.html" crc="30184118" seo="true" mt="1516878725333" redirect="true"/>
 </manifest>
