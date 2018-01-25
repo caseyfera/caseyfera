@@ -1,4 +1,4 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516877220547">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516877451314">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="4148105379" ref="index:merch"/>
@@ -182,6 +182,6 @@
     <file name="a-master-favicon.ico" crc="3769894731" ref="index"/>
     <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
   </folder>
-  <file name="index.html" crc="3805274282" seo="true" mt="1516877203362" redirect="true"/>
+  <file name="index.html" crc="332720617" seo="true" mt="1516877436085" redirect="true"/>
   <file name="merch.html" crc="299798575" seo="true" mt="1516876588380" redirect="true"/>
 </manifest>
