@@ -18,15 +18,6 @@
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/play.svg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/arrow-representing-a-download_318-481.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/rss-5-xxl.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://caseyfera.com2/images/patreon_logo_black.png</image:loc>
     </image:image>
     <image:image>
@@ -34,6 +25,15 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/23517967_10155881517867445_2399840999027819107_n.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/arrow-representing-a-download_318-481.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/play.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/rss-5-xxl.png</image:loc>
     </image:image>
   </url>
   <url>
