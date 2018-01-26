@@ -1,12 +1,12 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516969504000">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516971401327">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="465683250" ref="index:music"/>
+    <file name="master_a-master.css" crc="3940884927" ref="index:music"/>
     <file name="nomq_preview_master_a-master.css" crc="4274241637" ref="index:music"/>
-    <file name="index.css" crc="249896863" ref="index"/>
-    <file name="nomq_index.css" crc="4219796835" ref="index"/>
-    <file name="music.css" crc="471495928" ref="music"/>
-    <file name="nomq_music.css" crc="134985384" ref="music"/>
+    <file name="index.css" crc="418842707" ref="index"/>
+    <file name="nomq_index.css" crc="252331784" ref="index"/>
+    <file name="music.css" crc="4069590660" ref="music"/>
+    <file name="nomq_music.css" crc="531160241" ref="music"/>
   </folder>
   <folder name="assets">
     <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
@@ -113,6 +113,6 @@
     <file name="u11362-4.png" crc="526927665" ref="index:music"/>
     <file name="u90365-4.png" crc="51294650" ref="index:music"/>
   </folder>
-  <file name="index.html" crc="3988890064" seo="true" mt="1516969480248" redirect="true"/>
-  <file name="music.html" crc="3902819617" seo="true" mt="1516969480248" redirect="true"/>
+  <file name="index.html" crc="114815606" seo="true" mt="1516971002775" redirect="true"/>
+  <file name="music.html" crc="4109110237" seo="true" mt="1516971002775" redirect="true"/>
 </manifest>
