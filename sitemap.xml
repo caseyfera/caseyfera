@@ -2,9 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com2/index.html</loc>
-    <lastmod>2018-01-25</lastmod>
+    <lastmod>2018-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/patreon_logo_black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/kig8_2dq.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/youtube.svg</image:loc>
     </image:image>
@@ -16,12 +22,6 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/patreon_logo_black.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/kig8_2dq.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/23517967_10155881517867445_2399840999027819107_n.jpg</image:loc>
@@ -37,10 +37,16 @@
     </image:image>
   </url>
   <url>
-    <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-01-25</lastmod>
+    <loc>http://caseyfera.com2/music.html</loc>
+    <lastmod>2018-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/patreon_logo_black.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/kig8_2dq.png</image:loc>
+    </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/youtube.svg</image:loc>
     </image:image>
@@ -52,12 +58,6 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/patreon_logo_black.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/kig8_2dq.png</image:loc>
     </image:image>
   </url>
   <url>
