@@ -1,150 +1,303 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1516977782188">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517264703214">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="3895062908" ref="index:merch"/>
-    <file name="nomq_preview_master_a-master.css" crc="4243183366" ref="index:merch"/>
-    <file name="index.css" crc="418842707" ref="index"/>
-    <file name="nomq_index.css" crc="252331784" ref="index"/>
-    <file name="merch.css" crc="3875620201" ref="merch"/>
-    <file name="nomq_merch.css" crc="3905985087" ref="merch"/>
-  </folder>
-  <folder name="assets">
-    <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
+    <file name="master_a-master.css" crc="469776479" ref="index"/>
+    <file name="nomq_preview_master_a-master.css" crc="28798657" ref="index"/>
+    <file name="index.css" crc="275736543" ref="index"/>
+    <file name="nomq_index.css" crc="4246700440" ref="index"/>
   </folder>
   <folder name="scripts">
-    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:merch"/>
-    <file name="museutils.js" crc="46400467" ref="index:merch"/>
-    <file name="whatinput.js" crc="86476730" ref="index:merch"/>
-    <file name="museconfig.js" crc="436936948" ref="index:merch"/>
-    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index:merch"/>
-    <file name="jquery.watch.js" crc="4178585335" ref="index:merch"/>
-    <file name="webpro.js" crc="4152390327" ref="index:merch"/>
-    <file name="musewpdisclosure.js" crc="204784597" ref="index:merch"/>
-    <file name="jquery.musemenu.js" crc="3936200140" ref="index:merch"/>
-    <file name="jquery.scrolleffects.js" crc="410690402" ref="index:merch"/>
-    <file name="html5shiv.js" crc="4241844378" ref="index:merch"/>
-    <file name="jquery.museresponsive.js" crc="52098982" ref="index:merch"/>
-    <file name="require.js" crc="85721165" ref="index:merch"/>
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index"/>
+    <file name="museutils.js" crc="46400467" ref="index"/>
+    <file name="whatinput.js" crc="86476730" ref="index"/>
+    <file name="museconfig.js" crc="436936948" ref="index"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index"/>
+    <file name="jquery.musemenu.js" crc="3936200140" ref="index"/>
+    <file name="jquery.watch.js" crc="4178585335" ref="index"/>
+    <file name="webpro.js" crc="4152390327" ref="index"/>
+    <file name="musewpslideshow.js" crc="380562115" ref="index"/>
+    <file name="jquery.museoverlay.js" crc="3986278607" ref="index"/>
+    <file name="touchswipe.js" crc="4228958816" ref="index"/>
+    <file name="musewpdisclosure.js" crc="204784597" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="410690402" ref="index"/>
+    <file name="html5shiv.js" crc="4241844378" ref="index"/>
+    <file name="jquery.museresponsive.js" crc="52098982" ref="index"/>
+    <file name="require.js" crc="85721165" ref="index"/>
   </folder>
   <folder name="images">
-    <file name="a-master-favicon.ico" crc="3769894731" ref="index:merch"/>
-    <file name="poq1esb.jpg" crc="368883721" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="3779911783" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="cf logo.svg" crc="3775750170" ref="index:merch"/>
-    <file name="cf logo_poster_u12788.png" crc="90432454" ref="index:merch"/>
-    <file name="patreon_logo_black.png" crc="4237327699" seo="true" ref="index:merch">
+    <file name="favicon.ico" crc="506749041" ref="index"/>
+    <file name="favacon.png" crc="4065389311" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="kig8_2dq.png" crc="130175654" seo="true" ref="index:merch">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="youtube.svg" crc="496682058" seo="true" ref="index:merch">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="youtube_poster_.png" crc="221893240" ref="index:merch"/>
-    <file name="twiter.svg" crc="335481440" seo="true" ref="index:merch">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="twiter_poster_.png" crc="85616377" ref="index:merch"/>
-    <file name="imdb.svg" crc="27721402" seo="true" ref="index:merch">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="imdb_poster_.png" crc="351163032" ref="index:merch"/>
-    <file name="facebook.svg" crc="87461298" seo="true" ref="index:merch">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="facebook_poster_.png" crc="215717486" ref="index:merch"/>
-    <file name="23517967_10155881517867445_2399840999027819107_n.jpg" crc="256737133" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="poq1esb-u34620-4-fr.jpg" crc="4263744890" ref="index"/>
-    <file name="arrow-representing-a-download_318-481.jpg" crc="202845844" seo="true" ref="index">
+    <file name="u206626-4.png" crc="4276608921" ref="index"/>
+    <file name="u102248-4.png" crc="3848034610" ref="index"/>
+    <file name="u102330-4.png" crc="3895509085" ref="index"/>
+    <file name="u102401-4.png" crc="442564687" ref="index"/>
+    <file name="u102464-4.png" crc="420312472" ref="index"/>
+    <file name="u102525-4.png" crc="4055506561" ref="index"/>
+    <file name="amanda mar cd cover.jpg" crc="3961381584" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="u206708-4.png" crc="4276608921" ref="index"/>
+    <file name="u102936-4.png" crc="3848034610" ref="index"/>
+    <file name="u102956-4.png" crc="3895509085" ref="index"/>
+    <file name="u102942-4.png" crc="442564687" ref="index"/>
+    <file name="u102951-4.png" crc="420312472" ref="index"/>
+    <file name="u102971-4.png" crc="4055506561" ref="index"/>
+    <file name="amazon logo.svg" crc="4093947440" ref="index"/>
+    <file name="amazon logo_poster_u200834.png" crc="281659083" ref="index"/>
+    <file name="amazon logo ro.svg" crc="520997949" ref="index"/>
+    <file name="amazon logo ro_poster_u200826.png" crc="3771867211" ref="index"/>
+    <file name="itunes logo.svg" crc="483953051" ref="index"/>
+    <file name="itunes logo_poster_u200818.png" crc="4065879276" ref="index"/>
+    <file name="itunes logo ro.svg" crc="390319480" ref="index"/>
+    <file name="itunes logo ro_poster_u200802.png" crc="4222831441" ref="index"/>
+    <file name="spotify logo.svg" crc="2621638" ref="index"/>
+    <file name="spotify logo_poster_u200810.png" crc="4002247502" ref="index"/>
+    <file name="spotify logo ro.svg" crc="159144444" ref="index"/>
+    <file name="spotify logo ro_poster_u200794.png" crc="4241333577" ref="index"/>
+    <file name="cdbaby logo.svg" crc="3891701262" ref="index"/>
+    <file name="cdbaby logo_poster_u200778.png" crc="491963842" ref="index"/>
+    <file name="cdbaby logo ro.svg" crc="157314949" ref="index"/>
+    <file name="cdbaby logo ro_poster_u201194.png" crc="281659083" ref="index"/>
+    <file name="stil 2-crop-u192141.jpg" crc="351060324" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="blank.gif" crc="4208392903" ref="index"/>
+    <file name="amanda mar01_10_15_24still024-crop-u192340.png" crc="4109606477" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar00_26_18_15still070-crop-u192449.png" crc="4163942907" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_23_02still002-crop-u192515.png" crc="318510083" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_08_50_26still017-crop-u192574.png" crc="208655614" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_11_33_11still037-crop-u192633.png" crc="3852111550" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_12_26_27still043-crop-u192692.png" crc="4192858432" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="still-crop-u192751.jpg" crc="3867977218" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8219-crop-u192824.jpg" crc="4168439114" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8661.jpg" crc="8401630" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7864.jpg" crc="362123607" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7943.jpg" crc="3862002339" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8020.jpg" crc="519271580" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="loading.gif" crc="3815509949" ref="index"/>
+    <file name="amanda mar01_07_14_05still001.png" crc="10526408" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="play.svg" crc="55519422" seo="true" ref="index">
+    <file name="u101888-11.png" crc="98340127" ref="index"/>
+    <file name="u101903-11.png" crc="482819628" ref="index"/>
+    <file name="youtube.svg" crc="496682058" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="play_poster_.png" crc="72124251" ref="index"/>
-    <file name="rss-5-xxl.png" crc="50704696" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="menu-alt-512.png" crc="486695812" ref="index:merch">
+    <file name="youtube_poster_.png" crc="221893240" ref="index"/>
+    <file name="twiter.svg" crc="335481440" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
-    </file>
-    <file name="x.png" crc="486460471" ref="index:merch">
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
-    <file name="blank.gif" crc="4208392903" ref="index:merch"/>
-    <file name="poq1esb-u75767-3-fr.jpg" crc="4009153610" ref="index"/>
-    <file name="10583862_10152682622902445_8607667721636510643_n-u19848-fr.jpg" crc="3858830522" ref="index"/>
-    <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
-    <file name="u11376-4.png" crc="124136903" ref="index:merch"/>
-    <file name="u11383-4.png" crc="4178693126" ref="index:merch"/>
-    <file name="u90462-4.png" crc="202274187" ref="index:merch"/>
-    <file name="u11390-4.png" crc="301007341" ref="index:merch"/>
-    <file name="u11362-4.png" crc="526927665" ref="index:merch"/>
-    <file name="u90365-4.png" crc="51294650" ref="index:merch"/>
-    <file name="33651.png" crc="480513582" seo="true" ref="merch">
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
+    <file name="twiter_poster_.png" crc="85616377" ref="index"/>
+    <file name="instagram.svg" crc="230868779" ref="index"/>
+    <file name="instagram_poster_u99194.png" crc="443821583" ref="index"/>
+    <file name="imdb.svg" crc="27721402" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
-    <file name="2017_wc_lvms_dvd_cover.jpg" crc="3770008070" ref="merch">
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
+    <file name="imdb_poster_.png" crc="301090067" ref="index"/>
+    <file name="facebook.svg" crc="87461298" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
-    <file name="u90966-9.png" crc="55166628" ref="merch"/>
-    <file name="2017_wc_lvms_dvd_cover.png" crc="148353498" seo="true" ref="merch">
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
+    <file name="facebook_poster_.png" crc="215717486" ref="index"/>
+    <file name="liquify.jpg" crc="57626768" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
     </file>
-    <file name="u91498-9.png" crc="55166628" ref="merch"/>
-    <file name="u90966-92.png" crc="55166628" ref="merch"/>
-    <file name="u91498-92.png" crc="55166628" ref="merch"/>
+    <file name="amanda mar cd cover-u20083-fr.jpg" crc="463392082" ref="index"/>
+    <file name="menu-alt-512.png" crc="486695812" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="x.png" crc="486460471" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="stil 2-crop-u1921412.jpg" crc="4157911794" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_10_15_24still024-crop-u1923402.png" crc="1902547" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar00_26_18_15still070-crop-u1924492.png" crc="339531735" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_23_02still002-crop-u1925152.png" crc="140331929" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_08_50_26still017-crop-u1925742.png" crc="4289013663" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_11_33_11still037-crop-u1926332.png" crc="4219163929" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_12_26_27still043-crop-u1926922.png" crc="4075176627" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="still-crop-u1927512.jpg" crc="380356605" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8219-crop-u1928242.jpg" crc="123490222" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8661-crop-u192891.jpg" crc="228590202" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7864316x275.jpg" crc="77260669" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7943-crop-u193038.jpg" crc="3808596760" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8020316x275.jpg" crc="95381682" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="u101888-112.png" crc="3952122303" ref="index"/>
+    <file name="u101903-112.png" crc="175849749" ref="index"/>
+    <file name="amanda mar cd cover-u20083-fr2.jpg" crc="4282351900" ref="index"/>
+    <file name="stil 2-crop-u1921413.jpg" crc="413327114" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_10_15_24still024-crop-u1923403.png" crc="51444818" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar00_26_18_15still070-crop-u1924493.png" crc="4020242265" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_23_02still002-crop-u1925153.png" crc="3811920599" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_08_50_26still017-crop-u1925743.png" crc="317095593" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_11_33_11still037-crop-u1926333.png" crc="3963583905" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_12_26_27still043-crop-u1926923.png" crc="57713308" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="still-crop-u1927513.jpg" crc="198993164" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8219291x315.jpg" crc="272226065" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8661-crop-u1928912.jpg" crc="134203801" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7864301x261.jpg" crc="4208590436" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7943-crop-u1930382.jpg" crc="60791462" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8020301x261.jpg" crc="322155733" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_14_05still001-u155602-fr.png" crc="3855730265" ref="index"/>
+    <file name="u101888-113.png" crc="4124363667" ref="index"/>
+    <file name="u101903-113.png" crc="4070411184" ref="index"/>
+    <file name="amanda mar cd cover-u20083-fr3.jpg" crc="176146851" ref="index"/>
+    <file name="stil 2328x184.jpg" crc="241235123" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_10_15_24still024328x184.png" crc="503916771" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar00_26_18_15still070328x184.png" crc="4016119671" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_23_02still002328x184.png" crc="4129856145" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_08_50_26still017328x184.png" crc="241231042" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_11_33_11still037328x184.png" crc="3841399817" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_12_26_27still043328x184.png" crc="277892977" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="still328x184.jpg" crc="355367946" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8219-crop-u1928243.jpg" crc="4036206972" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8661275x184.jpg" crc="280961904" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7864264x230.jpg" crc="60533596" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_7943276x184.jpg" crc="308307075" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="img_8020264x229.jpg" crc="33042538" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="amanda mar01_07_14_05still001-u155602-fr2.png" crc="345446258" ref="index"/>
+    <file name="u101888-114.png" crc="226037640" ref="index"/>
+    <file name="u101903-114.png" crc="3779461581" ref="index"/>
   </folder>
-  <file name="index.html" crc="114815606" seo="true" mt="1516971002775" redirect="true"/>
-  <file name="merch.html" crc="102167004" seo="true" mt="1516977514308" redirect="true"/>
+  <file name="index.html" crc="253160014" seo="true" mt="1517264656943" redirect="true"/>
 </manifest>
