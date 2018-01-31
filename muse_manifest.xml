@@ -1,10 +1,10 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517361811922">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517362038118">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="4098911913" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4243183366" ref="index:merch"/>
-    <file name="index.css" crc="4159396275" ref="index"/>
-    <file name="nomq_index.css" crc="4024463430" ref="index"/>
+    <file name="index.css" crc="116576627" ref="index"/>
+    <file name="nomq_index.css" crc="3901352298" ref="index"/>
     <file name="merch.css" crc="3835624868" ref="merch"/>
     <file name="nomq_merch.css" crc="4172878943" ref="merch"/>
   </folder>
@@ -153,6 +153,6 @@
     </file>
     <file name="u95653-82.png" crc="233208542" ref="merch"/>
   </folder>
-  <file name="index.html" crc="3784263865" seo="true" mt="1517356493841" redirect="true"/>
-  <file name="merch.html" crc="4225341421" seo="true" mt="1517361772780" redirect="true"/>
+  <file name="index.html" crc="439567149" seo="true" mt="1517362017282" redirect="true"/>
+  <file name="merch.html" crc="4225341421" seo="true" mt="1517362017555" redirect="true"/>
 </manifest>
