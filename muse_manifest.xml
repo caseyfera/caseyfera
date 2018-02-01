@@ -1,12 +1,12 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517362427466">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517469727827">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="4098911913" ref="index:merch"/>
+    <file name="master_a-master.css" crc="3895062908" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4243183366" ref="index:merch"/>
     <file name="index.css" crc="116576627" ref="index"/>
     <file name="nomq_index.css" crc="3901352298" ref="index"/>
-    <file name="merch.css" crc="225841568" ref="merch"/>
-    <file name="nomq_merch.css" crc="11726163" ref="merch"/>
+    <file name="merch.css" crc="419490272" ref="merch"/>
+    <file name="nomq_merch.css" crc="4093792399" ref="merch"/>
   </folder>
   <folder name="assets">
     <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
@@ -39,53 +39,53 @@
     <file name="patreon_logo_black.png" crc="4237327699" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="kig8_2dq.png" crc="130175654" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="youtube.svg" crc="496682058" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="youtube_poster_.png" crc="221893240" ref="index:merch"/>
     <file name="twiter.svg" crc="335481440" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="twiter_poster_.png" crc="85616377" ref="index:merch"/>
     <file name="imdb.svg" crc="27721402" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="imdb_poster_.png" crc="351163032" ref="index:merch"/>
     <file name="facebook.svg" crc="87461298" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="merch" alt=""/>
-      <caption webpage="merch" alt=""/>
       <caption webpage="music" alt=""/>
       <caption webpage="music" alt=""/>
+      <caption webpage="merch" alt=""/>
+      <caption webpage="merch" alt=""/>
     </file>
     <file name="facebook_poster_.png" crc="215717486" ref="index:merch"/>
     <file name="23517967_10155881517867445_2399840999027819107_n.jpg" crc="256737133" seo="true" ref="index">
@@ -138,13 +138,11 @@
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
     </file>
-    <file name="u90966-9.png" crc="55166628" ref="merch"/>
     <file name="2017_wc_lvms_dvd_cover.png" crc="148353498" seo="true" ref="merch">
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
     </file>
     <file name="u91498-9.png" crc="55166628" ref="merch"/>
-    <file name="u90966-92.png" crc="55166628" ref="merch"/>
     <file name="u91498-92.png" crc="55166628" ref="merch"/>
     <file name="u95653-8.png" crc="233208542" ref="merch"/>
     <file name="continuum cover art.jpg" crc="482899952" seo="true" ref="merch">
@@ -152,7 +150,13 @@
       <caption webpage="merch" alt=""/>
     </file>
     <file name="u95653-82.png" crc="233208542" ref="merch"/>
+    <file name="u97531-4.png" crc="3795512448" ref="merch"/>
+    <file name="u97564-4.png" crc="282472417" ref="merch"/>
+    <file name="u90966-8.png" crc="360937597" ref="merch"/>
+    <file name="u97531-42.png" crc="3795512448" ref="merch"/>
+    <file name="u97564-42.png" crc="282472417" ref="merch"/>
+    <file name="u90966-82.png" crc="360937597" ref="merch"/>
   </folder>
   <file name="index.html" crc="439567149" seo="true" mt="1517362017282" redirect="true"/>
-  <file name="merch.html" crc="38918244" seo="true" mt="1517362414368" redirect="true"/>
+  <file name="merch.html" crc="498579915" seo="true" mt="1517468994207" redirect="true"/>
 </manifest>
