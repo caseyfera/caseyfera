@@ -1,10 +1,10 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1517469727827">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1519778647423">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="3895062908" ref="index:merch"/>
+    <file name="master_a-master.css" crc="4180541803" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4243183366" ref="index:merch"/>
-    <file name="index.css" crc="116576627" ref="index"/>
-    <file name="nomq_index.css" crc="3901352298" ref="index"/>
+    <file name="index.css" crc="3804929719" ref="index"/>
+    <file name="nomq_index.css" crc="26079929" ref="index"/>
     <file name="merch.css" crc="419490272" ref="merch"/>
     <file name="nomq_merch.css" crc="4093792399" ref="merch"/>
   </folder>
@@ -30,9 +30,6 @@
     <file name="a-master-favicon.ico" crc="3769894731" ref="index:merch"/>
     <file name="poq1esb.jpg" crc="368883721" ref="index">
       <caption webpage="index" alt="video"/>
-    </file>
-    <file name="10583862_10152682622902445_8607667721636510643_n.jpg" crc="3779911783" ref="index">
-      <caption webpage="index" alt=""/>
     </file>
     <file name="cf logo.svg" crc="3775750170" ref="index:merch"/>
     <file name="cf logo_poster_u12788.png" crc="90432454" ref="index:merch"/>
@@ -120,7 +117,6 @@
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:merch"/>
     <file name="poq1esb-u75767-3-fr.jpg" crc="4009153610" ref="index"/>
-    <file name="10583862_10152682622902445_8607667721636510643_n-u19848-fr.jpg" crc="3858830522" ref="index"/>
     <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
     <file name="u11376-4.png" crc="124136903" ref="index:merch"/>
     <file name="u11383-4.png" crc="4178693126" ref="index:merch"/>
@@ -156,7 +152,13 @@
     <file name="u97531-42.png" crc="3795512448" ref="merch"/>
     <file name="u97564-42.png" crc="282472417" ref="merch"/>
     <file name="u90966-82.png" crc="360937597" ref="merch"/>
+    <file name="u99900-8.png" crc="291922798" ref="index"/>
+    <file name="35 challenge ture the debate we are trying to have.png" crc="4037170727" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="35 challenge ture the debate we are trying to have-u19848-fr.png" crc="4031653675" ref="index"/>
+    <file name="u99900-82.png" crc="291922798" ref="index"/>
   </folder>
-  <file name="index.html" crc="439567149" seo="true" mt="1517362017282" redirect="true"/>
+  <file name="index.html" crc="66965881" seo="true" mt="1519778414727" redirect="true"/>
   <file name="merch.html" crc="498579915" seo="true" mt="1517468994207" redirect="true"/>
 </manifest>
