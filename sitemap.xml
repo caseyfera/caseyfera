@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com2/index.html</loc>
-    <lastmod>2018-02-27</lastmod>
+    <lastmod>2018-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -35,10 +35,13 @@
     <image:image>
       <image:loc>http://caseyfera.com2/images/rss-5-xxl.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/logo.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-01-31</lastmod>
+    <lastmod>2018-03-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -70,8 +73,20 @@
     </image:image>
   </url>
   <url>
+    <loc>http://caseyfera.com2/assets/the-local-music-hour-line-up.xlsx</loc>
+    <lastmod>2018-03-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>http://caseyfera.com2/assets/casey_final.mp3</loc>
     <lastmod>2017-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://caseyfera.com2/assets/the-local-music-hour-line-up---sheet3(1).pdf</loc>
+    <lastmod>2018-03-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
