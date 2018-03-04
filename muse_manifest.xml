@@ -1,4 +1,4 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1520122626925">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1520152506787">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="4115505257" ref="index:merch"/>
@@ -175,6 +175,6 @@
       <caption webpage="index" alt=""/>
     </file>
   </folder>
-  <file name="index.html" crc="63865622" seo="true" mt="1520122600371" redirect="true"/>
+  <file name="index.html" crc="3979979537" seo="true" mt="1520125624276" redirect="true"/>
   <file name="merch.html" crc="515158674" seo="true" mt="1520122520469" redirect="true"/>
 </manifest>
