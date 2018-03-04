@@ -1,10 +1,10 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1520067596985">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1520122626925">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="4115505257" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4218817817" ref="index:merch"/>
-    <file name="index.css" crc="57462348" ref="index"/>
-    <file name="nomq_index.css" crc="4289016706" ref="index"/>
+    <file name="index.css" crc="4074787319" ref="index"/>
+    <file name="nomq_index.css" crc="57814969" ref="index"/>
     <file name="merch.css" crc="347994387" ref="merch"/>
     <file name="nomq_merch.css" crc="4123802682" ref="merch"/>
   </folder>
@@ -153,18 +153,28 @@
     <file name="u97531-42.png" crc="3795512448" ref="merch"/>
     <file name="u97564-42.png" crc="282472417" ref="merch"/>
     <file name="u90966-82.png" crc="360937597" ref="merch"/>
-    <file name="35 challenge ture the debate we are trying to have.png" crc="4037170727" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="35 challenge ture the debate we are trying to have-u19848-fr.png" crc="4031653675" ref="index"/>
     <file name="logo.jpg" crc="89933572" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
     <file name="poq1esb-u104702-4-fr.jpg" crc="4263744890" ref="index"/>
+    <file name="lmh logo kpeg-01.png" crc="3826666485" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="web poster-01-01.png" crc="507965053" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="web poster-01-01261x202.png" crc="242688147" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
   </folder>
-  <file name="index.html" crc="176964250" seo="true" mt="1520067586154" redirect="true"/>
-  <file name="merch.html" crc="515158674" seo="true" mt="1520062733657" redirect="true"/>
+  <file name="index.html" crc="63865622" seo="true" mt="1520122600371" redirect="true"/>
+  <file name="merch.html" crc="515158674" seo="true" mt="1520122520469" redirect="true"/>
 </manifest>

@@ -38,10 +38,19 @@
     <image:image>
       <image:loc>http://caseyfera.com2/images/logo.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo%20kpeg-01.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/web%20poster-01-01.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/web%20poster-01-01261x202.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-03-02</lastmod>
+    <lastmod>2018-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
