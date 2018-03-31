@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com2/index.html</loc>
-    <lastmod>2018-03-03</lastmod>
+    <lastmod>2018-03-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -42,10 +42,13 @@
       <image:loc>http://caseyfera.com2/images/lmh%20logo%20kpeg-01.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/web%20poster-01-01.png</image:loc>
+      <image:loc>http://caseyfera.com2/images/homepagesized.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/web%20poster-01-01261x202.png</image:loc>
+      <image:loc>http://caseyfera.com2/images/localmusichour.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02.png</image:loc>
     </image:image>
   </url>
   <url>
