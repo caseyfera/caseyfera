@@ -48,12 +48,21 @@
       <image:loc>http://caseyfera.com2/images/localmusichour.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/lmh%20logo-02.png</image:loc>
+      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02480x301.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2-crop-u110340.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02576x360.png</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-03-03</lastmod>
+    <lastmod>2018-03-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -85,20 +94,14 @@
     </image:image>
   </url>
   <url>
-    <loc>http://caseyfera.com2/assets/the-local-music-hour-line-up.xlsx</loc>
-    <lastmod>2018-03-02</lastmod>
+    <loc>http://caseyfera.com2/assets/what-the-world-needs-right-now.jpg</loc>
+    <lastmod>2018-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://caseyfera.com2/assets/casey_final.mp3</loc>
     <lastmod>2017-10-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://caseyfera.com2/assets/the-local-music-hour-line-up---sheet3(1).pdf</loc>
-    <lastmod>2018-03-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

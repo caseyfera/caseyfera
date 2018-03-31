@@ -1,17 +1,16 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1522480915487">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1522534851891">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="4279879054" ref="index:merch"/>
+    <file name="master_a-master.css" crc="270315937" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="4218817817" ref="index:merch"/>
-    <file name="index.css" crc="172063030" ref="index"/>
-    <file name="nomq_index.css" crc="230500615" ref="index"/>
-    <file name="merch.css" crc="347994387" ref="merch"/>
+    <file name="index.css" crc="4154708207" ref="index"/>
+    <file name="nomq_index.css" crc="42570956" ref="index"/>
+    <file name="merch.css" crc="67740821" ref="merch"/>
     <file name="nomq_merch.css" crc="4123802682" ref="merch"/>
   </folder>
   <folder name="assets">
     <file name="casey_final.mp3" crc="90667670" seo="true" mt="1509088768000"/>
-    <file name="the-local-music-hour-line-up.xlsx" crc="4193000019" seo="true" mt="1520063406000"/>
-    <file name="the-local-music-hour-line-up---sheet3(1).pdf" crc="4114721990" seo="true" mt="1520063507000"/>
+    <file name="what-the-world-needs-right-now.jpg" crc="4096319492" seo="true" mt="1517041711000"/>
   </folder>
   <folder name="scripts">
     <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:merch"/>
@@ -120,7 +119,6 @@
       <caption webpage="merch" alt=""/>
     </file>
     <file name="blank.gif" crc="4208392903" ref="index:merch"/>
-    <file name="poq1esb-u75767-3-fr.jpg" crc="4009153610" ref="index"/>
     <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
     <file name="u11376-4.png" crc="124136903" ref="index:merch"/>
     <file name="u11383-4.png" crc="4178693126" ref="index:merch"/>
@@ -179,12 +177,25 @@
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
-    <file name="lmh logo-02.png" crc="397160760" seo="true" ref="index">
+    <file name="lmh logo-02.png" crc="527993184" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
     </file>
     <file name="loading.gif" crc="3815509949" ref="index"/>
+    <file name="caseyfera logo2.jpg" crc="4073055580" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="lmh logo-02480x301.png" crc="64465938" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="caseyfera logo2-crop-u110340.jpg" crc="289847590" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="lmh logo-02576x360.png" crc="4038810779" seo="true" ref="index">
+      <caption webpage="index" alt=""/>
+    </file>
+    <file name="poq1esb-u104702-4-fr2.jpg" crc="4009153610" ref="index"/>
   </folder>
-  <file name="index.html" crc="4232312016" seo="true" mt="1522480900837" redirect="true"/>
-  <file name="merch.html" crc="515158674" seo="true" mt="1520122520469" redirect="true"/>
+  <file name="index.html" crc="3876145124" seo="true" mt="1522534463279" redirect="true"/>
+  <file name="merch.html" crc="4254023422" seo="true" mt="1522534087714" redirect="true"/>
 </manifest>
