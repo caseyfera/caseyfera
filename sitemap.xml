@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com2/index.html</loc>
-    <lastmod>2018-03-31</lastmod>
+    <lastmod>2018-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -21,9 +21,6 @@
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/23517967_10155881517867445_2399840999027819107_n.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://caseyfera.com2/images/arrow-representing-a-download_318-481.jpg</image:loc>
     </image:image>
     <image:image>
@@ -36,13 +33,13 @@
       <image:loc>http://caseyfera.com2/images/logo.jpg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/lmh%20logo%20kpeg-01.png</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://caseyfera.com2/images/homepagesized.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/localmusichour.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/caseyfera%20logo2.jpg</image:loc>
@@ -54,15 +51,15 @@
       <image:loc>http://caseyfera.com2/images/pond5.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/lmh%20logo-02247x154.png</image:loc>
+      <image:loc>http://caseyfera.com2/images/cf%20logo%20with%20face-01.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/lmh%20logo-02355x222.png</image:loc>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02576x360.png</image:loc>
     </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-03-31</lastmod>
+    <lastmod>2018-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -91,6 +88,9 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/pond5.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/cf%20logo%20with%20face-01.png</image:loc>
     </image:image>
   </url>
   <url>
