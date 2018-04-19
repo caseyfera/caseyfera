@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://caseyfera.com2/index.html</loc>
-    <lastmod>2018-04-10</lastmod>
+    <lastmod>2018-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
@@ -56,10 +56,19 @@
     <image:image>
       <image:loc>http://caseyfera.com2/images/lmh%20logo-02576x360.png</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/index%20-%20copy.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lhm%20video%20img-01.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/upload-to-cloud.png</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>http://caseyfera.com2/merch.html</loc>
-    <lastmod>2018-04-10</lastmod>
+    <lastmod>2018-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
     <image:image>
