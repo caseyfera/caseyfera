@@ -1,11 +1,11 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1537221987527">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1537226082345">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
-    <file name="master_a-master.css" crc="34833757" ref="index:merch"/>
+    <file name="master_a-master.css" crc="3902516211" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="3965041317" ref="index:merch"/>
-    <file name="index.css" crc="4220764131" ref="index"/>
+    <file name="index.css" crc="3889334242" ref="index"/>
     <file name="nomq_index.css" crc="115290360" ref="index"/>
-    <file name="merch.css" crc="4137482323" ref="merch"/>
+    <file name="merch.css" crc="4151008637" ref="merch"/>
     <file name="nomq_merch.css" crc="121343522" ref="merch"/>
   </folder>
   <folder name="assets">
@@ -44,45 +44,45 @@
     <file name="patreon_logo_black.png" crc="4237327699" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
     </file>
     <file name="youtube.svg" crc="496682058" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
     </file>
     <file name="youtube_poster_.png" crc="221893240" ref="index"/>
     <file name="twiter.svg" crc="335481440" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
     </file>
     <file name="twiter_poster_.png" crc="85616377" ref="index"/>
     <file name="imdb.svg" crc="27721402" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
     </file>
     <file name="imdb_poster_.png" crc="351163032" ref="index"/>
     <file name="facebook.svg" crc="87461298" seo="true" ref="index:merch">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
-      <caption webpage="music" alt=""/>
-      <caption webpage="music" alt=""/>
       <caption webpage="merch" alt=""/>
       <caption webpage="merch" alt=""/>
+      <caption webpage="music" alt=""/>
+      <caption webpage="music" alt=""/>
     </file>
     <file name="facebook_poster_.png" crc="215717486" ref="index"/>
     <file name="arrow-representing-a-download_318-481.jpg" crc="202845844" seo="true" ref="index">
@@ -204,6 +204,6 @@
     <file name="u124606-4.png" crc="4183469285" ref="index"/>
     <file name="u124606-42.png" crc="4183469285" ref="index"/>
   </folder>
-  <file name="index.html" crc="534434141" seo="true" mt="1537221816572" redirect="true"/>
-  <file name="merch.html" crc="136029513" seo="true" mt="1537221816572" redirect="true"/>
+  <file name="index.html" crc="288402238" seo="true" mt="1537225858118" redirect="true"/>
+  <file name="merch.html" crc="3978837536" seo="true" mt="1537225858118" redirect="true"/>
 </manifest>
