@@ -20,8 +20,8 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
   <title>casey fera ♦&nbsp; Home</title>
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=443350757"/>
-  <link rel="stylesheet" type="text/css" href="css/master_a-master.css?crc=462695526"/>
-  <link rel="stylesheet" type="text/css" href="css/index.css?crc=3940632485" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="css/master_a-master.css?crc=34833757"/>
+  <link rel="stylesheet" type="text/css" href="css/index.css?crc=4220764131" id="pagesheet"/>
   <!-- IE-only CSS -->
   <!--[if lt IE 9]>
   <link rel="stylesheet" type="text/css" href="css/nomq_preview_master_a-master.css?crc=3965041317"/>
@@ -37,6 +37,8 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
 		if ((host  == window.location.host) && (window.location.protocol != "https:"))
 		window.location.protocol = "https";
 	</script>
+
+<link rel="calonical" href="caseyfera.com"/>
  </head>
  <body>
 
@@ -2501,12 +2503,12 @@ Muse.Utils.initWidget('#widgetu123460', ['#bp_infinity', '#bp_756'], function(el
 Muse.Utils.initWidget('#tab-panelu107051', ['#bp_infinity', '#bp_756'], function(elem) { return new WebPro.Widget.TabbedPanels(elem, {event:'click',defaultIndex:3}); });/* #tab-panelu107051 */
 Muse.Utils.initWidget('#accordionu30741', ['#bp_756'], function(elem) { return new WebPro.Widget.Accordion(elem, {canCloseAll:true,defaultIndex:-1}); });/* #accordionu30741 */
 Muse.Utils.initWidget('.MenuBar', ['#bp_756'], function(elem) { return $(elem).museMenu(); });/* unifiedNavBar */
-$('#bp_756').one('muse_this_bp_activate', function(){
-$('#accordionu30741').registerPositionScrollEffect([{"speed":[0,0],"in":[-Infinity,7.3]},{"speed":[0,0],"in":[7.3,Infinity]}], $(this)); /* scroll effect */
-});/* scroll effects for one breakpoint */
 $('#bp_infinity').one('muse_this_bp_activate', function(){
 $('#u63684-bw').registerPositionScrollEffect([{"speed":[null,-1],"in":[-Infinity,152.35]},{"speed":[null,0],"in":[152.35,Infinity]}], $(this)); /* scroll effect */
 $('#u41066').registerPositionScrollEffect([{"speed":[0,-1],"in":[-Infinity,155.65]},{"speed":[0,0],"in":[155.65,Infinity]}], $(this)); /* scroll effect */
+});/* scroll effects for one breakpoint */
+$('#bp_756').one('muse_this_bp_activate', function(){
+$('#accordionu30741').registerPositionScrollEffect([{"speed":[0,0],"in":[-Infinity,7.3]},{"speed":[0,0],"in":[7.3,Infinity]}], $(this)); /* scroll effect */
 });/* scroll effects for one breakpoint */
 $( '.breakpoint' ).registerBreakpoint();/* Register breakpoints */
 Muse.Utils.transformMarkupToFixBrowserProblems();/* body */
