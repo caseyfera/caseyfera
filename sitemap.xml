@@ -21,40 +21,28 @@
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>http://caseyfera.com2/images/arrow-representing-a-download_318-481.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/play.svg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/rss-5-xxl.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/logo.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/homepagesized.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/localmusichour.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/lmh%20logo-02.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2-crop-u110340.jpg</image:loc>
-    </image:image>
-    <image:image>
       <image:loc>http://caseyfera.com2/images/pond5.svg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/cf%20logo%20with%20face-01.png</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://caseyfera.com2/images/logo.jpg</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://caseyfera.com2/images/lmh%20logo-02576x360.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/homepagesized.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/lmh%20logo-02.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/localmusichour.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/index%20-%20copy.jpg</image:loc>
@@ -64,6 +52,18 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/upload-to-cloud.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/arrow-representing-a-download_318-481.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/play.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/rss-5-xxl.png</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/caseyfera%20logo2-crop-u110340.jpg</image:loc>
     </image:image>
   </url>
   <url>
@@ -87,6 +87,12 @@
       <image:loc>http://caseyfera.com2/images/facebook.svg</image:loc>
     </image:image>
     <image:image>
+      <image:loc>http://caseyfera.com2/images/pond5.svg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>http://caseyfera.com2/images/cf%20logo%20with%20face-01.png</image:loc>
+    </image:image>
+    <image:image>
       <image:loc>http://caseyfera.com2/images/33651.png</image:loc>
     </image:image>
     <image:image>
@@ -94,12 +100,6 @@
     </image:image>
     <image:image>
       <image:loc>http://caseyfera.com2/images/continuum%20cover%20art.jpg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/pond5.svg</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>http://caseyfera.com2/images/cf%20logo%20with%20face-01.png</image:loc>
     </image:image>
   </url>
   <url>
