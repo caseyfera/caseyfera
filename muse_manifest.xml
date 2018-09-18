@@ -1,10 +1,10 @@
-<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1537228048041">
+<manifest alg="2" build="2017.0.3.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster,textStyling" exportTarget="other" domain="caseyfera.com2" resolutions="1x" timestamp="1537245088480">
   <folder name="css">
     <file name="site_global.css" crc="443350757"/>
     <file name="master_a-master.css" crc="3902516211" ref="index:merch"/>
     <file name="nomq_preview_master_a-master.css" crc="3965041317" ref="index:merch"/>
-    <file name="index.css" crc="157591209" ref="index"/>
-    <file name="nomq_index.css" crc="242622146" ref="index"/>
+    <file name="index.css" crc="3984509040" ref="index"/>
+    <file name="nomq_index.css" crc="3987937469" ref="index"/>
     <file name="merch.css" crc="4151008637" ref="merch"/>
     <file name="nomq_merch.css" crc="121343522" ref="merch"/>
   </folder>
@@ -20,13 +20,10 @@
     <file name="jquery.watch.js" crc="4178585335" ref="index:merch"/>
     <file name="jquery.musepolyfill.bgsize.js" crc="532123423" ref="index:merch"/>
     <file name="webpro.js" crc="4152390327" ref="index:merch"/>
-    <file name="musewpslideshow.js" crc="380562115" ref="index"/>
-    <file name="jquery.museoverlay.js" crc="3986278607" ref="index"/>
-    <file name="touchswipe.js" crc="4228958816" ref="index"/>
     <file name="form_check.php" crc="4286608207" ref="index"/>
     <file name="form_throttle.php" crc="313199896" ref="index"/>
     <file name="form_process.php" crc="3855659497" ref="index"/>
-    <file name="form-u123460.php" crc="26175414" ref="index"/>
+    <file name="form-u123460.php" crc="214282529" ref="index"/>
     <file name="musewpdisclosure.js" crc="204784597" ref="index:merch"/>
     <file name="jquery.musemenu.js" crc="3936200140" ref="index:merch"/>
     <file name="jquery.scrolleffects.js" crc="410690402" ref="index:merch"/>
@@ -97,23 +94,7 @@
     <file name="poq1esb.jpg" crc="368883721" ref="index">
       <caption webpage="index" alt=""/>
     </file>
-    <file name="caseyfera logo2.jpg" crc="422990725" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
     <file name="blank.gif" crc="4208392903" ref="index:merch"/>
-    <file name="homepagesized.jpg" crc="426210554" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="lmh logo-02.png" crc="3993770091" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="localmusichour.jpg" crc="4257718050" seo="true" ref="index">
-      <caption webpage="index" alt=""/>
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="loading.gif" crc="3815509949" ref="index"/>
     <file name="index - copy.jpg" crc="19654156" seo="true" ref="index">
       <caption webpage="index" alt=""/>
       <caption webpage="index" alt=""/>
@@ -147,9 +128,6 @@
       <caption webpage="index" alt=""/>
     </file>
     <file name="x.png" crc="486460471" ref="index">
-      <caption webpage="index" alt=""/>
-    </file>
-    <file name="caseyfera logo2-crop-u110340.jpg" crc="4037563894" seo="true" ref="index">
       <caption webpage="index" alt=""/>
     </file>
     <file name="poq1esb-u24567-4-fr.jpg" crc="3820713628" ref="index"/>
@@ -190,6 +168,6 @@
     <file name="u91498-92.png" crc="55166628" ref="merch"/>
     <file name="u95653-82.png" crc="233208542" ref="merch"/>
   </folder>
-  <file name="index.html" crc="454977481" seo="true" mt="1537227930639" redirect="true"/>
-  <file name="merch.html" crc="3977596254" seo="true" mt="1537225858118" redirect="true"/>
+  <file name="index.html" crc="4097166879" seo="true" mt="1537229249703" redirect="true"/>
+  <file name="merch.html" crc="3977596254" seo="true" mt="1537229110110" redirect="true"/>
 </manifest>
