@@ -31,7 +31,88 @@ $form = array(
 		'to' => 'painter@adobe.com'
 	),
 	'fields' => array(
-
+		'custom_U123480' => array(
+			'order' => 1,
+			'type' => 'string',
+			'label' => 'Artist/Band Name',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Artist/Band Name\' is required.'
+			)
+		),
+		'Email' => array(
+			'order' => 2,
+			'type' => 'email',
+			'label' => 'Email',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Email\' is required.',
+				'format' => 'Field \'Email\' has an invalid email address.'
+			)
+		),
+		'custom_U123497' => array(
+			'order' => 3,
+			'type' => 'string',
+			'label' => 'Member(s)',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Member(s)\' is required.'
+			)
+		),
+		'custom_U123492' => array(
+			'order' => 4,
+			'type' => 'string',
+			'label' => 'Website',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Website\' is required.'
+			)
+		),
+		'custom_U123488' => array(
+			'order' => 5,
+			'type' => 'string',
+			'label' => 'City',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'City\' is required.'
+			)
+		),
+		'custom_U123465' => array(
+			'order' => 6,
+			'type' => 'string',
+			'label' => 'Custom:',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Custom:\' is required.'
+			)
+		),
+		'custom_U123461' => array(
+			'order' => 7,
+			'type' => 'string',
+			'label' => 'Custom:',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Custom:\' is required.'
+			)
+		),
+		'custom_U123474' => array(
+			'order' => 8,
+			'type' => 'string',
+			'label' => 'Custom:',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Custom:\' is required.'
+			)
+		),
+		'custom_U123484' => array(
+			'order' => 9,
+			'type' => 'string',
+			'label' => 'Message',
+			'required' => true,
+			'errors' => array(
+				'required' => 'Field \'Message\' is required.'
+			)
+		)
 	)
 );
 
