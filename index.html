@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+	
 <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta content="text/html; charset=iso-8859-2" http-equiv="Content-Type">
@@ -9,6 +10,20 @@
 <style>
 	body {background-color: #00A99D; }
 
+	
+	
+	#myBtn {
+  
+ 
+  bottom: 20px; /* Place the button at the bottom of the page */
+  right: 30px; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  
+ 
+
+	}
 
 	.mySlides {display:none;}	
 	
@@ -42,7 +57,10 @@
 	.bio h3 a {color: white; text-decoration: none}
 	h2 {z-index: 1; color: #EFDA03; width 200px; text-align: center; font-size: 30px}
 
-	.center {text-align: center}
+	.bringfront {position: sticky; top: -190px; z-index: 30; text-align: center ;}
+	.center {text-align: center;}
+	
+	
 	
 	
 	.w3-content{margin: auto; width: 300px; height: 220px; background-color: #EFDA03 ;}
@@ -63,6 +81,7 @@
 
 
 	</style>
+	
 <link href="break 802.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -103,13 +122,13 @@
 
 			-->  
 
-
-<div class="center">	  
+<div class="bringfront">
+	  
 	<nav>
-		<ul>
+		<ul class="lockdown">
 		  <li>
-		    <a href="#s1">home</a>
-		 </li>
+			   <a href onclick="topFunction()" id="myBtn" title="Go to top">home</a> 
+		    </li>
 		 <li>
 		    <a href="#s2">video</a>
 		 </li>
@@ -129,6 +148,7 @@
 	</nav>
 	  
 </div>
+	
 		
 <div id="TableSocial">
 	<div class="tableright">
@@ -235,7 +255,7 @@ function carousel() {
 	
 <div class="backgroundPurple"><p></p><h2><a name="s2">video</h2><p></p>
 	<div class="center">
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/UG-qafQi1eE?list=PLms1pQ6FGqMV6GVjX2wCCWgJafWQGx5HT" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/BVklGrjsTgY?controls=0?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 	<p></p>
 		<iframe width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 	<p></p>
