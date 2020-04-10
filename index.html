@@ -44,7 +44,8 @@
 		html { box-sizing: border-box; position: relative; top: 0px} *, *:before, *:after { box-sizing: inherit; z-index: 0; border: 0px solid purple;  padding: 0px; }
 	
 	/*Navigation bar*/
-			nav ul {transform: translateY(185px);center;list-style: none; font-size: 1.3em;  border:2px solid purple; opacity: .9;z-index: 5}
+	
+			nav ul {transform: translateY(205px);center;list-style: none; font-size: 2em;  border:2px solid purple; z-index: 5}
 			nav ul li {text-align: center; position: relative; top: 0px; display: inline-block; }
 			nav ul li a {text-align: center; font-family: volt; text-decoration: none; color: #999999; margin: 1px; padding-left: 25px; padding-top: 0px; padding-right: 25px; background: yellow;  }
 			nav ul li a:after {content: ""; display: inline-block; position: absolute; left: 0px; bottom: 0px; background-color: #2D576E; width: 0px; height: 3px; transition: all 0.4s; }
@@ -78,8 +79,8 @@
 	.center {text-align: center;}
 	
 	
-	/*ING SLIDE SHOW AT THE TOP (LMH,CF)*/
-	.w3-content{margin: auto; width: 300px; height: 220px; background-color: #EFDA03 ;}
+	/*IMG SLIDE SHOW AT THE TOP (LMH,CF)*/
+	.w3-content{margin: auto; width: 300px; height: 220px; background-color: black;}
 	.mySlides{width: 250px;  }
 	
 
@@ -87,26 +88,24 @@
 	.areweokay {border: 0px solid #CD2C2E; }
 	.areweokay i{font-family:volt; color: yellow; font-size: 25px;  }
 	.areweokay a{border: 1px #ADADAD}
-	.PDS {display: inline-block; color: yellow; border: 0px white; }
-	.PDS i {text-align: center;}
-	.PDS img {transform: translate(10px, 10px); }
+	
 	.bio i {color: white; text-decoration: none}
 	.bio a {text-decoration: none}
   
 	h3 {font-size: 35px; color: white}
 
 /*MAKE ALL IFRAMES (VIDEOS BIGER ON SMALL SCREENS*/
-	<style>
+	
 @media only screen and (max-width: 600px) {
   iframe {
     width: 600px; 
   }
 }
-	</style>
+	
 	
 <link href="break 802.css" rel="stylesheet" type="text/css">
 </head>
-
+	</style>
 
 <body>
 	
@@ -249,11 +248,11 @@
 
 	<div class="backgroundPurple">
 		
-		<!--ING SLIDE SHOW AT THE TOP (LMH,CF) -->
+		<!--IMG SLIDE SHOW AT THE TOP (LMH,CF) -->
 	<div class="w3-content w3-section" style="max-width:500px">
   	<img class="mySlides" src="images/localmusichour.jpg" style="width:100%">
-  	<img class="mySlides" src="images/lmh logo-02.png" style="width:100%">
-  	<img class="mySlides" src="images/caseyfera logo2.jpg" style="width:100%">
+  	<img class="mySlides" src="images/lmh logo-02.png" style="width:100%; padding-top: 15px;">
+  	<img class="mySlides" src="images/caseyfera logo2.jpg" style="width:100%; padding-top: 25px;">
 </div>
 
 <script>
@@ -296,8 +295,8 @@ function carousel() {
 			</div>
 	
 			<!-- reverbnation-->
-		<div>
-		<iframe width="100%" height="265" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_3154108?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_3154108&pwc[size]=small" style="width:0px;min-width:100%;max-width:100%;"></iframe>
+		<div class="center">
+		<iframe width="600px" height="350px" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_3154108?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_3154108&pwc[size]=small" ></iframe>
 		</div>
 	
 		<p></p>
@@ -354,10 +353,8 @@ function carousel() {
 <!--PODCAST sub links end -->	
 		
 			<!--PODCAST eps-->
-<div style="display: inline-block;" >
+<div style="display: inline-block; width: 600px;" >
 		<div id='buzzsprout-large-player-987973'>
-
-
 
 		<script type='text/javascript' charset='utf-8' src='https://www.buzzsprout.com/987973.js?container_id=buzzsprout-large-player-987973&player=large'>
 			</script>
