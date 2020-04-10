@@ -27,19 +27,23 @@
 
 	.mySlides {display:none;}	
 	
-	
+	/*Social Media links*/
 	#TableSocial {padding-left: 50%; padding-top: 50px;  margin-right: 0%; border: 0px solid #AA2B2D;}
 	.tableright {padding-left: 75px; transform: translatey(-30px); z-index: 1}
 	table { border: 0px solid #AA2B2D}	
 	table tr {}
 	table tr th {border: 0px solid #AA2B2D}
 
-	
+	/*CF Logo*/
 	.logo {text-align: center;text-shadow: 12px; position: relative; top: 0px; filter: drop-shadow(0 0 10px);}
 	.shadow {position: relative; left: 0px; top: -90px; filter: drop-shadow(0 10px); ;}
+	
+	/*KPEG LOGO LINK*/
 	#kpeg{transform: translateY(-180px);padding-left: 300px; border: 0px solid white;z-index: 5}
 	
 		html { box-sizing: border-box; position: relative; top: 0px} *, *:before, *:after { box-sizing: inherit; z-index: 0; border: 0px solid purple;  padding: 0px; }
+	
+	/*Navigation bar*/
 			nav ul {transform: translateY(185px);center;list-style: none; font-size: 1.3em;  border:2px solid purple; opacity: .9;z-index: 5}
 			nav ul li {text-align: center; position: relative; top: 0px; display: inline-block; }
 			nav ul li a {text-align: center; font-family: volt; text-decoration: none; color: #999999; margin: 1px; padding-left: 25px; padding-top: 0px; padding-right: 25px; background: yellow;  }
@@ -48,7 +52,8 @@
 			nav ul li a:hover:after { width: 100%; }
 			body {margin:0; padding:0;}
 	
-			
+	
+	/*LMH PODCAST LINKS*/
 			.pod ul li {text-align: center; position: relative; top: 0px; display: inline-block; }
 			.pod ul li a {text-align: center; font-family: volt; text-decoration: none; color: #999999; margin: 1px; padding-left: 25px; padding-top: 0px; padding-right: 25px; }
 			.pod ul li a:after {content: ""; display: inline-block; position: absolute; left: 0px; bottom: 0px; background-color: #2D576E; width: 0px; height: 3px; transition: all 0.4s; }
@@ -57,20 +62,23 @@
 			body {margin:0; padding:0;}
 
 	
-	
+	/*FONTS*/
 	div.backgroundPurple {font-family: volt; background-image: url(images/poq1esb.jpg); border: 5px solid #EFDA03; height: auto; position: relative; top: -125px}
 	h1 {color: yellow; }
 	
+	/*BIO INFO ON NEAR THE FOOTER*/
 	.bio h2 {margin:25px; padding: 25px; color: #EFDA03;}
 	.bio h3 a {color: white; text-decoration: none}
 	h2 {z-index: 1; color: #EFDA03; width 200px; text-align: center; font-size: 30px}
 
+	/*TOP NAV LINKS*/
 	.bringfront {position: sticky; top: -190px; z-index: 30; text-align: center ;}
+	
+	
 	.center {text-align: center;}
 	
 	
-	
-	
+	/*ING SLIDE SHOW AT THE TOP (LMH,CF)*/
 	.w3-content{margin: auto; width: 300px; height: 220px; background-color: #EFDA03 ;}
 	.mySlides{width: 250px;  }
 	
@@ -87,7 +95,13 @@
   
 	h3 {font-size: 35px; color: white}
 
-
+/*MAKE ALL IFRAMES (VIDEOS BIGER ON SMALL SCREENS*/
+	<style>
+@media only screen and (max-width: 600px) {
+  iframe {
+    width: 600px; 
+  }
+}
 	</style>
 	
 <link href="break 802.css" rel="stylesheet" type="text/css">
@@ -126,10 +140,10 @@
 	<a href="#">ze jinx</a> 
  </nav>
 
-</div> 
-
-			-->  
-
+</div> 			-->  
+	
+	
+	<!-- TOP NAV LINKS -->
 <div class="bringfront">
 	  
 	<nav>
@@ -233,7 +247,9 @@
 	
 
 
-<div class="backgroundPurple">
+	<div class="backgroundPurple">
+		
+		<!--ING SLIDE SHOW AT THE TOP (LMH,CF) -->
 	<div class="w3-content w3-section" style="max-width:500px">
   	<img class="mySlides" src="images/localmusichour.jpg" style="width:100%">
   	<img class="mySlides" src="images/lmh logo-02.png" style="width:100%">
@@ -262,23 +278,29 @@ function carousel() {
 	
 	
 <div class="backgroundPurple"><p></p><h2><a name="s2">video</h2><p></p>
-	<div class="center">
-		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/QZ3qtGLW9Uc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	<p></p>
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	<div style="text-align: center;">
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/QZ3qtGLW9Uc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin: 15px;"></iframe>
+	
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="margin: 15px;"></iframe>
 	<p></p>
 	</div>
 </div>
 	<p></p>
 		
-	<div class="backgroundPurple"><h2><a name="s3">music</h2>
-	<div class="center">
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/RFAlqRoJT84?list=PLms1pQ6FGqMWI1oEu19fcKpAPhcoatL0M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-	<p></p>
-		
-	<iframe width="100%" height="265" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_3154108?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_3154108&pwc[size]=small" style="width:0px;min-width:100%;max-width:100%;"></iframe>
-	</div>
-	<p></p>
+<div class="backgroundPurple"><h2><a name="s3">music</h2>
+	
+	<!--youtube music -->
+		<div class="center">
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/RFAlqRoJT84?list=PLms1pQ6FGqMWI1oEu19fcKpAPhcoatL0M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<p></p>
+			</div>
+	
+			<!-- reverbnation-->
+		<div>
+		<iframe width="100%" height="265" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_3154108?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_3154108&pwc[size]=small" style="width:0px;min-width:100%;max-width:100%;"></iframe>
+		</div>
+	
+		<p></p>
 	
 </div>
 	<p></p>
@@ -302,20 +324,28 @@ function carousel() {
 <ul>
   <li> 
     
-    <!--APPLE--> 
+    <!-- 1 APPLE--> 
     <a target="_blank" href="YOUR APPLE PODCASTS URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: 10px 7px; height: 40px; width: 162px;">Listen on Apple Podcasts</a> </li>
   <li>
   <li> 
     
-    <!--GOOGLE POD--> 
+    <!--2 GOOGLE POD--> 
     <a target="_blank" href="YOUR GOOGLE PODCASTS URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -468px 7px; height: 40px; width: 172px;">Listen on Google Podcasts</a> </li>
   <li> 
     
-    <!--SPOTIFY--> 
-    <a target="_blank" href="https://open.spotify.com/episode/3YcignohXx4ZJe4JqTeKA0?si=SNA4HP3iTgqBZXgbAvpMZw" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -182px 7px; height: 40px; width: 106px;">Listen on Spotify</a> </li>
-  <li> 
-    
-    <!--RSS--> 
+    <!--3 SPOTIFY--> 
+    <a target="_blank" href="YOUR SPOTIFY URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -182px 7px; height: 40px; width: 106px;">Listen on Spotify
+	  </a> </li>
+	
+	
+	<!--4 pandora--> 
+	<li>
+	<a target="_blank" href="YOUR PANDORA URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -945px 7px; height: 40px; width: 121px;">Listen on Pandora</a> 
+		</a> </li>
+  
+	
+	<li> 
+    <!--5 RSS--> 
     <a target="_blank" href="YOUR RSS FEED URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -317px 7px; height: 40px; width: 121px;">RSS Feed</a> </li>
 </ul>
 	
