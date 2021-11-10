@@ -107,10 +107,140 @@
   }
 }
 	
+
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
 	
 <link href="break 802.css" rel="stylesheet" type="text/css">
 </head>
 	</style>
+
+
+<script 
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+} 
+</script>
+
+
 
 <body>
 	
@@ -357,24 +487,23 @@ function carousel() {
 <ul>
   <li> 
     
-    <!-- 1 APPLE--> 
-    <a target="_blank" href="https://podcasts.apple.com/us/podcast/the-local-music-hour/id1507158092?uo=4" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: 10px 7px; height: 40px; width: 162px;">Listen on Apple Podcasts</a> </li>
+    <!-- 1 GOOLGE POD--> 
+    <a target="_blank" href="https://podcasts.google.com/?feed=aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS85ODc5NzMucnNz" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -457px -45px; height: 40px; width: 172px;">Listen on Google Podcasts</a> </li>
   <li>
   <li> 
     
-    <!--2 GOOGLE POD--> 
-    <a target="_blank" href="https://podcasts.google.com/?feed=aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS85ODc5NzMucnNz" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -468px 7px; height: 40px; width: 172px;">Listen on Google Podcasts</a> </li>
+    <!--2 APPLE--> 
+    <a target="_blank" href="https://podcasts.apple.com/us/podcast/the-local-music-hour/id1507158092" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -45px; height: 40px; width: 172px;">Listen on Google Podcasts</a> </li>
   <li> 
     
-    <!--3 SPOTIFY--> 
-    <a target="_blank" href="https://open.spotify.com/show/3dgk5ddoepVvDckxTT6j1r" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -182px 7px; height: 40px; width: 106px;">Listen on Spotify
+    <!--3 stitcher--> 
+    <a target="_blank" href="https://www.stitcher.com/show/the-local-music-hour" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -110px; height: 40px; width: 116px;">Listen on Stitcher</a> </li>
 	  </a> </li>
 	
 	
-	<!--4 pandora--> 
+	<!--4 iheart--> 
 	<li>
-	<a target="_blank" href="YOUR PANDORA URL" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -945px 7px; height: 40px; width: 121px;">Listen on Pandora</a> 
-		</a> </li>
+	<a target="_blank" href="https://www.iheart.com/podcast/269-the-local-music-hour-63122589/" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -245px; height: 40px; width: 152px;">Listen on Google iHeart</a> </li>
   
 	<!--
 	<li> 
@@ -386,7 +515,7 @@ function carousel() {
 		
     <!--5 RSS--> 
 		<li>
-    <a target="_blank" href="https://feeds.buzzsprout.com/987973.rss" style="display: block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -317px 7px; height: 40px; width: 121px;">RSS Feed</a> </li>
+    <a target="_blank" href="https://feeds.buzzsprout.com/987973.rss" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -457px -245px; height: 40px; width: 125px;">RSS Feed</a> </li>
 </ul>
 	
 </div>
@@ -407,7 +536,7 @@ function carousel() {
 	<!--PODCAST end-->
 	
 		<!--SUBMIT MUSIC LINK-->
-		<a href="https://www.dropbox.com/request/RkCbvc3CwAzbGiMQjUOW"><img src="images/index - copy.jpg" width="337" height="309" alt=""/></a>
+		<a href="https://toppng.com/download/0PryXdOi9O7cqQAtD4RLuzmVjZlDEi9Ff4cPje32usp5WFhd8nrcZHKyiBFhTliG9h1E0ipwZeXhMSnw2pn4MJ5dhGQlJ6w9Pieg3kglj2ROSLwQsOwTIPw9JfwJII0gPiaToYbTsAQ0ZxGsY2kJbacMouSZw0gjYrfQHWfKxi9loM6XIeUo3ewVl9oix2UgovyOl2xt/large" width="337" height="309" alt=""/></a>
 		<p></p>
 		
 	
@@ -428,10 +557,51 @@ function carousel() {
 	
 
 	
-<!--Start of Merch-->	
-<div class="backgroundPurple"><h2><a name="s4">merch</h2>
+<!--Start of art-->	
+<div class="backgroundPurple"><h2><a name="s4">art</h2>
 	<div class="center">
 	
+
+ <!-- Slideshow container -->
+<div class="slideshow-container">
+
+  <!-- Full-width images with number and caption text -->
+  <div class="mySlides fade">
+    <div class="numbertext">1 / 3</div>
+    <img src="image/z.jpg" style="width:100%">
+    <div class="text">Caption Text</div>
+  </div>
+
+  <div class="mySlides fade">
+    <div class="numbertext">2 / 3</div>
+    <img src="img2.jpg" style="width:100%">
+    <div class="text">Caption Two</div>
+  </div>
+
+  <div class="mySlides fade">
+    <div class="numbertext">3 / 3</div>
+    <img src="img3.jpg" style="width:100%">
+    <div class="text">Caption Three</div>
+  </div>
+
+  <!-- Next and previous buttons -->
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
+</div> 
+
+
+
+
+
+
 	</div>
 	
 	</div>
