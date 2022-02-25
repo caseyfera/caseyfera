@@ -12,7 +12,7 @@
 
 	
 	
-	#myBtn {
+	#myBtn {`	
   
  
   bottom: 20px; /* Place the button at the bottom of the page */
@@ -45,7 +45,7 @@
 	
 	/*Navigation bar*/
 	
-			nav ul {transform: translateY(205px);center;list-style: none; font-size: 2em;  border:2px solid purple; z-index: 5}
+			nav ul {transform: translateY(205px);center;list-style: none; font-size: 1.5em;  border:2px solid purple; z-index: 5}
 			nav ul li {text-align: center; position: relative; top: 0px; display: inline-block; }
 			nav ul li a {text-align: center; font-family: volt; text-decoration: none; color: #999999; margin: 1px; padding-left: 25px; padding-top: 0px; padding-right: 25px; background: yellow;  }
 			nav ul li a:after {content: ""; display: inline-block; position: absolute; left: 0px; bottom: 0px; background-color: #2D576E; width: 0px; height: 3px; transition: all 0.4s; }
@@ -72,13 +72,13 @@
 	div.backgroundPurple {font-family: volt; background-image: url(images/poq1esb.jpg); border: 5px solid #EFDA03; height: auto; position: relative; top: -125px}
 	h1 {color: yellow; }
 	
-	/*BIO INFO ON NEAR THE FOOTER*/
-	.bio h2 {margin:25px; padding: 25px; color: #EFDA03;}
-	.bio h3 a {color: white; text-decoration: none}
+	/*INFO INFO ON NEAR THE FOOTER*/
+	.INFO h2 {margin:25px; padding: 25px; color: #EFDA03;}
+	.INFO h3 a {color: white; text-decoration: none}
 	h2 {z-index: 1; color: #EFDA03; width 200px; text-align: center; font-size: 30px}
 
 	/*TOP NAV LINKS*/
-	.bringfront {position: sticky; top: -190px; z-index: 30; text-align: center ;}
+	.bringfront {position: sticky; top: -190px; z-index: 20; text-align: center ;}
 	
 	
 	.center {text-align: center;}
@@ -94,8 +94,8 @@
 	.areweokay i{font-family:volt; color: yellow; font-size: 25px;  }
 	.areweokay a{border: 1px #ADADAD}
 	
-	.bio i {color: white; text-decoration: none}
-	.bio a {text-decoration: none}
+	.INFO i {color: white; text-decoration: none}
+	.INFO a {text-decoration: none}
   
 	h3 {font-size: 35px; color: white}
 
@@ -246,35 +246,7 @@ function showSlides(n) {
 	
 
 
-	<!--
-<div class="topnav"> 
- <nav class="mainnav">
 
-	 <div class="subnav">
-	<li><a href="#">local music hour</a></li>
-	 </div></ul>
-	   <div class="epnav">
-		<a href="#">Ep1</a>
-		<a href="#">Ep2</a>
-		<a href="#">Ep3</a>
-		<a href="#">Ep4</a>
-		<a href="#">Ep5</a>
-		<a href="#">Ep6</a>
-	   
-  <a href="#s2">art</a>
-  <a href="#s2">science</a>
-  <a href="#s2">bio</a>
-  <a href="#s1">science</a>
- </div>  
-
-	 </div> 	 
-  	<a href="#">neon braille</a>
-  	<a href="#">cat collective</a>
- 	<a href="#">love ritual</a>
-	<a href="#">ze jinx</a> 
- </nav>
-
-</div> 			-->  
 	
 	
 	<!-- TOP NAV LINKS -->
@@ -283,22 +255,22 @@ function showSlides(n) {
 	<nav>
 		<ul class="lockdown">
 		  <li>
-			   <a href onclick="topFunction()" id="myBtn" title="Go to top">home</a> 
+			   <a href onclick="topFunction()" id="myBtn" title="Go to top">HOME</a> 
 		    </li>
 		 <li>
-		    <a href="#s2">video</a>
+		    <a href="#s2">VIDEO</a>
 		 </li>
 		 <li>
-		 <a href="#s3">music</a>
+		 <a href="#s3">MUSIC</a>
 		 </li>
 		 <li>
-		 	<a href="#s4">art</a>
+		 	<a href="#s4">ART</a>
 		 </li>
 		 <li>
-		 	<a href="#s5">science</a>
+		 	<a href="#s5">COMEDY</a>
 		 </li>	
 		<li>
-		 	<a href="#s6">bio</a>
+		 	<a href="#s6">INFO</a>
 		 </li>
 		</ul>
 	</nav>
@@ -334,7 +306,6 @@ function showSlides(n) {
 			<a href="https://twitter.com/caseyfera" target="_blank"><img src="images/twiter.svg" alt="twitter" width="50" height="50"/></a>
 				</th>
 				</tr>
-
 				-->
   </table>
 	</div>
@@ -357,9 +328,9 @@ function showSlides(n) {
 <div id="NavCenter">&nbsp;</ul>
  <nav>
   <ul>
-	<li><a href="#s1">home</a></li>
-	<li><a href="#s2">video</a></li>
-	<li><a href="#s3">music</a>
+	<li><a href="#s1">HOME</a></li>
+	<li><a href="#s2">VIDEO</a></li>
+	<li><a href="#s3">MUSIC</a>
 		<ul>
 		 <li><a>local music hour</a>
 		  <ul>
@@ -377,9 +348,9 @@ function showSlides(n) {
 		</li>
 		</ul>	
 		</li>
-	<li><a href="#s4">art</a></li>
-	<li><a href="#s5">science</a></li>
-	<li><a href="#s6">bio/contact</a></li>
+	<li><a href="#s4">ART</a></li>
+	<li><a href="#s5">COMEDY</a></li>
+	<li><a href="#s6">INFO/contact</a></li>
 	</ul>
 </nav>
 </div>
@@ -390,11 +361,12 @@ function showSlides(n) {
 
 	<div class="backgroundPurple">
 		
-		<!--IMG SLIDE SHOW AT THE TOP (LMH,CF) -->
+		<!--START OF IMG SLIDE SHOW AT THE TOP (LMH,CF) -->
+
 	<div class="w3-content w3-section" style="max-width:500px">
   	<img class="mySlides" src="images/z.jpg" style="width:100%">
   	<img class="mySlides" src="images/lmh logo-02.png" style="width:100%; padding-top: 15px;">
-  	<img class="mySlides" src="images/caseyfera logo2.jpg" style="width:100%; padding-top: 25px;">
+  	<img class="mySlides" src="images/HDMitis.jfif" style="width:100%; padding-top: 25px;">
 </div>
 
 <script>
@@ -410,31 +382,34 @@ function carousel() {
     myIndex++;
     if (myIndex > x.length) {myIndex = 1}    
     x[myIndex-1].style.display = "block";  
-    setTimeout(carousel, 2000); // Change image every 2 seconds
+    setTimeout(carousel, 3000); // Change image every 3 seconds
 }
 </script>
+
+              <!--END OF IMG SLIDE SHOW AT THE TOP (LMH,CF) -->
+
 </div>
 	
 <p></p>
 	
 	
-<div class="backgroundPurple"><p></p><h2><a name="s2">video</h2><p></p>
+<div class="backgroundPurple"><p></p><h2><a name="s2">VIDEO</h2><p></p>
 	
 	<!--Youtube Video Reel-->
 	
 	<div style="text-align: center;">
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/G8b3M9IXTBQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="margin: 15px;"></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/G8b3M9IXTBQ?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="margin: 15px;"></iframe>
 	
 		
 		
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="margin: 15px;"></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="margin: 15px;"></iframe>
 	</div>
 </div>
 	<p></p>
 		
 	
 	
-<div class="backgroundPurple"><h2><a name="s3">music</h2>
+<div class="backgroundPurple"><h2><a name="s3">MUSIC</h2>
 	
 
 
@@ -443,7 +418,7 @@ function carousel() {
 	
 	<!--youtube music -->
 		<div class="center">
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/SZTrAIjOzK0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/SZTrAIjOzK0?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 		</div>
 	<p></p>
 	
@@ -472,16 +447,18 @@ function carousel() {
 		
 		
 <!--START OF RADIO SECTION-->		
-<div class="backgroundPurple"><h2><a name="thelocalmusichour">radio</h2>
+<div class="backgroundPurple"><h2><a name="thelocalmusichour">RADIO</h2>
 	  
 	<!--START LMH YOUTUBE PLAYLIST-->
 	<div class="center">
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/fmTQsaDevZQ?list=PLms1pQ6FGqMWmF63_JNjEwFD_OwrNM7uB" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/BK2cIaRB9qM?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 		<p></p>
-	<!--END LMH YOUTUBE PLAYLIST-->	
+
+	   <!--END LMH YOUTUBE PLAYLIST-->	
 		
+
 		
-	<!--PODCAST links-->
+	          <!--PODCAST start links-->
 
 <div class="pod" style="display: inline;">
 <ul>
@@ -520,9 +497,15 @@ function carousel() {
 	
 </div>
 
-<!--PODCAST sub links end -->	
+                  <!--PODCAST sub links end -->	
+
+
+
+
 		
-			<!--PODCAST eps-->
+		<!--=========PODCAST start eps======-->
+
+
 <div style="display: inline-block; width: 600px;" >
 		<div id='buzzsprout-large-player-987973'>
 
@@ -533,9 +516,12 @@ function carousel() {
 </div>
 		<p></p>
 
-	<!--PODCAST end-->
+	<!--=================PODCAST END ==================-->
 	
-		<!--SUBMIT MUSIC LINK-->
+		
+
+
+                      <!--========SUBMIT START MUSIC LINK============-->
 		<a href="https://toppng.com/download/0PryXdOi9O7cqQAtD4RLuzmVjZlDEi9Ff4cPje32usp5WFhd8nrcZHKyiBFhTliG9h1E0ipwZeXhMSnw2pn4MJ5dhGQlJ6w9Pieg3kglj2ROSLwQsOwTIPw9JfwJII0gPiaToYbTsAQ0ZxGsY2kJbacMouSZw0gjYrfQHWfKxi9loM6XIeUo3ewVl9oix2UgovyOl2xt/large" width="337" height="309" alt=""/></a>
 		<p></p>
 		
@@ -545,9 +531,12 @@ function carousel() {
 			
 		<!--UPLOAD SONGS LINK-->
 		<a href="https://www.dropbox.com/request/RkCbvc3CwAzbGiMQjUOW">
-			<h2>upload your music and or video and album art work</h2>
+			<h2>UPLOAD <BR></BR> MUSIC / VIDEOS / ART</h2>
 		<img src="images/upload-to-cloud.png" width="100" height="100" alt=""/></a>
-		<p></p>
+		
+
+
+<p></p>
 		
 	
 
@@ -557,17 +546,24 @@ function carousel() {
 	
 
 	
-<!--Start of art-->	
-<div class="backgroundPurple"><h2><a name="s4">art</h2>
+        <!--===============Start of ART SECTION===============-->	
+
+
+
+<div class="backgroundPurple"><h2><a name="s4">ART</h2>
 	<div class="center">
 	
- <!-- ART LINKS -->
+ <!-- =ART LINKS= -->
+
  		<!-- Rarible -->
- 		<div>
+ 		
+<div>
 		<a href="https://rarible.com/user/0x1707ba767487cc2bb1122e3356584de060e0b78a?tab=owned">	
 		<img src="https://cdn.publish0x.com/prod/fs/images/2bbd99cf8edaddb9aef50d246ae33a91d3c09d6e1b5697c9c6a8863d8953ed79.png" width="100" height="100" alt=""/></a>
 
+
 		<!-- ArtGrab -->	
+
 		<a href="https://artgrab.co/art/caseyfera">		
 		<img src="https://artgrab.co/img/brand/artgrab-logo-white.png" width="100" height="100" alt=""/></a>
 </div>
@@ -691,10 +687,10 @@ function carousel() {
 	
 	
 	
-<div class="backgroundPurple"><h2><a name="s5">science</h2>
+<div class="backgroundPurple"><h2><a name="s5">COMEDY</h2>
 	<div class="center">
 		
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/t8g60akJCJk?list=PL8DDB49EDFD31789D" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?controls=0&amp;list=PLms1pQ6FGqMXBdxo2C71V4gvkj-p8lIsT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 		<p></p>
 		
 		
@@ -702,11 +698,11 @@ function carousel() {
 	</div>
 	<p></p>
 	
-<div class="backgroundPurple"><h2><a name="s6">bio</h2>
+<div class="backgroundPurple"><h2><a name="s6">INFO</h2>
 	
 	<div class="center">
 		
-	<div class="bio">	
+	<div class="INFO">	
 	  <h2>
       Casey Fera grew up around artists and musicians. He has played in bands since high school, as a kid casey spent many hours manually editing videos with a combination of analog VCRs and CD players before the easy access of digital workstations. In college he experienced the switch over from linear to non linear editing.
       
@@ -741,8 +737,8 @@ function carousel() {
 	
 	<!--
 	<h2>art </h2>
-	<h2>science </h2>
-	<h2>bio </h2>
+	<h2>COMEDY </h2>
+	<h2>INFO </h2>
 	<h2>radio</h2>
 	
 	
@@ -753,15 +749,22 @@ function carousel() {
 	
 	
 	
-<p name="s1">home</a>					
-  <p name="s2">video</a>
-<p name="s3">music</a>
-<p name="s4">art</a>
-<p name="s5">science</a>					
-<p name="s6">bio</a>
+<p name="s1">HOME</a>					
+  <p name="s2">VIDEO</a>
+<p name="s3">MUSIC</a>
+<p name="s4">ART</a>
+<p name="s5">COMEDY</a>					
+<p name="s6">INFO</a>
 <p name="s7">radio</a>
 		<p name="s8">form</a>
 	
 	-->
 </body>
 </html>
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contac
