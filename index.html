@@ -335,7 +335,7 @@ z-index: 100;
 }
 
 .active, .dot:hover {
-  background-color: #717171;
+  background-color: #white;
 }
 
 /* Fading animation */
@@ -459,6 +459,10 @@ z-index: 100;
                 <li class="nav-item">
                     <a href="#s3" class="nav-link">MUSIC</a>
                 </li>
+ <li class="nav-item">
+                    <a href="#s7" class="nav-link">RADIO</a>
+                </li>
+
                 <li class="nav-item">
                     <a href="#s4" class="nav-link">ART</a>
                 </li>
@@ -468,9 +472,7 @@ z-index: 100;
                 <li class="nav-item">
                     <a href="#s6" class="nav-link">INFO</a>
                 </li>
-  <li class="nav-item">
-                    <a href="#s7" class="nav-link">RADIO</a>
-                </li>
+ 
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -1159,8 +1161,7 @@ hamburger.addEventListener("click", mobileMenu);
 
 function mobileMenu() {
     hamburger.classList.toggle("active");
-    navMenu.classList.toggle("active");
-}
+    navMenu.classList.toggle("active");}
 
 
 const navLink = document.querySelectorAll(".nav-link");
