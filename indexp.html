@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+	<title>Poland Map</title>
+	<style type="text/css">
+<style>
+@font-face {
+  font-family: 'Open Sans';
+  src: url('path-to-font-file/OpenSans-Regular.ttf') format('truetype');
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+
+	.map {
+  position: relative;
+  padding-top: 55%;
+  background-image: url('Poland-Physical-Map-768x717.png'); /* replace with your Poland map image file URL */
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+
+		.city {
+			position: absolute;
+			background-color: #3a0d9c;
+			color: #fff;
+			padding: 8px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: bold;
+			text-align: center;
+			font-size: 16px;
+		}
+		.city a {
+			color: #fff;
+			text-decoration: none;
+		}
+		.city a:hover {
+			text-decoration: underline;
+		}
+
+		.map-editable {
+			cursor: move;
+		}
+
+
+<style>
+    #mouse-position {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: black;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+</style>
+
+<p id="mouse-position"></p>
+
+
+
+<script>
+		document.addEventListener('mousemove', function(event) {
+	var y = event.clientY / document.documentElement.clientHeight * 100;
+			var x = event.clientX / document.documentElement.clientWidth * 100;
+		
+			document.getElementById('info').innerHTML = 'Mouse position: ' + y.toFixed(2) + '%, ' + x.toFixed(2) + '%';
+		});
+	
+
+
+
+
+    // Get the element that will display the mouse position
+    var mousePosition = document.getElementById("mouse-position");
+
+    // Add an event listener to the document to track mouse movement
+    document.addEventListener("mousemove", function(event) {
+        // Get the x and y coordinates of the mouse pointer
+        var x = event.clientX;
+        var y = event.clientY;
+
+        // Update the text of the element to display the pixel location
+        mousePosition.innerText = "Mouse position: " + x + "px, " + y + "px";
+    });
+
+
+
+<!-- Include the jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- CSS for draggable links -->
+<style>
+    .draggable {
+        position: absolute;
+        cursor: move;
+    }
+</style>
+
+<!-- HTML for draggable city links -->
+
+
+<!-- JavaScript for draggable functionality -->
+<script>
+    // Make city links draggable
+    $('.draggable').draggable({
+        stop: function(event, ui) {
+            // When dragging stops, get the new position of the link
+            var left = ui.position.left;
+            var top = ui.position.top;
+            // Update the style of the link to match the new position
+            $(this).css({'left': left, 'top': top});
+        }
+    });
+</script>
+
+
+
+
+<body onmousemove="showCoords(event)">
+
+
+
+
+<!-- CITIES THAT DON'T MOVE    U0 D100 - L0 R100-->
+
+	<div class="map map-editable">
+		<div class="city" style="top: 42%; left: 53%;">
+			<a href="#" onclick="speakText('Warszawa')">Warszawa</a>
+		</div>
+		<div class="city" style="top: 80%; left: 55%;">
+			<a href="#" onclick="speakText('Kraków')">Kraków</a>
+		</div>
+		<div class="city" style="top: 51%; left: 52%;">
+			<a href="#" onclick="speakText('Łódź')">Łódź</a>
+		</div>
+		<div class="city" style="top: 64%; left: 30%;">
+			<a href="#" onclick="speakText('Wrocław')">Wrocław</a>
+		</div>
+		<div class="city" style="top: 41%; left: 28%;">
+			<a href="#" onclick="speakText('Poznań')">Poznań</a>
+		</div>
+		<div class="city" style="top: 9%; left: 41%;">
+			<a href="#" onclick="speakText('Gdańsk')">Gdańsk</a>
+		</div>
+		<div class="city" style="top: 23%; left: 20%;">
+			<a href="#" onclick="speakText('Szczecin')">Szczecin</a>
+		</div>
+		<div class="city" style="top: 27%; left: 36%;">
+			<a href="#" onclick="speakText('Bydgoszcz')">Bydgoszcz</a>
+		</div>
+		<div class="city" style="top: 60%; left: 69%;">
+			<a href="#" onclick="speakText('Lublin')">Lublin</a>
+		</div>
+		<div class="city" style="top: 27%; left: 73%;">
+			<a href="#" onclick="speakText('Białystok')">Białystok</a>
+		</div>
+		<div class="city" style="top: 76%; left: 48%;">
+			<a href="#" onclick="speakText('Katowice')">Katowice</a>
+		</div>
+		
+
+		<div class="city" style="top: 27%; left: 33%;">
+			<a href="#" onclick="speakText('Piła')">Piła</a>
+
+</div>
+
+
+
+<!-- Include the JavaScript code for TTS functionality -->
+	<script type="text/javascript" src="tts.js"></script>
+
+
+
+
+
+
+
+<style>
+
+
+
+
+
+.city-link {
+	position: absolute;
+	background-color: #FFF;
+	color: #000;
+	padding: 5px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	cursor: pointer;
+font-size: 12px;
+	user-select: none;}
+
+
+
+#info {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white;
+			padding: 10px;
+			font-size: 10px;
+		}
+
+		
+
+
+	
+
+
+	#info {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white;
+			padding: 10px;
+			font-size: 20px;}
+	
+	
+
+
+	
+
+
+
+	</style>
+</head>
+
+	<div id="info"></div>
+
+	
+<script>
+		document.addEventListener('mousemove', function(event) {
+	var y = event.clientY / document.documentElement.clientHeight * 100;
+			var x = event.clientX / document.documentElement.clientWidth * 100;
+		
+			document.getElementById('info').innerHTML = 'Mouse position: ' + y.toFixed(2) + '%, ' + x.toFixed(2) + '%';
+		});
+</script>
+
+
+
+
+<body onmousemove="showCoords(event)">
+
+
+<!-- CITIES THAT  MOVE -->
+
+<a href="#" class="city-link" id="Będzin" style="position:absolute; top: 0px; left: 0px;" onclick="speakText('Będzin')">Będzin</a>
+<a href="#" class="city-link" id="Bełchatów" style="position:absolute; top: 30px; left: 0px;" onclick="speakText('Bełchatów')">Bełchatów</a>
+<a href="#" class="city-link" id="Biała Podlaska" style="position:absolute; top: 60px; left: 0px;" onclick="speakText('Biała Podlaska')">Biała Podlaska</a>
+<a href="#" class="city-link" id="Białystok" style="position:absolute; top: 90px; left: 0px;" onclick="speakText('Białystok')">Białystok</a>
+<a href="#" class="city-link" id="Bielsko-Biała" style="position:absolute; top: 120px; left: 0px;" onclick="speakText('Bielsko-Biała')">Bielsko-Biała</a>
+<a href="#" class="city-link" id="Bydgoszcz" style="position:absolute; top: 150px; left: 0px;" onclick="speakText('Bydgoszcz')">Bydgoszcz</a>
+<a href="#" class="city-link" id="Bytom " style="position:absolute; top: 180px; left: 0px;" onclick="speakText('Bytom ')">Bytom </a>
+<a href="#" class="city-link" id="Chełm" style="position:absolute; top: 210px; left: 0px;" onclick="speakText('Chełm')">Chełm</a>
+<a href="#" class="city-link" id="Chorzów " style="position:absolute; top: 240px; left: 0px;" onclick="speakText('Chorzów ')">Chorzów </a>
+<a href="#" class="city-link" id="Częstochowa" style="position:absolute; top: 270px; left: 0px;" onclick="speakText('Częstochowa')">Częstochowa</a>
+<a href="#" class="city-link" id="Dąbrowa Górnicza " style="position:absolute; top: 300px; left: 0px;" onclick="speakText('Dąbrowa Górnicza ')">Dąbrowa Górnicza </a>
+<a href="#" class="city-link" id="Elbląg" style="position:absolute; top: 330px; left: 0px;" onclick="speakText('Elbląg')">Elbląg</a>
+<a href="#" class="city-link" id="Ełk" style="position:absolute; top: 360px; left: 0px;" onclick="speakText('Ełk')">Ełk</a>
+<a href="#" class="city-link" id="Gdańsk" style="position:absolute; top: 390px; left: 0px;" onclick="speakText('Gdańsk')">Gdańsk</a>
+<a href="#" class="city-link" id="Gdynia" style="position:absolute; top: 420px; left: 0px;" onclick="speakText('Gdynia')">Gdynia</a>
+<a href="#" class="city-link" id="Gliwice " style="position:absolute; top: 450px; left: 0px;" onclick="speakText('Gliwice ')">Gliwice </a>
+<a href="#" class="city-link" id="Głogów" style="position:absolute; top: 480px; left: 0px;" onclick="speakText('Głogów')">Głogów</a>
+<a href="#" class="city-link" id="Gniezno" style="position:absolute; top: 510px; left: 0px;" onclick="speakText('Gniezno')">Gniezno</a>
+<a href="#" class="city-link" id="Gorzów Wielkopolski" style="position:absolute; top: 540px; left: 0px;" onclick="speakText('Gorzów Wielkopolski')">Gorzów Wielkopolski</a>
+<a href="#" class="city-link" id="Grudziądz" style="position:absolute; top: 570px; left: 0px;" onclick="speakText('Grudziądz')">Grudziądz</a>
+<a href="#" class="city-link" id="Inowrocław" style="position:absolute; top: 600px; left: 0px;" onclick="speakText('Inowrocław')">Inowrocław</a>
+<a href="#" class="city-link" id="Jastrzębie Zdrój" style="position:absolute; top: 630px; left: 0px;" onclick="speakText('Jastrzębie Zdrój')">Jastrzębie Zdrój</a>
+<a href="#" class="city-link" id="Jaworzno " style="position:absolute; top: 660px; left: 0px;" onclick="speakText('Jaworzno ')">Jaworzno </a>
+<a href="#" class="city-link" id="Jelenia Góra" style="position:absolute; top: 690px; left: 0px;" onclick="speakText('Jelenia Góra')">Jelenia Góra</a>
+<a href="#" class="city-link" id="Kalisz" style="position:absolute; top: 720px; left: 0px;" onclick="speakText('Kalisz')">Kalisz</a>
+<a href="#" class="city-link" id="Katowice" style="position:absolute; top: 750px; left: 0px;" onclick="speakText('Katowice')">Katowice</a>
+<a href="#" class="city-link" id="Kędzierzyn-Koźle" style="position:absolute; top: 0px; left: 140px;" onclick="speakText('Kędzierzyn-Koźle')">Kędzierzyn-Koźle</a>
+<a href="#" class="city-link" id="Kielce" style="position:absolute; top: 30px; left: 140px;" onclick="speakText('Kielce')">Kielce</a>
+<a href="#" class="city-link" id="Konin" style="position:absolute; top: 60px; left: 140px;" onclick="speakText('Konin')">Konin</a>
+<a href="#" class="city-link" id="Koszalin" style="position:absolute; top: 90px; left: 140px;" onclick="speakText('Koszalin')">Koszalin</a>
+<a href="#" class="city-link" id="Kraków" style="position:absolute; top: 120px; left: 140px;" onclick="speakText('Kraków')">Kraków</a>
+<a href="#" class="city-link" id="Legionowo" style="position:absolute; top: 150px; left: 140px;" onclick="speakText('Legionowo')">Legionowo</a>
+<a href="#" class="city-link" id="Legnica" style="position:absolute; top: 180px; left: 140px;" onclick="speakText('Legnica')">Legnica</a>
+<a href="#" class="city-link" id="Leszno" style="position:absolute; top: 210px; left: 140px;" onclick="speakText('Leszno')">Leszno</a>
+<a href="#" class="city-link" id="Łódź" style="position:absolute; top: 240px; left: 140px;" onclick="speakText('Łódź')">Łódź</a>
+<a href="#" class="city-link" id="Łomża" style="position:absolute; top: 270px; left: 140px;" onclick="speakText('Łomża')">Łomża</a>
+<a href="#" class="city-link" id="Lubin" style="position:absolute; top: 300px; left: 140px;" onclick="speakText('Lubin')">Lubin</a>
+<a href="#" class="city-link" id="Lublin" style="position:absolute; top: 330px; left: 140px;" onclick="speakText('Lublin')">Lublin</a>
+<a href="#" class="city-link" id="Mielec" style="position:absolute; top: 360px; left: 140px;" onclick="speakText('Mielec')">Mielec</a>
+<a href="#" class="city-link" id="Mysłowice " style="position:absolute; top: 390px; left: 140px;" onclick="speakText('Mysłowice ')">Mysłowice </a>
+<a href="#" class="city-link" id="Nowy Sącz" style="position:absolute; top: 420px; left: 140px;" onclick="speakText('Nowy Sącz')">Nowy Sącz</a>
+<a href="#" class="city-link" id="Olsztyn" style="position:absolute; top: 450px; left: 140px;" onclick="speakText('Olsztyn')">Olsztyn</a>
+<a href="#" class="city-link" id="Opole" style="position:absolute; top: 480px; left: 140px;" onclick="speakText('Opole')">Opole</a>
+<a href="#" class="city-link" id="Ostrołęka" style="position:absolute; top: 510px; left: 140px;" onclick="speakText('Ostrołęka')">Ostrołęka</a>
+<a href="#" class="city-link" id="Ostrów Wielkopolski" style="position:absolute; top: 540px; left: 140px;" onclick="speakText('Ostrów Wielkopolski')">Ostrów Wielkopolski</a>
+<a href="#" class="city-link" id="Ostrowiec Świętokrzyski" style="position:absolute; top: 570px; left: 140px;" onclick="speakText('Ostrowiec Świętokrzyski')">Ostrowiec Świętokrzyski</a>
+<a href="#" class="city-link" id="Pabianice" style="position:absolute; top: 600px; left: 140px;" onclick="speakText('Pabianice')">Pabianice</a>
+<a href="#" class="city-link" id="Piekary Śląskie " style="position:absolute; top: 630px; left: 140px;" onclick="speakText('Piekary Śląskie ')">Piekary Śląskie </a>
+<a href="#" class="city-link" id="Piła" style="position:absolute; top: 660px; left: 140px;" onclick="speakText('Piła')">Piła</a>
+<a href="#" class="city-link" id="Piotrków Trybunalski" style="position:absolute; top: 690px; left: 140px;" onclick="speakText('Piotrków Trybunalski')">Piotrków Trybunalski</a>
+<a href="#" class="city-link" id="Płock" style="position:absolute; top: 720px; left: 140px;" onclick="speakText('Płock')">Płock</a>
+<a href="#" class="city-link" id="Poznań" style="position:absolute; top: 750px; left: 140px;" onclick="speakText('Poznań')">Poznań</a>
+<a href="#" class="city-link" id="Pruszków" style="position:absolute; top: 0px; left: 80%;" onclick="speakText('Pruszków')">Pruszków</a>
+<a href="#" class="city-link" id="Przemyśl" style="position:absolute; top: 30px; left: 80%;" onclick="speakText('Przemyśl')">Przemyśl</a>
+<a href="#" class="city-link" id="Racibórz" style="position:absolute; top: 60px; left: 80%;" onclick="speakText('Racibórz')">Racibórz</a>
+<a href="#" class="city-link" id="Radom" style="position:absolute; top: 90px; left: 80%;" onclick="speakText('Radom')">Radom</a>
+<a href="#" class="city-link" id="Ruda Śląska " style="position:absolute; top: 120px; left: 80%;" onclick="speakText('Ruda Śląska ')">Ruda Śląska </a>
+<a href="#" class="city-link" id="Rybnik" style="position:absolute; top: 150px; left: 80%;" onclick="speakText('Rybnik')">Rybnik</a>
+<a href="#" class="city-link" id="Rzeszów" style="position:absolute; top: 180px; left: 80%;" onclick="speakText('Rzeszów')">Rzeszów</a>
+<a href="#" class="city-link" id="Siedlce" style="position:absolute; top: 210px; left: 80%;" onclick="speakText('Siedlce')">Siedlce</a>
+<a href="#" class="city-link" id="Siemianowice Śląskie " style="position:absolute; top: 240px; left: 80%;" onclick="speakText('Siemianowice Śląskie ')">Siemianowice Śląskie </a>
+<a href="#" class="city-link" id="Słupsk" style="position:absolute; top: 270px; left: 80%;" onclick="speakText('Słupsk')">Słupsk</a>
+<a href="#" class="city-link" id="Sosnowiec " style="position:absolute; top: 300px; left: 80%;" onclick="speakText('Sosnowiec ')">Sosnowiec </a>
+<a href="#" class="city-link" id="Stalowa Wola" style="position:absolute; top: 330px; left: 80%;" onclick="speakText('Stalowa Wola')">Stalowa Wola</a>
+<a href="#" class="city-link" id="Stargard" style="position:absolute; top: 360px; left: 80%;" onclick="speakText('Stargard')">Stargard</a>
+<a href="#" class="city-link" id="Suwałki" style="position:absolute; top: 390px; left: 80%;" onclick="speakText('Suwałki')">Suwałki</a>
+<a href="#" class="city-link" id="Świdnica" style="position:absolute; top: 420px; left: 80%;" onclick="speakText('Świdnica')">Świdnica</a>
+<a href="#" class="city-link" id="Szczecin" style="position:absolute; top: 450px; left: 80%;" onclick="speakText('Szczecin')">Szczecin</a>
+<a href="#" class="city-link" id="Tarnów" style="position:absolute; top: 480px; left: 80%;" onclick="speakText('Tarnów')">Tarnów</a>
+<a href="#" class="city-link" id="Tarnowskie Góry" style="position:absolute; top: 510px; left: 80%;" onclick="speakText('Tarnowskie Góry')">Tarnowskie Góry</a>
+<a href="#" class="city-link" id="Tczew" style="position:absolute; top: 540px; left: 80%;" onclick="speakText('Tczew')">Tczew</a>
+<a href="#" class="city-link" id="Tomaszów Mazowiecki" style="position:absolute; top: 570px; left: 80%;" onclick="speakText('Tomaszów Mazowiecki')">Tomaszów Mazowiecki</a>
+<a href="#" class="city-link" id="Toruń" style="position:absolute; top: 600px; left: 80%;" onclick="speakText('Toruń')">Toruń</a>
+<a href="#" class="city-link" id="Tychy " style="position:absolute; top: 630px; left: 80%;" onclick="speakText('Tychy ')">Tychy </a>
+<a href="#" class="city-link" id="Wałbrzych" style="position:absolute; top: 660px; left: 80%;" onclick="speakText('Wałbrzych')">Wałbrzych</a>
+<a href="#" class="city-link" id="Warsaw" style="position:absolute; top: 690px; left: 80%;" onclick="speakText('Warsaw')">Warsaw</a>
+<a href="#" class="city-link" id="Włocławek" style="position:absolute; top: 720px; left: 80%;" onclick="speakText('Włocławek')">Włocławek</a>
+<a href="#" class="city-link" id="Wrocław" style="position:absolute; top: 750px; left: 80%;" onclick="speakText('Wrocław')">Wrocław</a>
+<a href="#" class="city-link" id="Zabrze " style="position:absolute; top: 0px; left: 90%;" onclick="speakText('Zabrze ')">Zabrze </a>
+<a href="#" class="city-link" id="Zamość" style="position:absolute; top: 30px; left: 90%;" onclick="speakText('Zamość')">Zamość</a>
+<a href="#" class="city-link" id="Zgierz" style="position:absolute; top: 60px; left: 90%;" onclick="speakText('Zgierz')">Zgierz</a>
+<a href="#" class="city-link" id="Zielona Góra" style="position:absolute; top: 90px; left: 90%;" onclick="speakText('Zielona Góra')">Zielona Góra</a>
+<a href="#" class="city-link" id="Żory" style="position:absolute; top: 120px; left: 90%;" onclick="speakText('Żory')">Żory</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- Include the JavaScript code for TTS functionality -->
+	<script type="text/javascript" src="tts.js"></script>
+
+
+<script>
+// This function is called when a city link is clicked
+function speakText(text) {
+	// Create a new SpeechSynthesisUtterance object and set the text to the city name
+	var utterance = new SpeechSynthesisUtterance(text);
+	// Set the voice for the TTS to Polish language and use the first available voice
+	utterance.voice = speechSynthesis.getVoices().find(function(voice) {
+  		return voice.lang === 'pl-PL';
+	}) || speechSynthesis.getVoices()[0];
+	// Speak the text aloud
+	speechSynthesis.speak(utterance);
+}
+
+
+
+		// This function is called when the mouse moves over the body
+		function showCoords(event) {
+			var x = event.clientX;
+			var y = event.clientY;
+			document.getElementById("coordinates").innerHTML = "X: " + x + ", Y: " + y;
+		}
+
+		// Make the city links draggable
+		var activeItem = null;
+		var active = false;
+
+		document.addEventListener("mousedown", function(e) {
+			if (e.target.matches(".city-link")) {
+				active = true;
+				activeItem = e.target;
+			}
+		});
+
+		document.addEventListener("mousemove", function(e) {
+			if (active) {
+				e.preventDefault();
+				activeItem.style.left = (e.clientX - activeItem.offsetWidth / 2) + "px";
+				activeItem.style.top = (e.clientY - activeItem.offsetHeight / 2) + "px";
+			}
+		});
+
+		document.addEventListener("mouseup", function() {
+			active = false;
+			activeItem = null;
+		});
+
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
