@@ -65,6 +65,31 @@ body {
 
 
 <script>
+	//trying to forace browser to use tts polish 
+	const allVoicesObtained = new Promise(function(resolve, reject) {
+  let voices = window.speechSynthesis.getVoices();
+  if (voices.length !== 0) {
+    resolve(voices);
+  } else {
+    window.speechSynthesis.addEventListener("voiceschanged", function() {
+      voices = window.speechSynthesis.getVoices();
+      resolve(voices);
+    });
+  }
+});
+
+allVoicesObtained.then(voices => console.log("All voices:", voices));
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		document.addEventListener('mousemove', function(event) {
 	var y = event.clientY / document.documentElement.clientHeight * 100;
 			var x = event.clientX / document.documentElement.clientWidth * 100;
