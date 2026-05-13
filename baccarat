@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dragonfly: Full Chip Set Edition</title>
+    <style>
+        :root {
+            --felt-green: #0a3d24; 
+            --gold: #d4af37;
+            --banker-red: #8b0000;
+            --player-blue: #4682b4;
+            --tie-green: #0a3d24;
+        }
+
+        body { 
+            font-family: 'Garamond', serif; 
+            background: #051a0f; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            padding: 5px;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; 
+            justify-content: center;
+        }
+
+        /* Overlay System */
+        #setup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .setup-card { background: var(--felt-green); padding: 25px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 350px; box-shadow: 0 0 50px black; }
+        .setup-card input, .setup-card select { width: 80%; padding: 8px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; }
+
+        .game-content { width: 98vw; max-width: 1200px; display: grid; grid-template-columns: 1fr 320px; gap: 10px; }
+        
+        .header-area { grid-column: span 2; display: flex; justify-content: center; align-items: center; position: relative; width: 100%; }
+        .header-title { font-size: 2rem; color: var(--gold); letter-spacing: 2px; margin: 5px 0; }
+        .settings-btn { position: absolute; right: 20px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+
+        .table-container { 
+            background: var(--felt-green); 
+            padding: 15px; 
+            border-radius: 50px 50px 200px 200px; 
+            border: 8px solid #5d4037; 
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-bets { display: flex; gap: 10px; margin-bottom: 8px; width: 100%; justify-content: center; }
+        .zone { padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.1s; border: 2px solid var(--gold); text-align: center; min-width: 140px; }
+        .player-zone { background: var(--player-blue); font-size: 1.2rem; }
+        .banker-zone { background: var(--banker-red); font-size: 1.2rem; }
+        
+        .tie-zone { border: 3px double var(--gold); padding: 8px 40px; margin: 4px 0; }
+
+        .side-bet-row { display: flex; justify-content: center; gap: 30px; }
+        .circle-bet { 
+            width: 90px; height: 90px; 
+            border: 3px solid var(--gold); 
+            border-radius: 50%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .bet-label { font-weight: bold; color: var(--gold); font-size: 0.7rem; }
+        .bet-display { font-size: 1rem; color: #fff; font-weight: bold; }
+
+        /* Chips and Controls */
+        .chip-tray { display: flex; gap: 6px; background: rgba(0,0,0,0.6); padding: 8px; border-radius: 50px; border: 1px solid var(--gold); }
+        .chip { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 3px dashed rgba(255,255,255,0.4); font-size: 0.7rem; text-shadow: 1px 1px black; }
+        .chip.active { transform: scale(1.2); box-shadow: 0 0 15px var(--gold); border-style: solid; }
+        
+        /* Chip Colors */
+        .c1 { background: #eeeeee; color: #333; text-shadow: none; }
+        .c5 { background: #d32f2f; } 
+        .c25 { background: #2e7d32; } 
+        .c50 { background: #1976d2; }
+        .c100 { background: #333; color: var(--gold); } 
+        .c500 { background: #6a1b9a; } 
+        .c1000 { background: #ff8f00; color: black; }
+
+        .card { width: 48px; height: 72px; background: white; border-radius: 4px; color: black; display: flex; flex-direction: column; justify-content: space-between; padding: 3px; font-size: 0.8rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); font-weight: bold; }
+        .card.red { color: #d32f2f; }
+        
+        .play-btn { background: var(--gold); color: black; padding: 10px 35px; font-size: 1.2rem; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .win-flash { animation: flash 0.3s 3; }
+        @keyframes flash { 50% { background: white; color: black; } }
+
+        /* Sidebar stats */
+        .sidebar { display: flex; flex-direction: column; gap: 8px; }
+        .stats-box { background: rgba(0,0,0,0.3); padding: 10px; border: 1px solid var(--gold); border-radius: 10px; font-size: 0.9rem; }
+        .bead-plate { display: grid; grid-template-rows: repeat(6, 20px); grid-auto-flow: column; grid-auto-columns: 20px; gap: 2px; background: #fff; padding: 5px; border-radius: 4px; overflow-x: auto; height: 140px; border: 1px solid var(--gold); }
+        .bead { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: white; }
+        .bead.banker { background: var(--banker-red); } .bead.player { background: var(--player-blue); } .bead.tie { background: #2e7d32; }
+    </style>
+</head>
+<body>
+
+    <div id="setup-overlay">
+        <div class="setup-card">
+            <h2 style="color: var(--gold); margin-top:0;">TABLE SETTINGS</h2>
+            <p>Starting Bankroll:</p>
+            <input type="number" id="start-balance" value="5000">
+            <p>Shoe Size:</p>
+            <select id="shoe-size">
+                <option value="6">6 Decks</option>
+                <option value="8" selected>8 Decks</option>
+                <option value="0">Infinite</option>
+            </select>
+            <br><br>
+            <button class="play-btn" onclick="startGame()">APPLY & PLAY</button>
+        </div>
+    </div>
+
+    <div class="game-content">
+        <div class="header-area">
+            <div class="header-title">DRAGON FLY — FLY TO TIE</div>
+            <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+        </div>
+        
+        <div class="main-column">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-around; width: 100%; margin-bottom: 5px;">
+                    <div style="text-align:center;"><span id="p-score" style="color:var(--player-blue); font-weight:bold; font-size:1.4rem;">0</span><div id="p-cards" style="display:flex; gap:5px; height:75px;"></div></div>
+                    <div style="text-align:center;"><span id="b-score" style="color:var(--banker-red); font-weight:bold; font-size:1.4rem;">0</span><div id="b-cards" style="display:flex; gap:5px; height:75px;"></div></div>
+                </div>
+
+                <div class="main-bets">
+                    <div id="bet-player-box" class="zone player-zone" onclick="placeBet('player')">PLAYER <div id="disp-player" class="bet-display">$0</div></div>
+                    <div id="bet-banker-box" class="zone banker-zone" onclick="placeBet('banker')">BANKER <div id="disp-banker" class="bet-display">$0</div></div>
+                </div>
+
+                <div id="bet-tie-box" class="tie-zone zone" onclick="placeBet('tie')">
+                    <div class="bet-label">TIE (8:1)</div>
+                    <div id="disp-tie" class="bet-display">$0</div>
+                </div>
+
+                <div class="side-bet-row">
+                    <div id="bet-panda-box" class="circle-bet zone" onclick="placeBet('panda')">
+                        <span>🐼</span><div class="bet-label">PANDA 8</div><div id="disp-panda" class="bet-display">$0</div>
+                    </div>
+                    <div id="bet-dragon-box" class="circle-bet zone" onclick="placeBet('dragon')">
+                        <span>🐉</span><div class="bet-label">DRAGON 7</div><div id="disp-dragon" class="bet-display">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-top:5px;">
+                <div class="chip-tray">
+                    <div class="chip c1" onclick="selectChip(1, this)">$1</div>
+                    <div class="chip c5" onclick="selectChip(5, this)">$5</div>
+                    <div class="chip c25 active" onclick="selectChip(25, this)">$25</div>
+                    <div class="chip c50" onclick="selectChip(50, this)">$50</div>
+                    <div class="chip c100" onclick="selectChip(100, this)">$100</div>
+                    <div class="chip c500" onclick="selectChip(500, this)">$500</div>
+                    <div class="chip c1000" onclick="selectChip(1000, this)">$1k</div>
+                </div>
+                <button class="play-btn" onclick="playHand()">DEAL</button>
+                <button onclick="clearBets()" style="background:none; border:1px solid var(--gold); color:var(--gold); cursor:pointer; padding:5px 12px; border-radius:20px; font-size:0.8rem;">CLEAR</button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="stats-box">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:5px;">FINANCIALS</div>
+                <div style="display:flex; justify-content:space-between"><span>BANK:</span><span id="balance">$0</span></div>
+                <div style="display:flex; justify-content:space-between"><span>P/L:</span><span id="session-pl">$0</span></div>
+                <div style="display:flex; justify-content:space-between"><span>SHOE:</span><span id="shoe-count">0</span></div>
+            </div>
+            <div id="bead-plate" class="bead-plate"></div>
+            <div class="stats-box" style="font-size:0.8rem;">
+                <div style="display:flex; justify-content:space-between"><span>Banker:</span><span id="stat-banker">0</span></div>
+                <div style="display:flex; justify-content:space-between"><span>Player:</span><span id="stat-player">0</span></div>
+                <div style="display:flex; justify-content:space-between"><span>Tie:</span><span id="stat-tie">0</span></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let bankroll = 0, initialBankroll = 0, selectedChipValue = 25;
+    let currentBets = { player: 0, banker: 0, tie: 0, panda: 0, dragon: 0 };
+    let stats = { banker: 0, player: 0, tie: 0 };
+    let shoe = [];
+    let shoeSize = 8;
+
+    function toggleSettings() {
+        document.getElementById('setup-overlay').style.display = 'flex';
+        document.getElementById('start-balance').value = bankroll;
+    }
+
+    function startGame() {
+        const newBankroll = parseInt(document.getElementById('start-balance').value);
+        if(initialBankroll === 0) initialBankroll = newBankroll;
+        bankroll = newBankroll;
+        shoeSize = parseInt(document.getElementById('shoe-size').value);
+        initShoe();
+        document.getElementById('setup-overlay').style.display = 'none';
+        updateUI();
+    }
+
+    function initShoe() {
+        if (shoeSize === 0) { shoe = []; return; }
+        shoe = [];
+        for (let i = 0; i < shoeSize * 52; i++) shoe.push((i % 13) + 1);
+        for (let i = shoe.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shoe[i], shoe[j]] = [shoe[j], shoe[i]];
+        }
+    }
+
+    function getNextCard() {
+        if (shoeSize === 0) return Math.floor(Math.random() * 13) + 1;
+        if (shoe.length < 10) initShoe();
+        return shoe.pop();
+    }
+
+    function selectChip(val, el) {
+        selectedChipValue = val;
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function placeBet(type) {
+        if (bankroll < selectedChipValue) return;
+        currentBets[type] += selectedChipValue;
+        bankroll -= selectedChipValue;
+        updateUI();
+        document.getElementById(`disp-${type}`).textContent = `$${currentBets[type]}`;
+    }
+
+    function clearBets() {
+        for (let k in currentBets) { bankroll += currentBets[k]; currentBets[k] = 0; document.getElementById(`disp-${k}`).textContent = "$0"; }
+        updateUI();
+    }
+
+    function playHand() {
+        if (Object.values(currentBets).reduce((a,b)=>a+b) <= 0) return;
+        document.querySelectorAll('.zone').forEach(z => z.classList.remove('win-flash'));
+        const getVal = (v) => v >= 10 ? 0 : v;
+        let p = [getNextCard(), getNextCard()], b = [getNextCard(), getNextCard()];
+        let pS = (getVal(p[0]) + getVal(p[1])) % 10, bS = (getVal(b[0]) + getVal(b[1])) % 10;
+
+        if (pS <= 5 && bS < 8) {
+            let p3 = getNextCard(); p.push(p3); pS = (pS + getVal(p3)) % 10;
+            let drawB = false, p3v = getVal(p3);
+            if (bS <= 2) drawB = true;
+            else if (bS === 3 && p3v !== 8) drawB = true;
+            else if (bS === 4 && [2,3,4,5,6,7].includes(p3v)) drawB = true;
+            else if (bS === 5 && [4,5,6,7].includes(p3v)) drawB = true;
+            else if (bS === 6 && [6,7].includes(p3v)) drawB = true;
+            if (drawB) { b.push(getNextCard()); bS = (bS + getVal(b[b.length-1])) % 10; }
+        } else if (bS <= 5 && pS >= 6 && pS < 8) {
+            b.push(getNextCard()); bS = (bS + getVal(b[b.length-1])) % 10;
+        }
+        renderHand(p, b, pS, bS);
+        resolve(p, b, pS, bS);
+    }
+
+    function renderHand(p, b, pS, bS) {
+        const suits = ['♠','♥','♦','♣'];
+        const make = (v) => {
+            let s = suits[Math.floor(Math.random()*4)];
+            let lbl = v === 1 ? 'A' : v === 11 ? 'J' : v === 12 ? 'Q' : v === 13 ? 'K' : v;
+            return `<div class="card ${s==='♥'||s==='♦'?'red':''}"><div>${lbl}</div><div style="font-size:1.2rem;align-self:center">${s}</div></div>`;
+        };
+        document.getElementById('p-cards').innerHTML = p.map(make).join('');
+        document.getElementById('b-cards').innerHTML = b.map(make).join('');
+        document.getElementById('p-score').textContent = pS;
+        document.getElementById('b-score').textContent = bS;
+    }
+
+    function resolve(p, b, pS, bS) {
+        let win = 0, winner = '';
+        const dragon = bS === 7 && b.length === 3 && bS > pS;
+        const panda = pS === 8 && p.length === 3 && pS > bS;
+
+        if (pS === bS) { 
+            win += currentBets.tie * 9 + currentBets.player + currentBets.banker; winner = 'tie'; stats.tie++; 
+            document.getElementById('bet-tie-box').classList.add('win-flash');
+        } else if (pS > bS) {
+            win += currentBets.player * 2; winner = 'player'; stats.player++;
+            document.getElementById('bet-player-box').classList.add('win-flash');
+            if (panda) { win += currentBets.panda * 26; document.getElementById('bet-panda-box').classList.add('win-flash'); }
+        } else {
+            winner = 'banker'; stats.banker++;
+            if (dragon) { win += currentBets.dragon * 41 + currentBets.banker; document.getElementById('bet-dragon-box').classList.add('win-flash'); }
+            else { win += currentBets.banker * 2; document.getElementById('bet-banker-box').classList.add('win-flash'); }
+        }
+        bankroll += win;
+        const bead = document.createElement('div');
+        bead.className = `bead ${winner}`; bead.textContent = (winner === 'player' ? pS : bS);
+        const plate = document.getElementById('bead-plate');
+        plate.appendChild(bead); plate.scrollLeft = plate.scrollWidth;
+        for (let k in currentBets) { currentBets[k] = 0; document.getElementById(`disp-${k}`).textContent = "$0"; }
+        updateUI();
+    }
+
+    function updateUI() {
+        document.getElementById('balance').textContent = `$${bankroll}`;
+        const pl = bankroll - initialBankroll;
+        document.getElementById('session-pl').textContent = (pl >= 0 ? '+$' : '-$') + Math.abs(pl);
+        document.getElementById('session-pl').style.color = pl >= 0 ? '#4caf50' : '#f44336';
+        document.getElementById('shoe-count').textContent = shoeSize === 0 ? "∞" : shoe.length;
+        document.getElementById('stat-banker').textContent = stats.banker;
+        document.getElementById('stat-player').textContent = stats.player;
+        document.getElementById('stat-tie').textContent = stats.tie;
+    }
+</script>
+</body>
+</html>
