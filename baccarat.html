@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dragonfly To Tie</title>
     <style>
         :root {
@@ -28,16 +29,16 @@
             justify-content: center;
         }
 
-        /* Overlay System */
-        #setup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 100; }
-        .setup-card { background: var(--felt-green); padding: 25px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 350px; box-shadow: 0 0 50px black; }
-        .setup-card input, .setup-card select { width: 80%; padding: 8px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; }
+        /* Overlays */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .setup-card { background: var(--felt-green); padding: 30px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 350px; box-shadow: 0 0 50px black; }
+        .setup-card input, .setup-card select { width: 90%; padding: 10px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; }
 
         .game-content { width: 98vw; max-width: 1200px; display: grid; grid-template-columns: 1fr 320px; gap: 10px; }
         
         .header-area { grid-column: span 2; display: flex; justify-content: center; align-items: center; position: relative; width: 100%; }
         .header-title { font-size: 2rem; color: var(--gold); letter-spacing: 2px; margin: 5px 0; }
-        .settings-btn { position: absolute; right: 20px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .settings-btn { position: absolute; right: 20px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         .table-container { 
             background: var(--felt-green); 
@@ -54,7 +55,6 @@
         .zone { padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.1s; border: 2px solid var(--gold); text-align: center; min-width: 140px; }
         .player-zone { background: var(--player-blue); font-size: 1.2rem; }
         .banker-zone { background: var(--banker-red); font-size: 1.2rem; }
-        
         .tie-zone { border: 3px double var(--gold); padding: 8px 40px; margin: 4px 0; }
 
         .side-bet-row { display: flex; justify-content: center; gap: 30px; }
@@ -69,20 +69,14 @@
         .bet-label { font-weight: bold; color: var(--gold); font-size: 0.7rem; }
         .bet-display { font-size: 1rem; color: #fff; font-weight: bold; }
 
-        /* Chips and Controls */
+        /* Chips */
         .chip-tray { display: flex; gap: 6px; background: rgba(0,0,0,0.6); padding: 8px; border-radius: 50px; border: 1px solid var(--gold); }
-        .chip { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 3px dashed rgba(255,255,255,0.4); font-size: 0.7rem; text-shadow: 1px 1px black; }
+        .chip { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 3px dashed rgba(255,255,255,0.4); font-size: 0.7rem; }
         .chip.active { transform: scale(1.2); box-shadow: 0 0 15px var(--gold); border-style: solid; }
-        
-        /* Chip Colors */
-        .c1 { background: #eeeeee; color: #333; text-shadow: none; }
-        .c5 { background: #d32f2f; } 
-        .c25 { background: #2e7d32; } 
-        .c50 { background: #1976d2; }
-        .c100 { background: #333; color: var(--gold); } 
-        .c500 { background: #6a1b9a; } 
-        .c1000 { background: #ff8f00; color: black; }
+        .c1 { background: #eee; color: #333; } .c5 { background: #d32f2f; } .c25 { background: #2e7d32; } 
+        .c50 { background: #1976d2; } .c100 { background: #333; color: var(--gold); } .c500 { background: #6a1b9a; } .c1000 { background: #ff8f00; color: black; }
 
+        /* Cards */
         .card { width: 48px; height: 72px; background: white; border-radius: 4px; color: black; display: flex; flex-direction: column; justify-content: space-between; padding: 3px; font-size: 0.8rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); font-weight: bold; }
         .card.red { color: #d32f2f; }
         
@@ -90,24 +84,22 @@
         .win-flash { animation: flash 0.3s 3; }
         @keyframes flash { 50% { background: white; color: black; } }
 
-        /* Sidebar stats */
+        /* Sidebar & Stats */
         .sidebar { display: flex; flex-direction: column; gap: 8px; }
         .stats-box { background: rgba(0,0,0,0.3); padding: 10px; border: 1px solid var(--gold); border-radius: 10px; font-size: 0.9rem; }
         .bead-plate { display: grid; grid-template-rows: repeat(6, 20px); grid-auto-flow: column; grid-auto-columns: 20px; gap: 2px; background: #fff; padding: 5px; border-radius: 4px; overflow-x: auto; height: 140px; border: 1px solid var(--gold); }
-        
-        /* Bead Styles */
         .bead { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; color: white; }
         .bead.banker { background: var(--banker-red); } 
         .bead.player { background: var(--player-blue); } 
         .bead.tie { background: var(--tie-green); }
-        .bead.panda-win { background: var(--panda-purple); border: 1px solid white; box-shadow: inset 0 0 5px black; }
+        .bead.panda-win { background: var(--panda-purple); border: 1px solid white; }
         .bead.dragon-win { background: var(--dragon-orange); color: black; border: 1px solid black; }
 
         #shoe-preview { display: none; flex-wrap: wrap; gap: 2px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 150px; overflow-y: auto; }
         .preview-card { color: white; border: 1px solid #444; padding: 1px; min-width: 14px; text-align: center; border-radius: 2px; }
-        .next-card { color: #d4af37 !important; border-color: #d4af37 !important; font-weight: bold; }
-
-        .win-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; margin-left: 5px; animation: bounce 0.5s infinite alternate; }
+        .next-card { color: var(--gold) !important; border-color: var(--gold) !important; font-weight: bold; }
+        
+        .win-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; animation: bounce 0.5s infinite alternate; }
         .panda-badge { background: var(--panda-purple); color: white; border: 1px solid white; }
         .dragon-badge { background: var(--dragon-orange); color: black; border: 1px solid black; }
         @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-3px); } }
@@ -115,9 +107,22 @@
 </head>
 <body>
 
-    <div id="setup-overlay">
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="overlay">
         <div class="setup-card">
-            <h2 style="color: var(--gold); margin-top:0;">TABLE SETTINGS</h2>
+            <h2 style="color: var(--gold);">DRAGONFLY TO TIE</h2>
+            <p>Enter your email to begin:</p>
+            <input type="email" id="user-email" placeholder="email@example.com" required>
+            <br><br>
+            <button class="play-btn" onclick="handleLogin()">ENTER CASINO</button>
+            <p id="login-msg" style="font-size: 0.8rem; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <!-- Table Setup Overlay -->
+    <div id="setup-overlay" class="overlay" style="display:none;">
+        <div class="setup-card">
+            <h2 style="color: var(--gold);">TABLE SETTINGS</h2>
             <p>Starting Bankroll:</p>
             <input type="number" id="start-balance" value="5000">
             <p>Shoe Size:</p>
@@ -164,7 +169,7 @@
                 </div>
             </div>
 
-            <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-top:5px;">
+            <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-top:10px;">
                 <div class="chip-tray">
                     <div class="chip c1" onclick="selectChip(1, this)">$1</div>
                     <div class="chip c5" onclick="selectChip(5, this)">$5</div>
@@ -181,9 +186,9 @@
 
         <div class="sidebar">
             <div class="stats-box">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="color:var(--gold); font-weight:bold;">SHOE INSPECTOR</span>
-                    <button onclick="toggleShoeVisibility()" style="font-size:0.7rem; padding:2px 5px; cursor:pointer; background:#000; color:var(--gold); border:1px solid var(--gold);">TOGGLE</button>
+                    <button onclick="toggleShoeVisibility()" style="font-size:0.7rem; background:#000; color:var(--gold); border:1px solid var(--gold);">TOGGLE</button>
                 </div>
                 <div id="shoe-preview"></div>
             </div>
@@ -195,10 +200,8 @@
                 <div style="display:flex; justify-content:space-between"><span>SHOE:</span><span id="shoe-count">0</span></div>
             </div>
             <div id="bead-plate" class="bead-plate"></div>
-            <div class="stats-box" style="font-size:0.8rem;">
-                <div style="display:flex; justify-content:space-between"><span>Banker:</span><span id="stat-banker">0</span></div>
-                <div style="display:flex; justify-content:space-between"><span>Player:</span><span id="stat-player">0</span></div>
-                <div style="display:flex; justify-content:space-between"><span>Tie:</span><span id="stat-tie">0</span></div>
+            <div class="stats-box">
+                <div style="display:flex; justify-content:space-between"><span>B: <span id="stat-banker">0</span></span><span>P: <span id="stat-player">0</span></span><span>T: <span id="stat-tie">0</span></span></div>
                 <hr style="border:0; border-top:1px solid #444; margin:5px 0;">
                 <div id="special-notifications" style="min-height: 1.2rem; text-align: center;"></div>
             </div>
@@ -206,6 +209,9 @@
     </div>
 
 <script>
+    // --- SETTINGS ---
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE'; 
+
     let bankroll = 0, initialBankroll = 0, selectedChipValue = 25;
     let currentBets = { player: 0, banker: 0, tie: 0, panda: 0, dragon: 0 };
     let stats = { banker: 0, player: 0, tie: 0 };
@@ -213,21 +219,49 @@
     let shoeSize = 8;
     let shoeVisible = false;
 
-    function toggleSettings() {
-        document.getElementById('setup-overlay').style.display = 'flex';
-        document.getElementById('start-balance').value = bankroll;
+    // --- AUTH & SETUP ---
+    function handleLogin() {
+        const email = document.getElementById('user-email').value;
+        const msg = document.getElementById('login-msg');
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!pattern.test(email)) {
+            msg.style.color = "#ff4444";
+            msg.textContent = "Invalid email address.";
+            return;
+        }
+
+        msg.style.color = "#d4af37";
+        msg.textContent = "Connecting...";
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'email=' + encodeURIComponent(email)
+        }).then(() => {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('setup-overlay').style.display = 'flex';
+        }).catch(() => {
+            // Proceed anyway if network fails
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('setup-overlay').style.display = 'flex';
+        });
     }
 
+    function toggleSettings() { document.getElementById('setup-overlay').style.display = 'flex'; }
+
     function startGame() {
-        const newBankroll = parseInt(document.getElementById('start-balance').value);
-        if(initialBankroll === 0) initialBankroll = newBankroll;
-        bankroll = newBankroll;
+        const val = parseInt(document.getElementById('start-balance').value);
+        if(initialBankroll === 0) initialBankroll = val;
+        bankroll = val;
         shoeSize = parseInt(document.getElementById('shoe-size').value);
         initShoe();
         document.getElementById('setup-overlay').style.display = 'none';
         updateUI();
     }
 
+    // --- GAME ENGINE ---
     function initShoe() {
         if (shoeSize === 0) { shoe = []; return; }
         shoe = [];
@@ -254,8 +288,8 @@
         if (bankroll < selectedChipValue) return;
         currentBets[type] += selectedChipValue;
         bankroll -= selectedChipValue;
-        updateUI();
         document.getElementById(`disp-${type}`).textContent = `$${currentBets[type]}`;
+        updateUI();
     }
 
     function clearBets() {
@@ -272,6 +306,7 @@
         let p = [getNextCard(), getNextCard()], b = [getNextCard(), getNextCard()];
         let pS = (getVal(p[0]) + getVal(p[1])) % 10, bS = (getVal(b[0]) + getVal(b[1])) % 10;
 
+        // Third Card Rules
         if (pS <= 5 && bS < 8) {
             let p3 = getNextCard(); p.push(p3); pS = (pS + getVal(p3)) % 10;
             let drawB = false, p3v = getVal(p3);
@@ -284,6 +319,7 @@
         } else if (bS <= 5 && pS >= 6 && pS < 8) {
             b.push(getNextCard()); bS = (bS + getVal(b[b.length-1])) % 10;
         }
+
         renderHand(p, b, pS, bS);
         resolve(p, b, pS, bS);
     }
@@ -308,8 +344,7 @@
 
         if (pS === bS) { 
             win += currentBets.tie * 9 + currentBets.player + currentBets.banker; 
-            winner = 'tie'; stats.tie++; 
-            beadClass = 'tie'; beadText = pS;
+            winner = 'tie'; stats.tie++; beadClass = 'tie'; beadText = pS;
             document.getElementById('bet-tie-box').classList.add('win-flash');
         } else if (pS > bS) {
             winner = 'player'; stats.player++;
@@ -337,43 +372,32 @@
         }
 
         bankroll += win;
-        
-        // Add to Bead Plate
         const bead = document.createElement('div');
-        bead.className = `bead ${beadClass}`; 
-        bead.textContent = beadText;
+        bead.className = `bead ${beadClass}`; bead.textContent = beadText;
         const plate = document.getElementById('bead-plate');
         plate.appendChild(bead); plate.scrollLeft = plate.scrollWidth;
-
         for (let k in currentBets) { currentBets[k] = 0; document.getElementById(`disp-${k}`).textContent = "$0"; }
         updateUI();
     }
 
     function toggleShoeVisibility() {
         shoeVisible = !shoeVisible;
-        const container = document.getElementById('shoe-preview');
-        container.style.display = shoeVisible ? 'flex' : 'none';
+        document.getElementById('shoe-preview').style.display = shoeVisible ? 'flex' : 'none';
         renderShoePreview();
     }
 
     function renderShoePreview() {
-        const container = document.getElementById('shoe-preview');
         if (!shoeVisible) return;
         const faceMap = {1:'A', 11:'J', 12:'Q', 13:'K'};
-        const previewHTML = [...shoe].reverse().map((card, index) => {
-            const label = faceMap[card] || card;
-            const isNext = index === 0 ? 'next-card' : '';
-            return `<span class="preview-card ${isNext}">${label}</span>`;
-        }).join('');
-        container.innerHTML = previewHTML || "EMPTY";
+        document.getElementById('shoe-preview').innerHTML = [...shoe].reverse().map((c, i) => 
+            `<span class="preview-card ${i===0?'next-card':''}">${faceMap[c]||c}</span>`).join('');
     }
 
     function updateUI() {
         document.getElementById('balance').textContent = `$${bankroll}`;
         const pl = bankroll - initialBankroll;
-        const plEl = document.getElementById('session-pl');
-        plEl.textContent = (pl >= 0 ? '+$' : '-$') + Math.abs(pl);
-        plEl.style.color = pl >= 0 ? '#4caf50' : '#f44336';
+        document.getElementById('session-pl').textContent = (pl >= 0 ? '+$' : '-$') + Math.abs(pl);
+        document.getElementById('session-pl').style.color = pl >= 0 ? '#4caf50' : '#f44336';
         document.getElementById('shoe-count').textContent = shoeSize === 0 ? "∞" : shoe.length;
         document.getElementById('stat-banker').textContent = stats.banker;
         document.getElementById('stat-player').textContent = stats.player;
