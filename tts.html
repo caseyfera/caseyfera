@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>TTS Generator + MP3 Export</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    background:#111827;
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    background:#1f2937;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+h1{
+    text-align:center;
+    margin-top:0;
+    margin-bottom:25px;
+}
+
+textarea{
+    width:100%;
+    height:220px;
+    resize:vertical;
+    border:none;
+    outline:none;
+    padding:15px;
+    border-radius:12px;
+    background:#374151;
+    color:white;
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.control-group{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    margin-bottom:8px;
+    color:#d1d5db;
+}
+
+select,
+input[type=range]{
+    width:100%;
+}
+
+select{
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#374151;
+    color:white;
+    font-size:16px;
+}
+
+.slider-value{
+    margin-top:6px;
+    color:#9ca3af;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+button{
+    flex:1;
+    min-width:140px;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+.speak{
+    background:#10b981;
+    color:white;
+}
+
+.pause{
+    background:#f59e0b;
+    color:white;
+}
+
+.resume{
+    background:#3b82f6;
+    color:white;
+}
+
+.stop{
+    background:#ef4444;
+    color:white;
+}
+
+.export{
+    background:#8b5cf6;
+    color:white;
+}
+
+.status{
+    margin-top:20px;
+    text-align:center;
+    color:#d1d5db;
+}
+
+audio{
+    width:100%;
+    margin-top:20px;
+}
+
+.note{
+    margin-top:20px;
+    padding:15px;
+    background:#111827;
+    border-radius:12px;
+    color:#cbd5e1;
+    line-height:1.5;
+}
+
+@media(max-width:700px){
+
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>TTS Generator + MP3 Export</h1>
+
+    <textarea id="text">
+Welcome to the Text To Speech Generator with MP3 export.
+    </textarea>
+
+    <div class="controls">
+
+        <div class="control-group">
+            <label>Voice</label>
+            <select id="voiceSelect"></select>
+        </div>
+
+        <div class="control-group">
+            <label>Rate</label>
+            <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
+            <div class="slider-value" id="rateValue">1</div>
+        </div>
+
+        <div class="control-group">
+            <label>Pitch</label>
+            <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
+            <div class="slider-value" id="pitchValue">1</div>
+        </div>
+
+        <div class="control-group">
+            <label>Volume</label>
+            <input type="range" id="volume" min="0" max="1" value="1" step="0.1">
+            <div class="slider-value" id="volumeValue">1</div>
+        </div>
+
+    </div>
+
+    <div class="buttons">
+        <button class="speak" onclick="speakText()">Speak</button>
+        <button class="pause" onclick="pauseSpeech()">Pause</button>
+        <button class="resume" onclick="resumeSpeech()">Resume</button>
+        <button class="stop" onclick="stopSpeech()">Stop</button>
+        <button class="export" onclick="exportMP3()">Export MP3</button>
+    </div>
+
+    <audio id="audioPlayback" controls></audio>
+
+    <div class="status" id="status">
+        Ready
+    </div>
+
+    <div class="note">
+        <strong>Important:</strong><br><br>
+
+        Browsers do NOT allow direct MP3 exporting from the built-in SpeechSynthesis API.<br><br>
+
+        This version records the speech audio and downloads it as a WEBM audio file.
+        You can easily convert WEBM to MP3 using:
+        <br><br>
+        • VLC Media Player<br>
+        • Audacity<br>
+        • FFmpeg<br>
+        • Online converters
+    </div>
+
+</div>
+
+<script>
+
+const synth = window.speechSynthesis;
+
+const voiceSelect = document.getElementById("voiceSelect");
+
+const rate = document.getElementById("rate");
+const pitch = document.getElementById("pitch");
+const volume = document.getElementById("volume");
+
+const rateValue = document.getElementById("rateValue");
+const pitchValue = document.getElementById("pitchValue");
+const volumeValue = document.getElementById("volumeValue");
+
+const textInput = document.getElementById("text");
+const statusText = document.getElementById("status");
+
+const audioPlayback = document.getElementById("audioPlayback");
+
+let voices = [];
+
+function populateVoices(){
+
+    voices = synth.getVoices();
+
+    voiceSelect.innerHTML = "";
+
+    voices.forEach((voice, index) => {
+
+        const option = document.createElement("option");
+
+        option.value = index;
+        option.textContent = `${voice.name} (${voice.lang})`;
+
+        voiceSelect.appendChild(option);
+
+    });
+
+}
+
+populateVoices();
+
+if(speechSynthesis.onvoiceschanged !== undefined){
+    speechSynthesis.onvoiceschanged = populateVoices;
+}
+
+rate.addEventListener("input", () => {
+    rateValue.textContent = rate.value;
+});
+
+pitch.addEventListener("input", () => {
+    pitchValue.textContent = pitch.value;
+});
+
+volume.addEventListener("input", () => {
+    volumeValue.textContent = volume.value;
+});
+
+function createUtterance(){
+
+    const utterance = new SpeechSynthesisUtterance(textInput.value);
+
+    utterance.voice = voices[voiceSelect.value];
+    utterance.rate = parseFloat(rate.value);
+    utterance.pitch = parseFloat(pitch.value);
+    utterance.volume = parseFloat(volume.value);
+
+    return utterance;
+
+}
+
+function speakText(){
+
+    synth.cancel();
+
+    const utterance = createUtterance();
+
+    utterance.onstart = () => {
+        statusText.textContent = "Speaking...";
+    };
+
+    utterance.onend = () => {
+        statusText.textContent = "Finished";
+    };
+
+    synth.speak(utterance);
+
+}
+
+function pauseSpeech(){
+
+    if(synth.speaking){
+        synth.pause();
+        statusText.textContent = "Paused";
+    }
+
+}
+
+function resumeSpeech(){
+
+    if(synth.paused){
+        synth.resume();
+        statusText.textContent = "Resumed";
+    }
+
+}
+
+function stopSpeech(){
+
+    synth.cancel();
+    statusText.textContent = "Stopped";
+
+}
+
+async function exportMP3(){
+
+    statusText.textContent = "Preparing export...";
+
+    try{
+
+        // Create audio context
+        const audioContext = new AudioContext();
+
+        // Capture system audio stream
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video:true,
+            audio:true
+        });
+
+        const mediaRecorder = new MediaRecorder(stream);
+
+        let chunks = [];
+
+        mediaRecorder.ondataavailable = event => {
+            chunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+
+            const blob = new Blob(chunks, {
+                type:'audio/webm'
+            });
+
+            const url = URL.createObjectURL(blob);
+
+            audioPlayback.src = url;
+
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = "tts-audio.webm";
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            statusText.textContent = "Export complete";
+
+            stream.getTracks().forEach(track => track.stop());
+
+        };
+
+        mediaRecorder.start();
+
+        const utterance = createUtterance();
+
+        utterance.onend = () => {
+
+            setTimeout(() => {
+                mediaRecorder.stop();
+            }, 500);
+
+        };
+
+        speechSynthesis.speak(utterance);
+
+        statusText.textContent = "Recording speech...";
+
+    }catch(error){
+
+        console.error(error);
+
+        statusText.textContent = "Export failed";
+
+        alert(
+            "Your browser blocked audio capture.\n\n" +
+            "Use Chrome or Edge and allow audio sharing."
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
