@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dragonfly To Tie v2.38</title>
+    <title>Dragonfly To Tie v2.51</title>
     <style>
         :root {
             --felt-green: #0a4d2c; 
@@ -14,6 +14,8 @@
             --panda-purple: #511f73; 
             --dragon-orange: #b86200;
             --wood-trim: #3e2723;
+            --road-bg: #fff;
+            --road-b: #e0e0e0;
         }
         
         body { 
@@ -30,316 +32,314 @@
             box-sizing: border-box;
         }
 
-        /* Authentication Overlays */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .setup-card { background: #0b2e1a; padding: 30px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 85%; max-width: 360px; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
         .setup-card input, .setup-card select { width: 90%; padding: 12px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; text-align: center; }
 
-        /* Master Responsive Container */
         .game-content {
             width: 100vw;
-            max-width: 1280px;
+            max-width: 1400px;
             display: flex;
             flex-direction: column;
-            padding: 15px;
-            gap: 15px;
+            padding: 10px;
+            gap: 10px;
             box-sizing: border-box;
         }
 
-        /* Top Dashboards Grid (Desktop View) */
-        .top-dashboards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+        /* ── Roads Section ── */
+        .roads-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             width: 100%;
         }
 
+        .roads-top-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+        }
+
+        .roads-bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .road-box {
+            background: rgba(0,0,0,0.4);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 8px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .road-title {
+            text-align: center;
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(212,175,55,0.3);
+            padding-bottom: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Road canvas wrappers */
+        .road-canvas-wrap {
+            background: var(--road-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--road-b);
+            position: relative;
+        }
+
+        /* Bead plate (Road) — 6 rows, scroll horizontally */
+        .bead-plate {
+            display: grid;
+            grid-template-rows: repeat(6, 18px);
+            grid-auto-flow: column;
+            grid-auto-columns: 18px;
+            gap: 2px;
+            padding: 4px;
+            overflow-x: auto;
+            height: 124px;
+            box-sizing: border-box;
+        }
+        .bead { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: white; flex-shrink: 0; }
+        .bead.banker { background: var(--banker-red); }
+        .bead.player { background: var(--player-blue); }
+        .bead.tie { background: #1a8c22; }
+        .bead.panda-win { background: var(--panda-purple); border: 1px solid white; }
+        .bead.dragon-win { background: var(--dragon-orange); color: black; border: 1px solid black; }
+
+        /* Big Road */
+        .big-road-wrap {
+            overflow-x: auto;
+            height: 124px;
+            padding: 4px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .big-road-grid {
+            display: grid;
+            grid-template-rows: repeat(6, 18px);
+            grid-auto-flow: column;
+            grid-auto-columns: 20px;
+            gap: 2px;
+            height: 118px;
+        }
+        .br-cell {
+            width: 20px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .br-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2px solid;
+            box-sizing: border-box;
+        }
+        .br-circle.banker { background: var(--banker-red); border-color: #6a0000; }
+        .br-circle.player { background: var(--player-blue); border-color: #0d3c7a; }
+        /* Tie mark on big road = green stripe on top of circle */
+        .br-circle.has-tie::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 11px;
+            background: #1a8c22;
+            top: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Derived roads (Big Eye Boy, Small Road, Cockroach Pig) */
+        .derived-road-wrap {
+            overflow-x: auto;
+            height: 76px;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+        .derived-road-grid {
+            display: grid;
+            grid-template-rows: repeat(4, 16px);
+            grid-auto-flow: column;
+            grid-auto-columns: 18px;
+            gap: 2px;
+            height: 70px;
+        }
+        .dr-cell {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Big Eye Boy: filled circles */
+        .dr-circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dr-circle.rep { background: #e02020; }
+        .dr-circle.non { background: var(--player-blue); }
+        /* Small Road: hollow circles */
+        .dr-circle-sm {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            border: 2px solid;
+            background: transparent;
+            box-sizing: border-box;
+        }
+        .dr-circle-sm.rep { border-color: #e02020; }
+        .dr-circle-sm.non { border-color: var(--player-blue); }
+        /* Cockroach Pig: diagonal slashes */
+        .dr-slash {
+            width: 12px;
+            height: 12px;
+            position: relative;
+        }
+        .dr-slash::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 2px;
+            border-radius: 1px;
+            top: 5px;
+            left: -1px;
+            transform: rotate(-45deg);
+        }
+        .dr-slash.rep::before { background: #e02020; }
+        .dr-slash.non::before { background: var(--player-blue); }
+
+        /* Top Dashboard + Financials */
+        .top-dashboards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+        }
         .dashboard-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0,0,0,0.4);
             border: 2px solid var(--gold);
             border-radius: 8px;
             padding: 12px;
             box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
         }
-
         .dashboard-title {
             text-align: center;
             color: var(--gold);
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             letter-spacing: 1px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(212,175,55,0.3);
             padding-bottom: 4px;
             position: relative;
         }
+        .fin-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin: 4px 0; font-family: monospace; }
 
-        /* Financials Typography Layout */
-        .fin-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.95rem;
-            margin: 4px 0;
-            font-family: monospace;
-        }
-
-        /* Bead Plate Custom Layout */
-        .bead-plate { 
-            display: grid; 
-            grid-template-rows: repeat(6, 18px); 
-            grid-auto-flow: column; 
-            grid-auto-columns: 18px; 
-            gap: 2px; 
-            background: #fff; 
-            padding: 6px; 
-            border-radius: 4px; 
-            overflow-x: auto; 
-            height: 118px; 
-            border: 1px solid var(--gold);
-            box-sizing: border-box;
-        }
-        .bead { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold; color: white; }
-        .bead.banker { background: var(--banker-red); } 
-        .bead.player { background: var(--player-blue); } 
-        .bead.tie { background: var(--tie-green); }
-        .bead.panda-win { background: var(--panda-purple); border: 1px solid white; } 
-        .bead.dragon-win { background: var(--dragon-orange); color: black; border: 1px solid black; }
-
-        /* Header Title Stylings */
+        /* Header */
         .header-area { display: flex; justify-content: center; align-items: center; width: 100%; position: relative; margin-bottom: 5px; }
-        .header-title { font-size: 2.2rem; color: var(--gold); letter-spacing: 3px; text-align: center; font-weight: bold; text-shadow: 2px 2px 4px #000; margin: 0; }
+        .header-title { font-size: 2rem; color: var(--gold); letter-spacing: 3px; text-align: center; font-weight: bold; text-shadow: 2px 2px 4px #000; margin: 0; }
         .settings-btn { position: absolute; right: 10px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
 
-        /* Desktop Real Casino Felt Styling (Image 2) */
+        /* Casino Table */
         .casino-table {
             background: var(--felt-green);
             border: 16px solid var(--wood-trim);
             border-radius: 100px 100px 300px 300px;
             box-shadow: inset 0 0 100px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.7);
-            padding: 40px 30px;
+            padding: 20px 30px 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
             box-sizing: border-box;
-            position: relative;
         }
+        .table-score-header { display: flex; justify-content: center; gap: 40px; font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 10px; letter-spacing: 1px; }
+        .cards-felt-area { display: flex; justify-content: center; gap: 60px; width: 100%; margin-bottom: 18px; }
+        .card-slots-group { display: flex; gap: 8px; min-height: 80px; justify-content: center; align-items: center; }
+        .card-placeholder-box { width: 52px; height: 76px; border: 2px dashed rgba(255,255,255,0.25); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
 
-        /* Scoreboard inside Table Cloth */
-        .table-score-header {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
+        .betting-layout { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 800px; }
+        .row-main-bets { display: flex; width: 100%; justify-content: center; gap: 20px; }
+        .row-side-bets { display: flex; width: 100%; justify-content: center; gap: 25px; }
 
-        /* Real Cards Container Slots */
-        .cards-felt-area {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            width: 100%;
-            margin-bottom: 35px;
-        }
-        .card-slots-group {
-            display: flex;
-            gap: 8px;
-            min-height: 85px;
-            justify-content: center;
-            align-items: center;
-        }
-        .card-placeholder-box {
-            width: 54px;
-            height: 80px;
-            border: 2px dashed rgba(255, 255, 255, 0.25);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Betting Grid Systems */
-        .betting-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            width: 100%;
-            max-width: 800px;
-        }
-        .row-main-bets {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            gap: 20px;
-        }
-        .row-side-bets {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            gap: 25px;
-        }
-
-        /* Custom Box Betting Zones Layout styling */
-        .bet-zone {
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            transition: transform 0.1s, filter 0.1s;
-            border: 2px solid var(--gold);
-            padding: 15px;
-        }
+        .bet-zone { border-radius: 8px; cursor: pointer; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; box-shadow: 0 6px 12px rgba(0,0,0,0.4); transition: transform 0.1s, filter 0.1s; border: 2px solid var(--gold); padding: 10px; }
         .bet-zone:active { transform: scale(0.98); }
-        
-        .zone-player { background: var(--player-blue); width: 220px; height: 95px; }
-        .zone-banker { background: var(--banker-red); width: 220px; height: 95px; }
-        .zone-tie { background: var(--tie-green); border: 4px double var(--gold); width: 160px; height: 95px; }
-        .zone-panda { background: var(--panda-purple); width: 200px; height: 80px; }
-        .zone-dragon { background: var(--dragon-orange); width: 200px; height: 80px; }
-
+        .zone-player { background: var(--player-blue); width: 220px; height: 80px; }
+        .zone-banker { background: var(--banker-red); width: 220px; height: 80px; }
+        .zone-tie { background: var(--tie-green); border: 4px double var(--gold); width: 160px; height: 80px; }
+        .zone-panda { background: var(--panda-purple); width: 200px; height: 68px; }
+        .zone-dragon { background: var(--dragon-orange); width: 200px; height: 68px; }
         .bet-title-text { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; margin-bottom: 2px; }
         .bet-sub-text { font-size: 0.75rem; opacity: 0.8; margin-bottom: 4px; }
         .bet-value-text { font-size: 1.1rem; font-weight: bold; color: #fff; }
 
-        /* Shared Cards Presentation */
         .card { width: 54px; height: 80px; background: white; border-radius: 5px; color: black; display: flex; flex-direction: column; justify-content: space-between; padding: 4px; font-size: 0.9rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.5); font-weight: bold; box-sizing: border-box; }
         .card.red { color: #d32f2f; }
 
-        /* Shared Interactive Controls UI Elements */
-        .controls-row {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-top: 25px;
-            width: 100%;
-        }
-
-        .chip-tray { 
-            display: flex; 
-            gap: 10px; 
-            background: rgba(0,0,0,0.7); 
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            border: 2px solid var(--gold); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+        .controls-row { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 0; width: 100%; }
+        .chip-tray { display: flex; gap: 10px; background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 50px; border: 2px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .chip { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 3px dashed rgba(255,255,255,0.4); font-size: 0.8rem; transition: transform 0.2s, box-shadow 0.2s; }
         .chip.active { transform: translateY(-8px) scale(1.08); box-shadow: 0 8px 20px var(--gold); border-style: solid; }
-        
-        .c1 { background: #eee; color: #333; } .c5 { background: #d32f2f; } .c25 { background: #2e7d32; } 
-        .c50 { background: #1976d2; } .c100 { background: #333; color: var(--gold); } .c500 { background: #6a1b9a; } .c1000 { background: #ff8f00; color: black; }
+        .c1{background:#eee;color:#333}.c5{background:#d32f2f}.c25{background:#2e7d32}.c50{background:#1976d2}.c100{background:#333;color:var(--gold)}.c500{background:#6a1b9a}.c1000{background:#ff8f00;color:black}
 
-        .action-buttons-group {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            justify-content: center;
-        }
-        .main-deal-btn { background: linear-gradient(180deg, #ffe066 0%, var(--gold) 100%); color: black; padding: 12px 60px; font-size: 1.4rem; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 1px; }
+        .action-buttons-group { display: flex; gap: 20px; width: 100%; justify-content: center; }
+        .main-deal-btn { background: linear-gradient(180deg,#ffe066 0%,var(--gold) 100%); color: black; padding: 12px 60px; font-size: 1.4rem; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 1px; }
         .main-deal-btn:active { transform: scale(0.97); }
         .clear-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
 
-        #shoe-preview { display: none; flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px; }
+        .win-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; animation: bounce 0.5s infinite alternate; }
+        @keyframes bounce { from{transform:translateY(0)}to{transform:translateY(-3px)} }
+        .win-flash { animation: flash 0.3s 3; }
+        @keyframes flash { 50%{background:white;color:black;box-shadow:0 0 20px white} }
+
+        .coffee-link-wrapper { text-align: center; margin-top: auto; padding-top: 5px; }
+        .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg,#FFDD00 0%,var(--gold) 100%); color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; width: 100%; box-sizing: border-box; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+
+        /* Shoe inspector */
+        .inspector-placeholder-label { color: rgba(255,255,255,0.3); text-align: center; font-size: 0.85rem; margin-top: 10px; }
+        .shoe-preview-container { flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px; }
         .preview-card { color: white; border: 1px solid #333; padding: 1px 3px; min-width: 14px; text-align: center; }
         .next-card { color: var(--gold) !important; border-color: var(--gold) !important; font-weight: bold; }
-        
-        .win-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; animation: bounce 0.5s infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-3px); } }
-        .win-flash { animation: flash 0.3s 3; }
-        @keyframes flash { 50% { background: white; color: black; box-shadow: 0 0 20px white; } }
-        
-        .coffee-link-wrapper { text-align: center; margin-top: auto; padding-top: 5px; }
-        .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, #FFDD00 0%, var(--gold) 100%); color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; width: 100%; box-sizing: border-box; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
-        /* Container for bottom data blocks on mobile */
-        .bottom-dashboards-mobile { display: none; }
-
-        /* ========================================================================= */
-        /* MOBILE VIEWPORT RE-STRUCTURES (Image 3 + Bottom Stats Combo) */
-        /* ========================================================================= */
+        /* ── MOBILE ── */
         @media (max-width: 768px) {
-            body { padding: 0; background: #08110b; justify-content: flex-start; }
-            .game-content { width: 100vw; padding: 10px; gap: 12px; }
-            
-            /* Hide top layout element row on mobile */
-            .top-dashboards { display: none; }
-            
-            /* Show bottom telemetry layout cluster on mobile */
-            .bottom-dashboards-mobile { 
-                display: flex; 
-                flex-direction: column; 
-                gap: 12px; 
-                width: 100%; 
-                margin-top: 15px;
-            }
-            
-            .header-title { font-size: 1.8rem; }
-            
-            /* Morph Desktop Horseshoe Board into Clean Vertical Container (Image 3 Style) */
-            .casino-table {
-                background: #092414;
-                border: none;
-                border-radius: 12px;
-                box-shadow: none;
-                padding: 15px 10px;
-            }
-
-            .table-score-header {
-                width: 100%;
-                justify-content: space-around;
-                margin-bottom: 15px;
-                background: rgba(0, 0, 0, 0.4);
-                padding: 8px 0;
-                border-radius: 4px;
-                font-size: 1.2rem;
-            }
-
-            /* Stack cards naturally underneath scores */
-            .cards-felt-area {
-                flex-direction: row;
-                justify-content: space-around;
-                gap: 10px;
-                margin-bottom: 20px;
-            }
+            body { padding: 0; background: #08110b; }
+            .game-content { padding: 10px; gap: 10px; }
+            .header-title { font-size: 1.6rem; }
+            .top-dashboards { grid-template-columns: 1fr; }
+            .roads-top-row { grid-template-columns: 1fr; }
+            .roads-bottom-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .casino-table { background: #092414; border: none; border-radius: 12px; box-shadow: none; padding: 15px 10px; }
+            .table-score-header { width: 100%; justify-content: space-around; font-size: 1.1rem; background: rgba(0,0,0,0.4); padding: 8px 0; border-radius: 4px; }
+            .cards-felt-area { flex-direction: row; justify-content: space-around; gap: 10px; margin-bottom: 15px; }
             .card-slots-group { min-height: 70px; }
-            .card-placeholder-box, .card { width: 44px; height: 68px; font-size: 0.8rem; }
-
-            /* Full Vertical Re-ordering of Bet Blocks (Image 3 Layout) */
+            .card-placeholder-box,.card { width: 44px; height: 68px; font-size: 0.8rem; }
             .betting-layout { width: 100%; gap: 10px; }
             .row-main-bets { flex-direction: column; width: 100%; gap: 10px; align-items: center; }
             .row-side-bets { width: 100%; gap: 10px; }
-
-            /* Size scaling to fill viewport block structure tightly */
             .bet-zone { width: 100% !important; height: auto !important; padding: 12px 10px; }
-            .zone-player { order: 1; }
-            .zone-tie { order: 2; }
-            .zone-banker { order: 3; }
-            
             .bet-title-text { font-size: 1.25rem; }
             .bet-value-text { font-size: 1rem; }
-
-            /* Bottom Controls Lock-up adjustment */
             .controls-row { margin-top: 10px; gap: 12px; }
             .chip-tray { width: 100%; justify-content: space-between; box-sizing: border-box; padding: 8px 12px; }
             .chip { width: 38px; height: 38px; font-size: 0.7rem; }
             .chip.active { transform: translateY(-4px); }
-            
             .action-buttons-group { flex-direction: column; gap: 8px; width: 100%; align-items: center; }
             .main-deal-btn { width: 100%; max-width: 280px; padding: 14px 0; font-size: 1.3rem; }
-            .clear-btn { width: 100%; max-width: 140px; padding: 8px 0; order: 2; }
+            .clear-btn { width: 100%; max-width: 140px; padding: 8px 0; }
         }
     </style>
 </head>
@@ -347,25 +347,25 @@
 
     <div id="login-overlay" class="overlay">
         <div class="setup-card">
-            <h2 style="color: var(--gold); margin-bottom: 20px; font-size: 1.4rem;">DRAGONFLY TO TIE v2.38</h2>
+            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.51</h2>
             <div id="email-step">
-                <input type="text" id="user-email" placeholder="Email Address" autocomplete="off">
+                <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
                 <br><br>
-                <button class="main-deal-btn" onclick="handleLogin()" style="width: 100%; font-size: 1.1rem; padding: 10px 0;">Access</button>
+                <button class="main-deal-btn" onclick="handleLogin()" style="width:100%;font-size:1.1rem;padding:10px 0;">Access</button>
             </div>
             <div id="code-step" style="display:none;">
                 <p>Verification Code:</p>
-                <input type="text" id="access-code" placeholder="000000">
+                <input type="text" id="access-code" placeholder="000000" onkeydown="if(event.key==='Enter') verifyCode()">
                 <br><br>
-                <button class="main-deal-btn" onclick="verifyCode()" style="width: 100%; font-size: 1.1rem; padding: 10px 0;">Verify</button>
+                <button class="main-deal-btn" onclick="verifyCode()" style="width:100%;font-size:1.1rem;padding:10px 0;">Verify</button>
             </div>
-            <p id="login-msg" style="font-size: 0.85rem; margin-top: 15px; color: var(--gold); min-height: 1.2rem;"></p>
+            <p id="login-msg" style="font-size:0.85rem;margin-top:15px;color:var(--gold);min-height:1.2rem;"></p>
         </div>
     </div>
 
     <div id="setup-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
-            <h2 style="color: var(--gold); font-size: 1.4rem;">TABLE SETUP</h2>
+            <h2 style="color:var(--gold);font-size:1.4rem;">TABLE SETUP</h2>
             <p>Initial Bankroll:</p>
             <input type="number" id="start-balance" value="5000">
             <p>Shoe Size:</p>
@@ -375,47 +375,24 @@
                 <option value="0">Infinite</option>
             </select>
             <br><br>
-            <button class="main-deal-btn" onclick="startGame()" style="width: 100%; font-size: 1.1rem; padding: 10px 0;">Join Table</button>
+            <button class="main-deal-btn" onclick="startGame()" style="width:100%;font-size:1.1rem;padding:10px 0;">Join Table</button>
         </div>
     </div>
 
     <div class="game-content" id="game-container" style="display:none;">
-        
-        <div class="top-dashboards" id="desktop-dashboards">
-            <div class="dashboard-box">
-                <div class="dashboard-title">FINANCIALS</div>
-                <div class="fin-row"><span>BANKROLL:</span><span class="balance-label" style="color:#fff; font-weight:bold;">$0.00</span></div>
-                <div class="fin-row"><span>SESSION P/L:</span><span class="session-pl-label">$0.00</span></div>
-                <div class="fin-row"><span>SHOE CARDS:</span><span class="shoe-count-label" style="color:var(--gold);">0</span></div>
-            </div>
-            
-            <div class="dashboard-box">
-                <div class="dashboard-title">
-                    SHOE INSPECTOR
-                    <button onclick="toggleShoeVisibility()" style="position:absolute; right:0; top:0; background:none; border:none; color:var(--gold); cursor:pointer; font-size:0.8rem;">[TOGGLE]</button>
-                </div>
-                <div class="shoe-preview-container" id="shoe-preview-desktop" style="display:none; flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px;"></div>
-                <div class="inspector-placeholder-label" style="color:rgba(255,255,255,0.3); text-align:center; font-size:0.85rem; margin-top:10px;">Inspector Engine Standby</div>
-            </div>
-            
-            <div class="dashboard-box">
-                <div class="dashboard-title">BEAD PLATE</div>
-                <div class="bead-plate bead-plate-container"></div>
-            </div>
-        </div>
 
+        <!-- Header -->
         <div class="header-area">
-            <div class="header-title">DRAGONFLY TO TIE <span style="font-size: 1rem; vertical-align: middle; opacity: 0.7;">v2.38</span></div>
+            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.51</span></div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
         </div>
 
+        <!-- Casino Table (TOP) -->
         <div class="casino-table">
-            
             <div class="table-score-header">
                 <span style="color:#9ec2ff;">PLAYER: <span id="p-score">0</span></span>
                 <span style="color:#ff9e9e;">BANKER: <span id="b-score">0</span></span>
             </div>
-
             <div class="cards-felt-area">
                 <div class="card-slots-group" id="p-cards">
                     <div class="card-placeholder-box"></div>
@@ -426,94 +403,154 @@
                     <div class="card-placeholder-box"></div>
                 </div>
             </div>
-
             <div class="betting-layout">
                 <div class="row-main-bets">
                     <div id="bet-player-box" class="bet-zone zone-player" onclick="placeBet('player')">
                         <div class="bet-title-text">PLAYER</div>
                         <div class="bet-value-text" id="disp-player">$0</div>
                     </div>
-
                     <div id="bet-tie-box" class="bet-zone zone-tie" onclick="placeBet('tie')">
                         <div class="bet-title-text" style="color:var(--gold);">TIE 8:1</div>
                         <div class="bet-value-text" id="disp-tie">$0</div>
                     </div>
-
                     <div id="bet-banker-box" class="bet-zone zone-banker" onclick="placeBet('banker')">
                         <div class="bet-title-text">BANKER</div>
                         <div class="bet-value-text" id="disp-banker">$0</div>
                     </div>
                 </div>
-
                 <div class="row-side-bets">
                     <div id="bet-panda-box" class="bet-zone zone-panda" onclick="placeBet('panda')">
                         <div class="bet-title-text" style="font-size:1.2rem;">🐼 PANDA 8</div>
                         <div class="bet-value-text" id="disp-panda">$0</div>
                     </div>
-
                     <div id="bet-dragon-box" class="bet-zone zone-dragon" onclick="placeBet('dragon')">
-                        <div class="bet-title-text" style="font-size:1.2rem; color:#fff;">🐉 DRAGON 7</div>
+                        <div class="bet-title-text" style="font-size:1.2rem;color:#fff;">🐉 DRAGON 7</div>
                         <div class="bet-value-text" id="disp-dragon">$0</div>
                     </div>
                 </div>
             </div>
-
-            <div id="special-notifications" style="min-height: 1.5rem; text-align: center; margin-top: 15px; font-weight: bold; font-size: 1.1rem;"></div>
+            <div id="special-notifications" style="min-height:1.2rem;text-align:center;margin-top:8px;font-weight:bold;font-size:1rem;"></div>
         </div>
 
+        <!-- Chips + Deal -->
         <div class="controls-row">
             <div class="chip-tray">
-                <div class="chip c1" onclick="selectChip(1, this)">$1</div>
-                <div class="chip c5" onclick="selectChip(5, this)">$5</div>
-                <div class="chip c25 active" onclick="selectChip(25, this)">$25</div>
-                <div class="chip c50" onclick="selectChip(50, this)">$50</div>
-                <div class="chip c100" onclick="selectChip(100, this)">$100</div>
-                <div class="chip c500" onclick="selectChip(500, this)">$500</div>
-                <div class="chip c1000" onclick="selectChip(1000, this)">$1k</div>
+                <div class="chip c1" onclick="selectChip(1,this)">$1</div>
+                <div class="chip c5" onclick="selectChip(5,this)">$5</div>
+                <div class="chip c25 active" onclick="selectChip(25,this)">$25</div>
+                <div class="chip c50" onclick="selectChip(50,this)">$50</div>
+                <div class="chip c100" onclick="selectChip(100,this)">$100</div>
+                <div class="chip c500" onclick="selectChip(500,this)">$500</div>
+                <div class="chip c1000" onclick="selectChip(1000,this)">$1k</div>
             </div>
-
             <div class="action-buttons-group">
                 <button onclick="clearBets()" class="clear-btn">CLEAR</button>
                 <button class="main-deal-btn" onclick="playHand()">DEAL</button>
             </div>
         </div>
 
-        <div class="bottom-dashboards-mobile" id="mobile-dashboards">
+        <!-- Financials + Shoe Inspector (BELOW TABLE) -->
+        <div class="top-dashboards">
             <div class="dashboard-box">
                 <div class="dashboard-title">FINANCIALS</div>
-                <div class="fin-row"><span>BANKROLL:</span><span class="balance-label" style="color:#fff; font-weight:bold;">$0.00</span></div>
+                <div class="fin-row"><span>BANKROLL:</span><span class="balance-label" style="color:#fff;font-weight:bold;">$0.00</span></div>
                 <div class="fin-row"><span>SESSION P/L:</span><span class="session-pl-label">$0.00</span></div>
                 <div class="fin-row"><span>SHOE CARDS:</span><span class="shoe-count-label" style="color:var(--gold);">0</span></div>
+                <div class="fin-row"><span>B:</span><span id="stat-b" style="color:#ff9e9e;">0</span>
+                    &nbsp;<span>P:</span><span id="stat-p" style="color:#9ec2ff;">0</span>
+                    &nbsp;<span>T:</span><span id="stat-t" style="color:#7dff7d;">0</span></div>
             </div>
-
             <div class="dashboard-box">
-                <div class="dashboard-title">BEAD PLATE</div>
-                <div class="bead-plate bead-plate-container"></div>
-            </div>
-
-            <div class="dashboard-box">
-                <div class="dashboard-title">
+                <div class="dashboard-title" style="position:relative;">
                     SHOE INSPECTOR
-                    <button onclick="toggleShoeVisibility()" style="position:absolute; right:0; top:0; background:none; border:none; color:var(--gold); cursor:pointer; font-size:0.8rem;">[TOGGLE]</button>
+                    <button onclick="toggleShoeVisibility()" style="position:absolute;right:0;top:0;background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.75rem;">[TOGGLE]</button>
                 </div>
-                <div class="shoe-preview-container" id="shoe-preview-mobile" style="display:none; flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px;"></div>
-                <div class="inspector-placeholder-label" style="color:rgba(255,255,255,0.3); text-align:center; font-size:0.85rem; margin-top:10px;">Inspector Engine Standby</div>
+                <div id="shoe-preview-el" class="shoe-preview-container" style="display:none;"></div>
+                <div class="inspector-placeholder-label" id="inspector-placeholder">Inspector Engine Standby</div>
             </div>
         </div>
 
-        <div class="coffee-link-wrapper" style="width:100%; max-width: 240px; margin: 10px auto 0 auto;">
-             <a href="https://buymeacoffee.com/baccaratfunk/the-motion-energy" target="_blank" class="coffee-link">☕ Buy me a cup of coffee</a>
+        <!-- ═══════════════════════════════════
+             FIVE ROADS SECTION
+        ════════════════════════════════════ -->
+        <div class="roads-section">
+            <!-- Top row: Bead Plate (Road) + Big Road -->
+            <div class="roads-top-row">
+                <div class="road-box">
+                    <div class="road-title">🔵 ROAD (珠盘路)</div>
+                    <div class="road-canvas-wrap">
+                        <div class="bead-plate" id="road-bead"></div>
+                    </div>
+                </div>
+                <div class="road-box">
+                    <div class="road-title">🔴 BIG ROAD (大路)</div>
+                    <div class="road-canvas-wrap">
+                        <div class="big-road-wrap">
+                            <div class="big-road-grid" id="road-big"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom row: Three derived roads -->
+            <div class="roads-bottom-row">
+                <div class="road-box">
+                    <div class="road-title">👁 BIG EYE BOY (大眼仔)</div>
+                    <div class="road-canvas-wrap">
+                        <div class="derived-road-wrap">
+                            <div class="derived-road-grid" id="road-beb"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="road-box">
+                    <div class="road-title">📍 SMALL ROAD (小路)</div>
+                    <div class="road-canvas-wrap">
+                        <div class="derived-road-wrap">
+                            <div class="derived-road-grid" id="road-small"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="road-box">
+                    <div class="road-title">🪳 COCKROACH PIG (曱甴路)</div>
+                    <div class="road-canvas-wrap">
+                        <div class="derived-road-wrap">
+                            <div class="derived-road-grid" id="road-cock"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ═══════════════════════════════════ -->
+
+        <div class="coffee-link-wrapper" style="width:100%;max-width:240px;margin:6px auto 0 auto;">
+            <a href="https://buymeacoffee.com/baccaratfunk/the-motion-energy" target="_blank" class="coffee-link">☕ Buy me a cup of coffee</a>
         </div>
     </div>
 
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHrUd-Hyi-FST4-YD34GHFOXHFbRscOuTKbqbDn6v7WjkolDx8wKbUX3JxIJ1jhLc/exec';
     let bankroll = 0, initialBankroll = 0, selectedChipValue = 25, userEmail = "";
-    let currentBets = { player: 0, banker: 0, tie: 0, panda: 0, dragon: 0 };
-    let stats = { banker: 0, player: 0, tie: 0 };
+    let currentBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
+    let stats = { banker:0, player:0, tie:0 };
     let shoe = [], shoeSize = 8, shoeVisible = false;
 
-    // --- ENCRYPTED BYPASS VERIFICATION GATEWAY ---
+    // ══════════════════════════════════════════════════════════
+    //  ROAD DATA STRUCTURES
+    // ══════════════════════════════════════════════════════════
+    // beadHistory: array of { result: 'banker'|'player'|'tie'|'panda-win'|'dragon-win', label }
+    let beadHistory = [];
+
+    // bigRoadGrid: 2D array [col][row] = { type:'banker'|'player', tieCount:0 }
+    // We store it as a flat columns array for easy rendering
+    let bigRoadColumns = []; // each col = array of cells (max 6)
+    let bigRoadCurrentCol = 0;
+    let bigRoadLastNonTie = null; // 'banker'|'player'
+
+    // derived road entry arrays: each = { rep: bool }
+    let bebEntries = [];   // Big Eye Boy
+    let smallEntries = []; // Small Road
+    let cockEntries = [];  // Cockroach Pig
+
+    // ── Login / Setup ──
     function handleLogin() {
         const input = document.getElementById('user-email').value.trim().toLowerCase();
         if (input === "dragonfly") {
@@ -527,188 +564,370 @@
             msg.textContent = "Invalid Credentials";
         }
     }
-
     async function sendCode() {
         userEmail = document.getElementById('user-email').value.trim();
         const msg = document.getElementById('login-msg');
-        msg.style.color = "var(--gold)";
-        msg.textContent = "Checking server...";
+        msg.style.color = "var(--gold)"; msg.textContent = "Checking server...";
         try {
-            const response = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail), { method: 'POST' });
-            const result = await response.text();
-            if (result === "Quota Exceeded") {
-                msg.style.color = "#ff4444";
-                msg.textContent = "Google Daily Email Limit Reached.";
-            } else {
-                document.getElementById('email-step').style.display = 'none';
-                document.getElementById('code-step').style.display = 'block';
-                msg.textContent = "Code sent! Valid for 5 minutes.";
-            }
-        } catch (e) { msg.textContent = "Connection error."; }
+            const r = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail), { method:'POST' });
+            const result = await r.text();
+            if (result === "Quota Exceeded") { msg.style.color="#ff4444"; msg.textContent="Google Daily Email Limit Reached."; }
+            else { document.getElementById('email-step').style.display='none'; document.getElementById('code-step').style.display='block'; msg.textContent="Code sent! Valid for 5 minutes."; }
+        } catch(e) { msg.textContent="Connection error."; }
     }
-
     async function verifyCode() {
         const token = document.getElementById('access-code').value.trim();
         const msg = document.getElementById('login-msg');
         try {
-            const response = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${token}`);
-            const result = await response.text();
-            if (result === "Verified") {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('setup-overlay').style.display = 'flex';
-            } else { msg.style.color = "#ff4444"; msg.textContent = "Invalid or expired code."; }
-        } catch (e) { msg.textContent = "Verification error."; }
+            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${token}`);
+            const result = await r.text();
+            if (result === "Verified") { document.getElementById('login-overlay').style.display='none'; document.getElementById('setup-overlay').style.display='flex'; }
+            else { msg.style.color="#ff4444"; msg.textContent="Invalid or expired code."; }
+        } catch(e) { msg.textContent="Verification error."; }
     }
 
-    // --- MATHEMATICAL CASINO ENGINE CORE ---
-    function toggleSettings() { document.getElementById('setup-overlay').style.display = 'flex'; }
+    function toggleSettings() { document.getElementById('setup-overlay').style.display='flex'; }
     function startGame() {
         const val = parseInt(document.getElementById('start-balance').value);
-        if(initialBankroll === 0) initialBankroll = val;
+        if (initialBankroll === 0) initialBankroll = val;
         bankroll = val; shoeSize = parseInt(document.getElementById('shoe-size').value);
-        initShoe(); 
-        document.getElementById('setup-overlay').style.display = 'none';
-        document.getElementById('game-container').style.display = 'flex';
+        initShoe();
+        // Reset roads
+        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        bebEntries = []; smallEntries = []; cockEntries = [];
+        stats = { banker:0, player:0, tie:0 };
+        document.getElementById('setup-overlay').style.display='none';
+        document.getElementById('game-container').style.display='flex';
+        renderAllRoads();
         updateUI();
     }
 
     function initShoe() {
         if (shoeSize === 0) { shoe = []; return; }
-        shoe = []; for (let i = 0; i < shoeSize * 52; i++) shoe.push((i % 13) + 1);
-        for (let i = shoe.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shoe[i], shoe[j]] = [shoe[j], shoe[i]]; }
+        shoe = []; for (let i=0;i<shoeSize*52;i++) shoe.push((i%13)+1);
+        for (let i=shoe.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [shoe[i],shoe[j]]=[shoe[j],shoe[i]]; }
     }
-
-    function getNextCard() { if (shoeSize === 0) return Math.floor(Math.random() * 13) + 1; if (shoe.length < 10) initShoe(); return shoe.pop(); }
-    function selectChip(val, el) { selectedChipValue = val; document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); }
-    
-    function placeBet(type) { 
-        if (bankroll < selectedChipValue) return; 
-        currentBets[type] += selectedChipValue; 
-        bankroll -= selectedChipValue; 
-        document.getElementById(`disp-${type}`).textContent = `$${currentBets[type]}`; 
-        updateUI(); 
-    }
-    
-    function clearBets() { 
-        for (let k in currentBets) { 
-            bankroll += currentBets[k]; 
-            currentBets[k] = 0; 
-            document.getElementById(`disp-${k}`).textContent = "$0"; 
-        } 
-        updateUI(); 
-    }
+    function getNextCard() { if(shoeSize===0) return Math.floor(Math.random()*13)+1; if(shoe.length<10) initShoe(); return shoe.pop(); }
+    function selectChip(val, el) { selectedChipValue=val; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
+    function placeBet(type) { if(bankroll<selectedChipValue) return; currentBets[type]+=selectedChipValue; bankroll-=selectedChipValue; document.getElementById(`disp-${type}`).textContent=`$${currentBets[type]}`; updateUI(); }
+    function clearBets() { for(let k in currentBets){ bankroll+=currentBets[k]; currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; } updateUI(); }
 
     function playHand() {
-        if (Object.values(currentBets).reduce((a,b)=>a+b) <= 0) return;
-        document.querySelectorAll('.bet-zone').forEach(z => z.classList.remove('win-flash'));
-        document.getElementById('special-notifications').innerHTML = ''; 
-        
-        const gV = (v) => v >= 10 ? 0 : v;
-        let p = [getNextCard(), getNextCard()], b = [getNextCard(), getNextCard()];
-        let pS = (gV(p[0]) + gV(p[1])) % 10, bS = (gV(b[0]) + gV(b[1])) % 10;
-
-        if (pS <= 5 && bS < 8) {
-            let p3 = getNextCard(); p.push(p3); pS = (pS + gV(p3)) % 10;
-            let dB = false, p3v = gV(p3);
-            if (bS <= 2) dB = true; 
-            else if (bS === 3 && p3v !== 8) dB = true;
-            else if (bS === 4 && [2,3,4,5,6,7].includes(p3v)) dB = true;
-            else if (bS === 5 && [4,5,6,7].includes(p3v)) dB = true;
-            else if (bS === 6 && [6,7].includes(p3v)) dB = true;
-            if (dB) { b.push(getNextCard()); bS = (bS + gV(b[b.length-1])) % 10; }
-        } else if (bS <= 5 && pS >= 6 && pS < 8) { b.push(getNextCard()); bS = (bS + gV(b[b.length-1])) % 10; }
-
-        renderHand(p, b, pS, bS); resolve(p, b, pS, bS);
+        if (Object.values(currentBets).reduce((a,b)=>a+b)<=0) return;
+        document.querySelectorAll('.bet-zone').forEach(z=>z.classList.remove('win-flash'));
+        document.getElementById('special-notifications').innerHTML='';
+        const gV=(v)=>v>=10?0:v;
+        let p=[getNextCard(),getNextCard()], b=[getNextCard(),getNextCard()];
+        let pS=(gV(p[0])+gV(p[1]))%10, bS=(gV(b[0])+gV(b[1]))%10;
+        if (pS<=5 && bS<8) {
+            let p3=getNextCard(); p.push(p3); pS=(pS+gV(p3))%10;
+            let dB=false, p3v=gV(p3);
+            if(bS<=2) dB=true;
+            else if(bS===3&&p3v!==8) dB=true;
+            else if(bS===4&&[2,3,4,5,6,7].includes(p3v)) dB=true;
+            else if(bS===5&&[4,5,6,7].includes(p3v)) dB=true;
+            else if(bS===6&&[6,7].includes(p3v)) dB=true;
+            if(dB){ b.push(getNextCard()); bS=(bS+gV(b[b.length-1]))%10; }
+        } else if(bS<=5&&pS>=6&&pS<8){ b.push(getNextCard()); bS=(bS+gV(b[b.length-1]))%10; }
+        renderHand(p,b,pS,bS);
+        resolve(p,b,pS,bS);
     }
 
-    function renderHand(p, b, pS, bS) {
-        const s = ['♠','♥','♦','♣'];
-        const mk = (v) => {
-            let st = s[Math.floor(Math.random()*4)], lbl = v === 1 ? 'A' : v === 11 ? 'J' : v === 12 ? 'Q' : v === 13 ? 'K' : v;
-            return `<div class="card ${st==='♥'||st==='♦'?'red':''}"><div>${lbl}</div><div style="font-size:1.4rem;align-self:center;line-height:1;">${st}</div></div>`;
-        };
-        document.getElementById('p-cards').innerHTML = p.map(mk).join('');
-        document.getElementById('b-cards').innerHTML = b.map(mk).join('');
-        document.getElementById('p-score').textContent = pS; document.getElementById('b-score').textContent = bS;
+    function renderHand(p,b,pS,bS) {
+        const s=['♠','♥','♦','♣'];
+        const mk=(v)=>{let st=s[Math.floor(Math.random()*4)],lbl=v===1?'A':v===11?'J':v===12?'Q':v===13?'K':v; return `<div class="card ${st==='♥'||st==='♦'?'red':''}"><div>${lbl}</div><div style="font-size:1.4rem;align-self:center;line-height:1;">${st}</div></div>`;};
+        document.getElementById('p-cards').innerHTML=p.map(mk).join('');
+        document.getElementById('b-cards').innerHTML=b.map(mk).join('');
+        document.getElementById('p-score').textContent=pS;
+        document.getElementById('b-score').textContent=bS;
     }
 
-    function resolve(p, b, pS, bS) {
-        let win = 0, bC = '', bT = '';
-        const drg = bS === 7 && b.length === 3 && bS > pS;
-        const pnd = pS === 8 && p.length === 3 && pS > bS;
+    function resolve(p,b,pS,bS) {
+        let win=0;
+        const drg=bS===7&&b.length===3&&bS>pS;
+        const pnd=pS===8&&p.length===3&&pS>bS;
+        let outcomeType, beadClass, beadLabel;
 
-        if (pS === bS) { 
-            win += currentBets.tie * 9 + currentBets.player + currentBets.banker; 
-            stats.tie++; bC = 'tie'; bT = pS; 
-            document.getElementById('bet-tie-box').classList.add('win-flash'); 
-        } 
-        else if (pS > bS) {
-            stats.player++; bC = pnd ? 'panda-win' : 'player'; bT = pnd ? 'P' : pS; win += currentBets.player * 2; 
-            document.getElementById('bet-player-box').classList.add('win-flash');
-            if (pnd) { 
-                win += currentBets.panda * 26; 
-                document.getElementById('bet-panda-box').classList.add('win-flash'); 
-                document.getElementById('special-notifications').innerHTML = '<span class="win-badge" style="background:var(--panda-purple);border:1px solid white;">PANDA 8 WIN!</span>'; 
+        if (pS===bS) {
+            win += currentBets.tie*9 + currentBets.player + currentBets.banker;
+            stats.tie++;
+            beadClass='tie'; beadLabel='T'; outcomeType='tie';
+            document.getElementById('bet-tie-box').classList.add('win-flash');
+        } else if (pS>bS) {
+            stats.player++;
+            if (pnd) {
+                win+=currentBets.panda*26; win+=currentBets.player*2;
+                beadClass='panda-win'; beadLabel='P8'; outcomeType='player';
+                document.getElementById('bet-panda-box').classList.add('win-flash');
+                document.getElementById('bet-player-box').classList.add('win-flash');
+                document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--panda-purple);border:1px solid white;">PANDA 8 WIN!</span>';
+            } else {
+                win+=currentBets.player*2;
+                beadClass='player'; beadLabel='P'; outcomeType='player';
+                document.getElementById('bet-player-box').classList.add('win-flash');
             }
         } else {
-            stats.banker++; bC = drg ? 'dragon-win' : 'banker'; bT = drg ? 'D' : bS;
-            if (drg) { 
-                win += currentBets.dragon * 41 + currentBets.banker; 
-                document.getElementById('bet-dragon-box').classList.add('win-flash'); 
-                document.getElementById('special-notifications').innerHTML = '<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>'; 
-            } 
-            else { win += currentBets.banker * 2; document.getElementById('bet-banker-box').classList.add('win-flash'); }
+            stats.banker++;
+            if (drg) {
+                win+=currentBets.dragon*41+currentBets.banker;
+                beadClass='dragon-win'; beadLabel='D7'; outcomeType='banker';
+                document.getElementById('bet-dragon-box').classList.add('win-flash');
+                document.getElementById('bet-banker-box').classList.add('win-flash');
+                document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>';
+            } else {
+                win+=currentBets.banker*2;
+                beadClass='banker'; beadLabel='B'; outcomeType='banker';
+                document.getElementById('bet-banker-box').classList.add('win-flash');
+            }
         }
-        bankroll += win;
-        
-        // Append to both responsive bead plate tracking views simultaneously
-        document.querySelectorAll('.bead-plate-container').forEach(plate => {
-            const bd = document.createElement('div'); 
-            bd.className = `bead ${bC}`; 
-            bd.textContent = bT;
-            plate.appendChild(bd); 
-            plate.scrollLeft = plate.scrollWidth;
-        });
+        bankroll+=win;
 
-        for (let k in currentBets) { currentBets[k] = 0; document.getElementById(`disp-${k}`).textContent = "$0"; }
+        // Update all 5 roads
+        addToRoads(outcomeType, beadClass, beadLabel);
+
+        for(let k in currentBets){ currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; }
         updateUI();
+        document.getElementById('stat-b').textContent=stats.banker;
+        document.getElementById('stat-p').textContent=stats.player;
+        document.getElementById('stat-t').textContent=stats.tie;
     }
 
-    function toggleShoeVisibility() { 
-        shoeVisible = !shoeVisible; 
-        document.getElementById('shoe-preview-desktop').style.display = shoeVisible ? 'flex' : 'none'; 
-        document.getElementById('shoe-preview-mobile').style.display = shoeVisible ? 'flex' : 'none'; 
-        
-        document.querySelectorAll('.inspector-placeholder-label').forEach(lbl => {
-            lbl.style.display = shoeVisible ? 'none' : 'block';
-        });
-        renderShoePreview(); 
+    // ══════════════════════════════════════════════════════════
+    //  ROAD ALGORITHMS
+    // ══════════════════════════════════════════════════════════
+
+    function addToRoads(outcomeType, beadClass, beadLabel) {
+        // 1. ROAD (Bead Plate) — simple chronological
+        beadHistory.push({ cls: beadClass, label: beadLabel });
+
+        // 2. BIG ROAD
+        if (outcomeType === 'tie') {
+            // Tie: mark the last cell in big road with a tie indicator, don't add new cell
+            if (bigRoadColumns.length > 0) {
+                const lastCol = bigRoadColumns[bigRoadColumns.length-1];
+                if (lastCol.length > 0) lastCol[lastCol.length-1].tieCount++;
+            }
+        } else {
+            // Non-tie outcome
+            const isNewType = bigRoadLastNonTie !== outcomeType;
+            if (bigRoadColumns.length === 0 || isNewType || bigRoadColumns[bigRoadColumns.length-1].length >= 6) {
+                // Start new column
+                bigRoadColumns.push([{ type: outcomeType, tieCount: 0 }]);
+            } else {
+                // Continue same column
+                bigRoadColumns[bigRoadColumns.length-1].push({ type: outcomeType, tieCount: 0 });
+            }
+            bigRoadLastNonTie = outcomeType;
+
+            // 3. Derived roads — only computed on non-tie results
+            computeDerivedRoads(outcomeType);
+        }
+
+        renderAllRoads();
     }
-    
+
+    /*
+     * Derived Road Logic (Big Eye Boy, Small Road, Cockroach Pig)
+     * 
+     * Each derived road entry is generated when a new cell is placed on the Big Road.
+     * 
+     * The algorithm compares two columns in the Big Road to determine if the pattern
+     * is "repetitive" (red) or "non-repetitive" (blue).
+     *
+     * BIG EYE BOY:
+     *   - Starts when the 2nd column has its first entry OR the 1st column has 2+ entries
+     *   - For each new entry in col C at row R:
+     *     - If R===0 (new column): compare col C-1 length with col C-2 length
+     *       - If they are the same length (or C-2 doesn't exist): RED
+     *       - If they differ: BLUE  
+     *     - If R>0 (same column continues): check if cell exists at col C-2, row R-1
+     *       - If it exists: RED (pattern matching)
+     *       - If it doesn't: BLUE
+     *
+     * SMALL ROAD: same logic but looking 2 columns further back (C-3 instead of C-2)
+     * COCKROACH PIG: same logic but looking 3 columns further back (C-4 instead of C-3... actually C vs C-3 skip)
+     *
+     * Simplified standard implementation:
+     */
+    function computeDerivedRoads(outcomeType) {
+        const cols = bigRoadColumns;
+        const colIdx = cols.length - 1;
+        const rowIdx = cols[colIdx].length - 1;
+
+        // BIG EYE BOY: starts when 2nd column appears (colIdx >= 1) OR colIdx===0 and rowIdx>=1
+        derivedEntry(cols, colIdx, rowIdx, 1, bebEntries);
+
+        // SMALL ROAD: starts when 3rd column appears (colIdx >= 2) OR colIdx===0/1 and deep enough
+        derivedEntry(cols, colIdx, rowIdx, 2, smallEntries);
+
+        // COCKROACH PIG: starts when 4th column (colIdx >= 3)
+        derivedEntry(cols, colIdx, rowIdx, 3, cockEntries);
+    }
+
+    /*
+     * derivedEntry: compute one entry for a derived road
+     * lookback = 1 for BEB, 2 for Small, 3 for Cockroach
+     */
+    function derivedEntry(cols, colIdx, rowIdx, lookback, entries) {
+        // Minimum trigger: the "reference" column must exist
+        // For BEB (lookback=1): reference col = colIdx - 1
+        // But also triggers when row deepens past lookback in first col
+        const refColIdx = colIdx - lookback;
+
+        // Case A: new column (rowIdx === 0)
+        if (rowIdx === 0) {
+            if (refColIdx < 0) return; // too early
+            // Compare length of current col's left neighbor vs ref col
+            // left neighbor of current col = col at colIdx-1
+            const leftLen  = (colIdx - 1 >= 0) ? cols[colIdx - 1].length : 0;
+            const refLen   = (refColIdx >= 0)   ? cols[refColIdx].length  : 0;
+            // RED if same depth, BLUE if different
+            entries.push({ rep: leftLen === refLen });
+        } else {
+            // Case B: same column continuing (rowIdx > 0)
+            if (refColIdx < 0) {
+                // For case where we're still in col 0 but deep: compare current row vs lookback rows back
+                // This handles the "vertical" start condition
+                if (colIdx === 0 && rowIdx === lookback) {
+                    // First derived entry generated by a tall first column
+                    // Always starts as non-repetitive (BLUE) per standard rules
+                    entries.push({ rep: false });
+                }
+                return;
+            }
+            // Check if ref column has a cell at rowIdx-1
+            const refHasCell = refColIdx >= 0 && cols[refColIdx].length > (rowIdx - 1);
+            entries.push({ rep: refHasCell });
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  RENDER ALL ROADS
+    // ══════════════════════════════════════════════════════════
+    function renderAllRoads() {
+        renderBeadPlate();
+        renderBigRoad();
+        renderDerivedRoad('road-beb', bebEntries, 'circle');
+        renderDerivedRoad('road-small', smallEntries, 'hollow');
+        renderDerivedRoad('road-cock', cockEntries, 'slash');
+    }
+
+    function renderBeadPlate() {
+        const container = document.getElementById('road-bead');
+        container.innerHTML = '';
+        beadHistory.forEach(entry => {
+            const bead = document.createElement('div');
+            bead.className = `bead ${entry.cls}`;
+            bead.textContent = entry.label;
+            container.appendChild(bead);
+        });
+        container.scrollLeft = container.scrollWidth;
+    }
+
+    function renderBigRoad() {
+        const container = document.getElementById('road-big');
+        container.innerHTML = '';
+
+        // Build a flat grid: we need to place cells at (col, row) positions
+        // The CSS grid is: 6 rows, auto columns — grid-auto-flow: column
+        // So we fill col by col, 6 cells per col (empty if not used)
+        const ROWS = 6;
+        bigRoadColumns.forEach(col => {
+            for (let r = 0; r < ROWS; r++) {
+                const cell = document.createElement('div');
+                cell.className = 'br-cell';
+                if (r < col.length) {
+                    const entry = col[r];
+                    const circle = document.createElement('div');
+                    circle.className = `br-circle ${entry.type}`;
+                    if (entry.tieCount > 0) {
+                        circle.classList.add('has-tie');
+                        circle.style.position = 'relative';
+                        // Green vertical line indicator
+                        const tieLine = document.createElement('div');
+                        tieLine.style.cssText = 'position:absolute;width:2px;height:11px;background:#1a8c22;top:0;left:50%;transform:translateX(-50%);border-radius:1px;';
+                        circle.appendChild(tieLine);
+                    }
+                    cell.appendChild(circle);
+                }
+                container.appendChild(cell);
+            }
+        });
+        const wrap = container.parentElement;
+        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
+    }
+
+    function renderDerivedRoad(containerId, entries, style) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        const ROWS = 4;
+        // Layout: fill top-to-bottom, left-to-right (same as big road but 4 rows)
+        // We simulate a 4-row grid
+        let col = 0, row = 0;
+        // First, calculate column count needed
+        const colCount = Math.ceil(entries.length / ROWS) + 2;
+        const totalCells = colCount * ROWS;
+        // Build sparse array
+        const grid = new Array(totalCells).fill(null);
+        entries.forEach((entry, i) => {
+            const c = Math.floor(i / ROWS);
+            const r = i % ROWS;
+            grid[c * ROWS + r] = entry;
+        });
+
+        for (let i = 0; i < grid.length; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'dr-cell';
+            const entry = grid[i];
+            if (entry !== null) {
+                let el;
+                if (style === 'circle') {
+                    el = document.createElement('div');
+                    el.className = `dr-circle ${entry.rep ? 'rep' : 'non'}`;
+                } else if (style === 'hollow') {
+                    el = document.createElement('div');
+                    el.className = `dr-circle-sm ${entry.rep ? 'rep' : 'non'}`;
+                } else { // slash
+                    el = document.createElement('div');
+                    el.className = `dr-slash ${entry.rep ? 'rep' : 'non'}`;
+                }
+                cell.appendChild(el);
+            }
+            container.appendChild(cell);
+        }
+        const wrap = container.parentElement;
+        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SHOE INSPECTOR
+    // ══════════════════════════════════════════════════════════
+    function toggleShoeVisibility() {
+        shoeVisible = !shoeVisible;
+        const el = document.getElementById('shoe-preview-el');
+        const ph = document.getElementById('inspector-placeholder');
+        el.style.display = shoeVisible ? 'flex' : 'none';
+        if (ph) ph.style.display = shoeVisible ? 'none' : 'block';
+        renderShoePreview();
+    }
     function renderShoePreview() {
         if (!shoeVisible) return;
-        const fm = {1:'A', 11:'J', 12:'Q', 13:'K'};
-        const dynamicContent = [...shoe].reverse().map((c, i) => `<span class="preview-card ${i===0?'next-card':''}">${fm[c]||c}</span>`).join('');
-        
-        document.getElementById('shoe-preview-desktop').innerHTML = dynamicContent;
-        document.getElementById('shoe-preview-mobile').innerHTML = dynamicContent;
+        const fm={1:'A',11:'J',12:'Q',13:'K'};
+        document.getElementById('shoe-preview-el').innerHTML = [...shoe].reverse().map((c,i)=>`<span class="preview-card ${i===0?'next-card':''}">${fm[c]||c}</span>`).join('');
     }
 
+    // ══════════════════════════════════════════════════════════
+    //  UI UPDATE
+    // ══════════════════════════════════════════════════════════
     function updateUI() {
-        const formattedBankroll = `$${bankroll.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        const pl = bankroll - initialBankroll;
-        const formattedPL = (pl >= 0 ? '+$' : '-$') + Math.abs(pl).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        const plColor = pl >= 0 ? '#4caf50' : '#f44336';
-        const rawShoeCount = shoeSize === 0 ? "∞" : shoe.length;
-
-        // Propagate dynamic data changes to both Mobile and Desktop label instances simultaneously
-        document.querySelectorAll('.balance-label').forEach(el => el.textContent = formattedBankroll);
-        document.querySelectorAll('.session-pl-label').forEach(el => {
-            el.textContent = formattedPL;
-            el.style.color = plColor;
-        });
-        document.querySelectorAll('.shoe-count-label').forEach(el => el.textContent = rawShoeCount);
-        
+        const fmt=`$${bankroll.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+        const pl=bankroll-initialBankroll;
+        const fmtPL=(pl>=0?'+$':'-$')+Math.abs(pl).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+        const plColor=pl>=0?'#4caf50':'#f44336';
+        const rawCount=shoeSize===0?"∞":shoe.length;
+        document.querySelectorAll('.balance-label').forEach(el=>el.textContent=fmt);
+        document.querySelectorAll('.session-pl-label').forEach(el=>{el.textContent=fmtPL;el.style.color=plColor;});
+        document.querySelectorAll('.shoe-count-label').forEach(el=>el.textContent=rawCount);
         renderShoePreview();
     }
 </script>
