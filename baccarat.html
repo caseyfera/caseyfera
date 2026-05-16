@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dragonfly To Tie v2.51</title>
+    <title>Dragonfly To Tie v2.512</title>
     <style>
         :root {
             --felt-green: #0a4d2c; 
@@ -308,6 +308,38 @@
         .coffee-link-wrapper { text-align: center; margin-top: auto; padding-top: 5px; }
         .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg,#FFDD00 0%,var(--gold) 100%); color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; width: 100%; box-sizing: border-box; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
+        /* Result Overlay */
+        #result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.82);
+            display: none; justify-content: center; align-items: center;
+            z-index: 500; cursor: pointer;
+            animation: fadeInOverlay 0.25s ease;
+        }
+        @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
+        .result-card {
+            border-radius: 24px; padding: 36px 50px; text-align: center;
+            box-shadow: 0 0 80px rgba(0,0,0,0.9);
+            animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            min-width: 260px;
+        }
+        @keyframes popIn { from{transform:scale(0.6);opacity:0} to{transform:scale(1);opacity:1} }
+        .result-title { font-size: 3rem; font-weight: bold; letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .result-amount { font-size: 1.8rem; font-weight: bold; margin-bottom: 8px; }
+        .result-tap { font-size: 0.85rem; opacity: 0.6; margin-top: 14px; letter-spacing: 1px; }
+
+        /* Rebet / Double buttons */
+        .aux-btn {
+            background: none; border: 2px solid var(--gold); color: var(--gold);
+            padding: 10px 22px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; font-size: 0.9rem; transition: background 0.15s;
+        }
+        .aux-btn:hover { background: rgba(212,175,55,0.15); }
+        .aux-btn:disabled { opacity: 0.3; cursor: default; }
+        @media (max-width: 768px) {
+            .aux-btn { padding: 8px 14px; font-size: 0.8rem; }
+        }
+
         /* Shoe inspector */
         .inspector-placeholder-label { color: rgba(255,255,255,0.3); text-align: center; font-size: 0.85rem; margin-top: 10px; }
         .shoe-preview-container { flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px; }
@@ -337,9 +369,9 @@
             .chip-tray { width: 100%; justify-content: space-between; box-sizing: border-box; padding: 8px 12px; }
             .chip { width: 38px; height: 38px; font-size: 0.7rem; }
             .chip.active { transform: translateY(-4px); }
-            .action-buttons-group { flex-direction: column; gap: 8px; width: 100%; align-items: center; }
+            .action-buttons-group { flex-wrap: wrap; gap: 8px; width: 100%; align-items: center; justify-content: center; }
             .main-deal-btn { width: 100%; max-width: 280px; padding: 14px 0; font-size: 1.3rem; }
-            .clear-btn { width: 100%; max-width: 140px; padding: 8px 0; }
+            .clear-btn { max-width: 100px; padding: 8px 0; }
         }
     </style>
 </head>
@@ -347,7 +379,7 @@
 
     <div id="login-overlay" class="overlay">
         <div class="setup-card">
-            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.51</h2>
+            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.512</h2>
             <div id="email-step">
                 <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
                 <br><br>
@@ -379,11 +411,21 @@
         </div>
     </div>
 
+    <!-- Win/Lose Result Overlay -->
+    <div id="result-overlay" onclick="dismissResult()">
+        <div class="result-card" id="result-card">
+            <div class="result-title" id="result-title">WIN</div>
+            <div class="result-amount" id="result-amount">+$0</div>
+            <div id="result-detail" style="font-size:1rem;opacity:0.85;margin-bottom:4px;"></div>
+            <div class="result-tap">TAP TO CONTINUE</div>
+        </div>
+    </div>
+
     <div class="game-content" id="game-container" style="display:none;">
 
         <!-- Header -->
         <div class="header-area">
-            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.51</span></div>
+            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.512</span></div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
         </div>
 
@@ -444,6 +486,8 @@
                 <div class="chip c1000" onclick="selectChip(1000,this)">$1k</div>
             </div>
             <div class="action-buttons-group">
+                <button id="btn-rebet" class="aux-btn" onclick="reBet()" disabled title="Repeat last bet">↩ REBET</button>
+                <button id="btn-double" class="aux-btn" onclick="doubleBet()" disabled title="Double current bets">✕2 DOUBLE</button>
                 <button onclick="clearBets()" class="clear-btn">CLEAR</button>
                 <button class="main-deal-btn" onclick="playHand()">DEAL</button>
             </div>
@@ -530,6 +574,7 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHrUd-Hyi-FST4-YD34GHFOXHFbRscOuTKbqbDn6v7WjkolDx8wKbUX3JxIJ1jhLc/exec';
     let bankroll = 0, initialBankroll = 0, selectedChipValue = 25, userEmail = "";
     let currentBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
+    let lastBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
     let stats = { banker:0, player:0, tie:0 };
     let shoe = [], shoeSize = 8, shoeVisible = false;
 
@@ -596,6 +641,8 @@
         beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0 };
+        lastBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
+        updateAuxButtons();
         document.getElementById('setup-overlay').style.display='none';
         document.getElementById('game-container').style.display='flex';
         renderAllRoads();
@@ -609,11 +656,49 @@
     }
     function getNextCard() { if(shoeSize===0) return Math.floor(Math.random()*13)+1; if(shoe.length<10) initShoe(); return shoe.pop(); }
     function selectChip(val, el) { selectedChipValue=val; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
-    function placeBet(type) { if(bankroll<selectedChipValue) return; currentBets[type]+=selectedChipValue; bankroll-=selectedChipValue; document.getElementById(`disp-${type}`).textContent=`$${currentBets[type]}`; updateUI(); }
-    function clearBets() { for(let k in currentBets){ bankroll+=currentBets[k]; currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; } updateUI(); }
+    function placeBet(type) { if(bankroll<selectedChipValue) return; currentBets[type]+=selectedChipValue; bankroll-=selectedChipValue; document.getElementById(`disp-${type}`).textContent=`$${currentBets[type]}`; updateUI(); updateAuxButtons(); }
+    function clearBets() { for(let k in currentBets){ bankroll+=currentBets[k]; currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; } updateUI(); updateAuxButtons(); }
+
+    function updateAuxButtons() {
+        const total = Object.values(currentBets).reduce((a,b)=>a+b,0);
+        const lastTotal = Object.values(lastBets).reduce((a,b)=>a+b,0);
+        document.getElementById('btn-double').disabled = total === 0;
+        document.getElementById('btn-rebet').disabled = lastTotal === 0;
+    }
+
+    function reBet() {
+        clearBets();
+        const lastTotal = Object.values(lastBets).reduce((a,b)=>a+b,0);
+        if (bankroll < lastTotal) { return; } // not enough
+        for (let k in lastBets) {
+            if (lastBets[k] > 0) {
+                currentBets[k] = lastBets[k];
+                bankroll -= lastBets[k];
+                document.getElementById(`disp-${k}`).textContent = `$${currentBets[k]}`;
+            }
+        }
+        updateUI();
+        updateAuxButtons();
+    }
+
+    function doubleBet() {
+        const total = Object.values(currentBets).reduce((a,b)=>a+b,0);
+        if (total === 0 || bankroll < total) return;
+        for (let k in currentBets) {
+            if (currentBets[k] > 0) {
+                const add = currentBets[k];
+                if (bankroll >= add) {
+                    currentBets[k] += add;
+                    bankroll -= add;
+                    document.getElementById(`disp-${k}`).textContent = `$${currentBets[k]}`;
+                }
+            }
+        }
+        updateUI();
+        updateAuxButtons();
+    }
 
     function playHand() {
-        if (Object.values(currentBets).reduce((a,b)=>a+b)<=0) return;
         document.querySelectorAll('.bet-zone').forEach(z=>z.classList.remove('win-flash'));
         document.getElementById('special-notifications').innerHTML='';
         const gV=(v)=>v>=10?0:v;
@@ -647,6 +732,8 @@
         const drg=bS===7&&b.length===3&&bS>pS;
         const pnd=pS===8&&p.length===3&&pS>bS;
         let outcomeType, beadClass, beadLabel;
+        const totalWagered = Object.values(currentBets).reduce((a,b)=>a+b,0);
+        let specialMsg = '';
 
         if (pS===bS) {
             win += currentBets.tie*9 + currentBets.player + currentBets.banker;
@@ -661,6 +748,7 @@
                 document.getElementById('bet-panda-box').classList.add('win-flash');
                 document.getElementById('bet-player-box').classList.add('win-flash');
                 document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--panda-purple);border:1px solid white;">PANDA 8 WIN!</span>';
+                specialMsg = '🐼 PANDA 8!';
             } else {
                 win+=currentBets.player*2;
                 beadClass='player'; beadLabel='P'; outcomeType='player';
@@ -674,6 +762,7 @@
                 document.getElementById('bet-dragon-box').classList.add('win-flash');
                 document.getElementById('bet-banker-box').classList.add('win-flash');
                 document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>';
+                specialMsg = '🐉 DRAGON 7!';
             } else {
                 win+=currentBets.banker*2;
                 beadClass='banker'; beadLabel='B'; outcomeType='banker';
@@ -682,14 +771,72 @@
         }
         bankroll+=win;
 
+        // Save last bets before clearing
+        for (let k in currentBets) lastBets[k] = currentBets[k];
+
+        // Show result overlay (only when bets were placed)
+        if (totalWagered > 0) {
+            const netPL = win - totalWagered;
+            showResult(netPL, outcomeType, pS, bS, specialMsg);
+        }
+
         // Update all 5 roads
         addToRoads(outcomeType, beadClass, beadLabel);
 
         for(let k in currentBets){ currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; }
         updateUI();
+        updateAuxButtons();
         document.getElementById('stat-b').textContent=stats.banker;
         document.getElementById('stat-p').textContent=stats.player;
         document.getElementById('stat-t').textContent=stats.tie;
+    }
+
+    function showResult(netPL, outcomeType, pS, bS, specialMsg) {
+        const overlay = document.getElementById('result-overlay');
+        const card = document.getElementById('result-card');
+        const titleEl = document.getElementById('result-title');
+        const amountEl = document.getElementById('result-amount');
+        const detailEl = document.getElementById('result-detail');
+
+        const isWin = netPL > 0;
+        const isPush = netPL === 0;
+
+        // Outcome label
+        const outcomeLabel = outcomeType === 'tie' ? 'TIE' : outcomeType === 'player' ? 'PLAYER' : 'BANKER';
+
+        if (isPush) {
+            titleEl.textContent = 'PUSH';
+            card.style.background = 'linear-gradient(135deg,#333 0%,#555 100%)';
+            card.style.border = '3px solid #aaa';
+            titleEl.style.color = '#eee';
+            amountEl.style.color = '#ccc';
+        } else if (isWin) {
+            titleEl.textContent = specialMsg || 'WIN!';
+            card.style.background = 'linear-gradient(135deg,#0a4d2c 0%,#1a8c22 100%)';
+            card.style.border = '3px solid var(--gold)';
+            titleEl.style.color = '#ffd700';
+            amountEl.style.color = '#7dff7d';
+        } else {
+            titleEl.textContent = 'LOSE';
+            card.style.background = 'linear-gradient(135deg,#3b0000 0%,#8b1e1e 100%)';
+            card.style.border = '3px solid #ff4444';
+            titleEl.style.color = '#ff8888';
+            amountEl.style.color = '#ffaaaa';
+        }
+
+        const sign = netPL >= 0 ? '+' : '-';
+        amountEl.textContent = `${sign}$${Math.abs(netPL).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+        detailEl.textContent = `${outcomeLabel}  •  Player ${pS} – Banker ${bS}`;
+
+        overlay.style.display = 'flex';
+        // Auto-dismiss after 2.5s
+        clearTimeout(window._resultTimer);
+        window._resultTimer = setTimeout(dismissResult, 2500);
+    }
+
+    function dismissResult() {
+        clearTimeout(window._resultTimer);
+        document.getElementById('result-overlay').style.display = 'none';
     }
 
     // ══════════════════════════════════════════════════════════
