@@ -359,6 +359,7 @@
         <div class="header-area">
             <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.6</span></div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+            <button id="sound-toggle-btn" class="settings-btn" onclick="toggleSound()" style="right:54px;" title="Toggle Sound">🔊</button>
         </div>
 
         <!-- Casino Banner -->
@@ -750,6 +751,7 @@
     }
 
     function initShoe() {
+        sfxShuffle();
         if (shoeSize === 0) { shoe = []; return; }
         shoe = [];
         for (let i=0; i<shoeSize*52; i++) shoe.push((i%13)+1);
@@ -766,6 +768,7 @@
         selectedChipValue=val;
         document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
         el.classList.add('active');
+        sfxChip();
     }
 
     function placeBet(type) {
@@ -775,11 +778,13 @@
         bankroll -= selectedChipValue;
         const disp = document.getElementById(`disp-${type}`);
         if (disp) disp.textContent = `$${currentBets[type]}`;
+        sfxBetPlace();
         updateUI();
         updateAuxButtons();
     }
 
     function clearBets() {
+        sfxClear();
         for (let k in currentBets) {
             bankroll += currentBets[k];
             currentBets[k] = 0;
@@ -832,11 +837,156 @@
     }
 
     // ══════════════════════════════════════════════════════════
+    //  SOUND ENGINE  (Web Audio API — no external files)
+    // ══════════════════════════════════════════════════════════
+    let _actx = null;
+    let soundEnabled = true;
+
+    function getACtx() {
+        if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+        if (_actx.state === 'suspended') _actx.resume();
+        return _actx;
+    }
+
+    function _tone(type, freq, dur, vol, attack=0.005, decay=0, sustain=1, release=0.05, startTime=null) {
+        if (!soundEnabled) return;
+        try {
+            const ctx = getACtx();
+            const t = startTime ?? ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = type; osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(vol, t + attack);
+            if (decay > 0) gain.gain.linearRampToValueAtTime(vol * sustain, t + attack + decay);
+            gain.gain.setValueAtTime(vol * sustain, t + dur - release);
+            gain.gain.linearRampToValueAtTime(0, t + dur);
+            osc.start(t); osc.stop(t + dur + 0.01);
+        } catch(e) {}
+    }
+
+    function _noise(dur, vol, filterFreq=2000, startTime=null) {
+        if (!soundEnabled) return;
+        try {
+            const ctx = getACtx();
+            const t = startTime ?? ctx.currentTime;
+            const bufSize = Math.ceil(ctx.sampleRate * dur);
+            const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+            const data = buf.getChannelData(0);
+            for (let i=0; i<bufSize; i++) data[i] = (Math.random()*2-1);
+            const src = ctx.createBufferSource();
+            src.buffer = buf;
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = filterFreq;
+            filter.Q.value = 0.8;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(vol, t);
+            gain.gain.linearRampToValueAtTime(0, t + dur);
+            src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+            src.start(t); src.stop(t + dur + 0.01);
+        } catch(e) {}
+    }
+
+    function sfxChip() {
+        _tone('square', 1200, 0.04, 0.18, 0.002, 0, 1, 0.03);
+        _noise(0.04, 0.12, 3500);
+    }
+    function sfxBetPlace() {
+        _tone('triangle', 900, 0.07, 0.22, 0.003, 0.01, 0.6, 0.05);
+        _noise(0.06, 0.1, 2800);
+    }
+    function sfxDeal(cardIndex) {
+        const delay = cardIndex * 0.13;
+        try {
+            const ctx = getACtx();
+            const t = ctx.currentTime + delay;
+            _noise(0.09, 0.28, 4000, t);
+            _tone('sawtooth', 180, 0.07, 0.06, 0.002, 0, 1, 0.04, t);
+        } catch(e) {}
+    }
+    function sfxThirdCard() {
+        try {
+            const ctx = getACtx();
+            const t = ctx.currentTime;
+            _noise(0.08, 0.22, 3500, t);
+            _tone('sawtooth', 220, 0.06, 0.05, 0.002, 0, 1, 0.04, t);
+        } catch(e) {}
+    }
+    function sfxWin() {
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((f, i) => {
+            try {
+                const ctx = getACtx();
+                const t = ctx.currentTime + i * 0.1;
+                _tone('sine', f, 0.35, 0.3, 0.01, 0, 0.7, 0.2, t);
+                _tone('triangle', f * 2, 0.1, 0.06, 0.005, 0, 1, 0.05, t);
+            } catch(e) {}
+        });
+    }
+    function sfxJackpot() {
+        const seq = [523, 659, 784, 659, 1047, 880, 1047];
+        seq.forEach((f, i) => {
+            try {
+                const ctx = getACtx();
+                const t = ctx.currentTime + i * 0.1;
+                _tone('sine', f, 0.25, 0.35, 0.01, 0, 0.8, 0.1, t);
+                _tone('square', f / 2, 0.25, 0.08, 0.01, 0, 0.5, 0.1, t);
+                if (i === seq.length-1) _tone('sine', f, 0.4, 0.4, 0.01, 0, 0.9, 0.3, t+0.05);
+            } catch(e) {}
+        });
+        _noise(0.6, 0.08, 6000);
+    }
+    function sfxLose() {
+        const notes = [440, 370, 311];
+        notes.forEach((f, i) => {
+            try {
+                const ctx = getACtx();
+                const t = ctx.currentTime + i * 0.12;
+                _tone('sine', f, 0.3, 0.22, 0.01, 0, 0.6, 0.2, t);
+            } catch(e) {}
+        });
+    }
+    function sfxTie() {
+        _tone('sine', 440, 0.15, 0.2, 0.01, 0, 0.8, 0.08);
+        try {
+            const ctx = getACtx();
+            _tone('sine', 554, 0.15, 0.2, 0.01, 0, 0.8, 0.08, ctx.currentTime + 0.18);
+        } catch(e) {}
+    }
+    function sfxClear() {
+        _tone('triangle', 350, 0.08, 0.15, 0.005, 0, 1, 0.06);
+    }
+    function sfxShuffle() {
+        for (let i=0; i<5; i++) {
+            try {
+                const ctx = getACtx();
+                _noise(0.1, 0.18, 3000 + i*400, ctx.currentTime + i*0.07);
+            } catch(e) {}
+        }
+    }
+    function sfxSideBetWin() {
+        _tone('sine', 1047, 0.2, 0.25, 0.005, 0, 0.7, 0.15);
+        try {
+            const ctx = getACtx();
+            _tone('sine', 1319, 0.1, 0.2, 0.005, 0, 0.6, 0.12, ctx.currentTime + 0.08);
+        } catch(e) {}
+    }
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const btn = document.getElementById('sound-toggle-btn');
+        if (btn) btn.textContent = soundEnabled ? '🔊' : '🔇';
+        if (soundEnabled) sfxChip();
+    }
+
+    // ══════════════════════════════════════════════════════════
     //  GAME LOGIC
     // ══════════════════════════════════════════════════════════
     function playHand() {
         document.querySelectorAll('.bet-zone').forEach(z=>z.classList.remove('win-flash'));
         document.getElementById('special-notifications').innerHTML='';
+        sfxDeal(0); sfxDeal(1); sfxDeal(2); sfxDeal(3);
         const gV=(v)=>v>=10?0:v;
         let p=[getNextCard(),getNextCard()], b=[getNextCard(),getNextCard()];
         let pS=(gV(p[0])+gV(p[1]))%10, bS=(gV(b[0])+gV(b[1]))%10;
@@ -1030,6 +1180,11 @@
         const amountEl = document.getElementById('result-amount');
         const detailEl = document.getElementById('result-detail');
         const isWin = netPL > 0, isPush = netPL === 0;
+        // Sound
+        if (isPush) sfxTie();
+        else if (!isWin) sfxLose();
+        else if (specialMsg && (specialMsg.includes('DRAGON') || specialMsg.includes('PANDA'))) sfxJackpot();
+        else sfxWin();
         const outcomeLabel = outcomeType==='tie'?'TIE':outcomeType==='player'?'PLAYER':'BANKER';
 
         if (isPush) {
