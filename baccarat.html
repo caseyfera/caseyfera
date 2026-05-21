@@ -3,38 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dragonfly To Tie v2.512</title>
+    <title>Dragonfly To Tie v2.6</title>
     <style>
         :root {
-            --felt-green: #0a4d2c; 
-            --gold: #d4af37; 
+            --felt-green: #0a4d2c;
+            --gold: #d4af37;
             --banker-red: #8b1e1e;
-            --player-blue: #1e5aa8; 
-            --tie-green: #1a5220; 
-            --panda-purple: #511f73; 
+            --player-blue: #1e5aa8;
+            --tie-green: #1a5220;
+            --panda-purple: #511f73;
             --dragon-orange: #b86200;
             --wood-trim: #3e2723;
             --road-bg: #fff;
             --road-b: #e0e0e0;
         }
-        
-        body { 
-            font-family: 'Garamond', serif; 
-            background: #05140b; 
-            color: white; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 0; 
-            margin: 0; 
-            min-height: 100vh; 
+
+        body {
+            font-family: 'Garamond', serif;
+            background: #05140b;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
             overflow-x: hidden;
             box-sizing: border-box;
         }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .setup-card { background: #0b2e1a; padding: 30px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 85%; max-width: 360px; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .setup-card { background: #0b2e1a; padding: 30px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 85%; max-width: 420px; box-shadow: 0 0 50px rgba(0,0,0,0.9); max-height: 90vh; overflow-y: auto; }
         .setup-card input, .setup-card select { width: 90%; padding: 12px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; text-align: center; }
+
+        /* Casino Mode Selector */
+        .casino-mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .casino-card {
+            background: rgba(0,0,0,0.6);
+            border: 2px solid rgba(212,175,55,0.4);
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .casino-card:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+        .casino-card.selected { border-color: var(--gold); background: rgba(212,175,55,0.2); box-shadow: 0 0 12px rgba(212,175,55,0.4); }
+        .casino-card-flag { font-size: 1.4rem; }
+        .casino-card-name { font-size: 0.75rem; font-weight: bold; color: var(--gold); margin: 3px 0 1px; letter-spacing: 0.5px; }
+        .casino-card-loc { font-size: 0.65rem; color: rgba(255,255,255,0.5); }
+        .casino-card-tag { font-size: 0.6rem; color: #7dff7d; margin-top: 3px; }
+        .casino-card-check { position: absolute; top: 6px; right: 8px; color: var(--gold); font-size: 0.9rem; display: none; }
+        .casino-card.selected .casino-card-check { display: block; }
+
+        /* Side bet badges on setup */
+        .side-bet-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .sbt { font-size: 0.55rem; background: rgba(212,175,55,0.2); border: 1px solid rgba(212,175,55,0.4); border-radius: 3px; padding: 1px 4px; color: rgba(255,255,255,0.7); }
+
+        /* Casino mode banner in-game */
+        .casino-banner {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 6px;
+            padding: 5px 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 1px;
+        }
+        .casino-banner strong { color: var(--gold); }
 
         .game-content {
             width: 100vw;
@@ -46,69 +89,16 @@
             box-sizing: border-box;
         }
 
-        /* ── Roads Section ── */
-        .roads-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
+        /* Roads */
+        .roads-section { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .roads-top-row { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+        .roads-bottom-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-        .roads-top-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 10px;
-        }
+        .road-box { background: rgba(0,0,0,0.4); border: 2px solid var(--gold); border-radius: 8px; padding: 8px; box-sizing: border-box; display: flex; flex-direction: column; gap: 5px; }
+        .road-title { text-align: center; color: var(--gold); font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 4px; flex-shrink: 0; }
+        .road-canvas-wrap { background: var(--road-bg); border-radius: 4px; overflow: hidden; border: 1px solid var(--road-b); position: relative; }
 
-        .roads-bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-
-        .road-box {
-            background: rgba(0,0,0,0.4);
-            border: 2px solid var(--gold);
-            border-radius: 8px;
-            padding: 8px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .road-title {
-            text-align: center;
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(212,175,55,0.3);
-            padding-bottom: 4px;
-            flex-shrink: 0;
-        }
-
-        /* Road canvas wrappers */
-        .road-canvas-wrap {
-            background: var(--road-bg);
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid var(--road-b);
-            position: relative;
-        }
-
-        /* Bead plate (Road) — 6 rows, scroll horizontally */
-        .bead-plate {
-            display: grid;
-            grid-template-rows: repeat(6, 18px);
-            grid-auto-flow: column;
-            grid-auto-columns: 18px;
-            gap: 2px;
-            padding: 4px;
-            overflow-x: auto;
-            height: 124px;
-            box-sizing: border-box;
-        }
+        .bead-plate { display: grid; grid-template-rows: repeat(6, 18px); grid-auto-flow: column; grid-auto-columns: 18px; gap: 2px; padding: 4px; overflow-x: auto; height: 124px; box-sizing: border-box; }
         .bead { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold; color: white; flex-shrink: 0; }
         .bead.banker { background: var(--banker-red); }
         .bead.player { background: var(--player-blue); }
@@ -116,136 +106,71 @@
         .bead.panda-win { background: var(--panda-purple); border: 1px solid white; }
         .bead.dragon-win { background: var(--dragon-orange); color: black; border: 1px solid black; }
 
-        /* Big Road */
-        .big-road-wrap {
-            overflow-x: auto;
-            height: 124px;
-            padding: 4px;
-            box-sizing: border-box;
-            position: relative;
-        }
-        .big-road-grid {
-            display: grid;
-            grid-template-rows: repeat(6, 18px);
-            grid-auto-flow: column;
-            grid-auto-columns: 20px;
-            gap: 2px;
-            height: 118px;
-        }
-        .br-cell {
-            width: 20px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .br-circle {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            border: 2px solid;
-            box-sizing: border-box;
-        }
+        .big-road-wrap { overflow-x: auto; height: 124px; padding: 4px; box-sizing: border-box; position: relative; }
+        .big-road-grid { display: grid; grid-template-rows: repeat(6, 18px); grid-auto-flow: column; grid-auto-columns: 20px; gap: 2px; height: 118px; }
+        .br-cell { width: 20px; height: 18px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .br-circle { width: 15px; height: 15px; border-radius: 50%; border: 2px solid; box-sizing: border-box; }
         .br-circle.banker { background: var(--banker-red); border-color: #6a0000; }
         .br-circle.player { background: var(--player-blue); border-color: #0d3c7a; }
-        /* Tie mark on big road = green stripe on top of circle */
-        .br-circle.has-tie::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 11px;
-            background: #1a8c22;
-            top: 3px;
-            left: 50%;
-            transform: translateX(-50%);
+        .br-circle.has-tie::after { content: ''; position: absolute; width: 2px; height: 11px; background: #1a8c22; top: 3px; left: 50%; transform: translateX(-50%); }
+
+        /* ── Mobile Big Road: shrink cells so more columns fit without horizontal scroll ── */
+        @media (max-width: 768px) {
+            /* Big road: use smaller cells so ~20 columns visible at once */
+            .big-road-wrap { height: 88px; padding: 2px; }
+            .big-road-grid {
+                grid-template-rows: repeat(6, 12px);
+                grid-auto-columns: 13px;
+                gap: 1px;
+                height: 82px;
+            }
+            .br-cell { width: 13px; height: 12px; }
+            .br-circle { width: 10px; height: 10px; border-width: 1.5px; }
+            .br-circle.has-tie::after { width: 1.5px; height: 7px; top: 1px; }
+
+            /* Bead plate: shrink too so it matches height */
+            .bead-plate {
+                grid-template-rows: repeat(6, 12px);
+                grid-auto-columns: 12px;
+                gap: 1px;
+                height: 88px;
+                padding: 2px;
+            }
+            .bead { width: 12px; height: 12px; font-size: 6px; }
+
+            /* Derived roads: scale down slightly too */
+            .derived-road-wrap { height: 58px; padding: 2px; }
+            .derived-road-grid {
+                grid-template-rows: repeat(4, 12px);
+                grid-auto-columns: 13px;
+                gap: 1px;
+                height: 52px;
+            }
+            .dr-cell { width: 13px; height: 12px; }
+            .dr-circle { width: 9px; height: 9px; }
+            .dr-circle-sm { width: 8px; height: 8px; border-width: 1.5px; }
+            .dr-slash { width: 9px; height: 9px; }
+            .dr-slash::before { width: 11px; height: 1.5px; top: 4px; left: -1px; }
         }
 
-        /* Derived roads (Big Eye Boy, Small Road, Cockroach Pig) */
-        .derived-road-wrap {
-            overflow-x: auto;
-            height: 76px;
-            padding: 4px;
-            box-sizing: border-box;
-        }
-        .derived-road-grid {
-            display: grid;
-            grid-template-rows: repeat(4, 16px);
-            grid-auto-flow: column;
-            grid-auto-columns: 18px;
-            gap: 2px;
-            height: 70px;
-        }
-        .dr-cell {
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* Big Eye Boy: filled circles */
-        .dr-circle {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
+        .derived-road-wrap { overflow-x: auto; height: 76px; padding: 4px; box-sizing: border-box; }
+        .derived-road-grid { display: grid; grid-template-rows: repeat(4, 16px); grid-auto-flow: column; grid-auto-columns: 18px; gap: 2px; height: 70px; }
+        .dr-cell { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+        .dr-circle { width: 12px; height: 12px; border-radius: 50%; }
         .dr-circle.rep { background: #e02020; }
         .dr-circle.non { background: var(--player-blue); }
-        /* Small Road: hollow circles */
-        .dr-circle-sm {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            border: 2px solid;
-            background: transparent;
-            box-sizing: border-box;
-        }
+        .dr-circle-sm { width: 11px; height: 11px; border-radius: 50%; border: 2px solid; background: transparent; box-sizing: border-box; }
         .dr-circle-sm.rep { border-color: #e02020; }
         .dr-circle-sm.non { border-color: var(--player-blue); }
-        /* Cockroach Pig: diagonal slashes */
-        .dr-slash {
-            width: 12px;
-            height: 12px;
-            position: relative;
-        }
-        .dr-slash::before {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 2px;
-            border-radius: 1px;
-            top: 5px;
-            left: -1px;
-            transform: rotate(-45deg);
-        }
+        .dr-slash { width: 12px; height: 12px; position: relative; }
+        .dr-slash::before { content: ''; position: absolute; width: 14px; height: 2px; border-radius: 1px; top: 5px; left: -1px; transform: rotate(-45deg); }
         .dr-slash.rep::before { background: #e02020; }
         .dr-slash.non::before { background: var(--player-blue); }
 
-        /* Top Dashboard + Financials */
-        .top-dashboards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-        }
-        .dashboard-box {
-            background: rgba(0,0,0,0.4);
-            border: 2px solid var(--gold);
-            border-radius: 8px;
-            padding: 12px;
-            box-sizing: border-box;
-        }
-        .dashboard-title {
-            text-align: center;
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 1.05rem;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid rgba(212,175,55,0.3);
-            padding-bottom: 4px;
-            position: relative;
-        }
+        /* Top Dashboard */
+        .top-dashboards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        .dashboard-box { background: rgba(0,0,0,0.4); border: 2px solid var(--gold); border-radius: 8px; padding: 12px; box-sizing: border-box; }
+        .dashboard-title { text-align: center; color: var(--gold); font-weight: bold; font-size: 1.05rem; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 4px; position: relative; }
         .fin-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin: 4px 0; font-family: monospace; }
 
         /* Header */
@@ -265,25 +190,34 @@
             align-items: center;
             width: 100%;
             box-sizing: border-box;
+            transition: background 0.5s, border-color 0.5s;
         }
         .table-score-header { display: flex; justify-content: center; gap: 40px; font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 10px; letter-spacing: 1px; }
         .cards-felt-area { display: flex; justify-content: center; gap: 60px; width: 100%; margin-bottom: 18px; }
         .card-slots-group { display: flex; gap: 8px; min-height: 80px; justify-content: center; align-items: center; }
         .card-placeholder-box { width: 52px; height: 76px; border: 2px dashed rgba(255,255,255,0.25); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
 
-        .betting-layout { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 800px; }
+        .betting-layout { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 900px; }
         .row-main-bets { display: flex; width: 100%; justify-content: center; gap: 20px; }
-        .row-side-bets { display: flex; width: 100%; justify-content: center; gap: 25px; }
+        .row-side-bets { display: flex; width: 100%; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
         .bet-zone { border-radius: 8px; cursor: pointer; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; box-shadow: 0 6px 12px rgba(0,0,0,0.4); transition: transform 0.1s, filter 0.1s; border: 2px solid var(--gold); padding: 10px; }
         .bet-zone:active { transform: scale(0.98); }
+        .bet-zone.disabled-bet { opacity: 0.25; pointer-events: none; }
         .zone-player { background: var(--player-blue); width: 220px; height: 80px; }
         .zone-banker { background: var(--banker-red); width: 220px; height: 80px; }
         .zone-tie { background: var(--tie-green); border: 4px double var(--gold); width: 160px; height: 80px; }
-        .zone-panda { background: var(--panda-purple); width: 200px; height: 68px; }
-        .zone-dragon { background: var(--dragon-orange); width: 200px; height: 68px; }
+        .zone-panda { background: var(--panda-purple); width: 155px; height: 64px; }
+        .zone-dragon { background: var(--dragon-orange); width: 155px; height: 64px; }
+        /* New side bet zones */
+        .zone-lucky6 { background: linear-gradient(135deg, #1a4a6b, #0d6b5e); width: 155px; height: 64px; }
+        .zone-tiger { background: linear-gradient(135deg, #5a1a00, #b84000); width: 155px; height: 64px; }
+        .zone-super6 { background: linear-gradient(135deg, #1b5e20, #388e3c); width: 155px; height: 64px; }
+        .zone-bonus { background: linear-gradient(135deg, #4a148c, #7b1fa2); width: 155px; height: 64px; }
+        .zone-natural { background: linear-gradient(135deg, #bf360c, #e64a19); width: 155px; height: 64px; }
+
         .bet-title-text { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; margin-bottom: 2px; }
-        .bet-sub-text { font-size: 0.75rem; opacity: 0.8; margin-bottom: 4px; }
+        .bet-sub-text { font-size: 0.7rem; opacity: 0.85; margin-bottom: 3px; line-height: 1.2; }
         .bet-value-text { font-size: 1.1rem; font-weight: bold; color: #fff; }
 
         .card { width: 54px; height: 80px; background: white; border-radius: 5px; color: black; display: flex; flex-direction: column; justify-content: space-between; padding: 4px; font-size: 0.9rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.5); font-weight: bold; box-sizing: border-box; }
@@ -309,36 +243,18 @@
         .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg,#FFDD00 0%,var(--gold) 100%); color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; width: 100%; box-sizing: border-box; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
         /* Result Overlay */
-        #result-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.82);
-            display: none; justify-content: center; align-items: center;
-            z-index: 500; cursor: pointer;
-            animation: fadeInOverlay 0.25s ease;
-        }
+        #result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.82); display: none; justify-content: center; align-items: center; z-index: 500; cursor: pointer; animation: fadeInOverlay 0.25s ease; }
         @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
-        .result-card {
-            border-radius: 24px; padding: 36px 50px; text-align: center;
-            box-shadow: 0 0 80px rgba(0,0,0,0.9);
-            animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-            min-width: 260px;
-        }
+        .result-card { border-radius: 24px; padding: 36px 50px; text-align: center; box-shadow: 0 0 80px rgba(0,0,0,0.9); animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); min-width: 260px; }
         @keyframes popIn { from{transform:scale(0.6);opacity:0} to{transform:scale(1);opacity:1} }
         .result-title { font-size: 3rem; font-weight: bold; letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
         .result-amount { font-size: 1.8rem; font-weight: bold; margin-bottom: 8px; }
         .result-tap { font-size: 0.85rem; opacity: 0.6; margin-top: 14px; letter-spacing: 1px; }
 
-        /* Rebet / Double buttons */
-        .aux-btn {
-            background: none; border: 2px solid var(--gold); color: var(--gold);
-            padding: 10px 22px; border-radius: 50px; font-weight: bold;
-            cursor: pointer; font-size: 0.9rem; transition: background 0.15s;
-        }
+        /* Rebet / Double */
+        .aux-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 22px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: background 0.15s; }
         .aux-btn:hover { background: rgba(212,175,55,0.15); }
         .aux-btn:disabled { opacity: 0.3; cursor: default; }
-        @media (max-width: 768px) {
-            .aux-btn { padding: 8px 14px; font-size: 0.8rem; }
-        }
 
         /* Shoe inspector */
         .inspector-placeholder-label { color: rgba(255,255,255,0.3); text-align: center; font-size: 0.85rem; margin-top: 10px; }
@@ -346,14 +262,18 @@
         .preview-card { color: white; border: 1px solid #333; padding: 1px 3px; min-width: 14px; text-align: center; }
         .next-card { color: var(--gold) !important; border-color: var(--gold) !important; font-weight: bold; }
 
-        /* ── MOBILE ── */
+        /* Section label */
+        .section-label { font-size: 0.7rem; color: rgba(212,175,55,0.6); text-transform: uppercase; letter-spacing: 2px; text-align: left; margin-bottom: 2px; padding-left: 2px; }
+
+        /* Mobile */
         @media (max-width: 768px) {
+            .aux-btn { padding: 8px 14px; font-size: 0.8rem; }
             body { padding: 0; background: #08110b; }
             .game-content { padding: 10px; gap: 10px; }
             .header-title { font-size: 1.6rem; }
             .top-dashboards { grid-template-columns: 1fr; }
-            .roads-top-row { grid-template-columns: 1fr; }
-            .roads-bottom-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .roads-top-row { grid-template-columns: 1fr 2fr; } /* keep side-by-side on mobile, more space for big road */
+            .roads-bottom-row { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
             .casino-table { background: #092414; border: none; border-radius: 12px; box-shadow: none; padding: 15px 10px; }
             .table-score-header { width: 100%; justify-content: space-around; font-size: 1.1rem; background: rgba(0,0,0,0.4); padding: 8px 0; border-radius: 4px; }
             .cards-felt-area { flex-direction: row; justify-content: space-around; gap: 10px; margin-bottom: 15px; }
@@ -361,8 +281,9 @@
             .card-placeholder-box,.card { width: 44px; height: 68px; font-size: 0.8rem; }
             .betting-layout { width: 100%; gap: 10px; }
             .row-main-bets { flex-direction: column; width: 100%; gap: 10px; align-items: center; }
-            .row-side-bets { width: 100%; gap: 10px; }
+            .row-side-bets { width: 100%; gap: 8px; justify-content: center; }
             .bet-zone { width: 100% !important; height: auto !important; padding: 12px 10px; }
+            .zone-panda,.zone-dragon,.zone-lucky6,.zone-tiger,.zone-super6,.zone-bonus,.zone-natural { width: calc(50% - 4px) !important; }
             .bet-title-text { font-size: 1.25rem; }
             .bet-value-text { font-size: 1rem; }
             .controls-row { margin-top: 10px; gap: 12px; }
@@ -372,6 +293,7 @@
             .action-buttons-group { flex-wrap: wrap; gap: 8px; width: 100%; align-items: center; justify-content: center; }
             .main-deal-btn { width: 100%; max-width: 280px; padding: 14px 0; font-size: 1.3rem; }
             .clear-btn { max-width: 100px; padding: 8px 0; }
+            .casino-mode-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -379,7 +301,7 @@
 
     <div id="login-overlay" class="overlay">
         <div class="setup-card">
-            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.512</h2>
+            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.6</h2>
             <div id="email-step">
                 <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
                 <br><br>
@@ -398,12 +320,22 @@
     <div id="setup-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
             <h2 style="color:var(--gold);font-size:1.4rem;">TABLE SETUP</h2>
-            <p>Initial Bankroll:</p>
+
+            <p style="margin:8px 0 4px;color:var(--gold);font-size:0.85rem;letter-spacing:1px;">CASINO MODE</p>
+            <div class="casino-mode-grid" id="casino-mode-grid">
+                <!-- populated by JS -->
+            </div>
+
+            <p style="margin:14px 0 4px;">Initial Bankroll:</p>
             <input type="number" id="start-balance" value="5000">
-            <p>Shoe Size:</p>
+
+            <p style="margin:8px 0 4px;">Shoe Size:</p>
             <select id="shoe-size">
+                <option value="1">1 Deck</option>
                 <option value="6">6 Decks</option>
                 <option value="8" selected>8 Decks</option>
+                <option value="10">10 Decks</option>
+                <option value="12">12 Decks</option>
                 <option value="0">Infinite</option>
             </select>
             <br><br>
@@ -411,7 +343,7 @@
         </div>
     </div>
 
-    <!-- Win/Lose Result Overlay -->
+    <!-- Result Overlay -->
     <div id="result-overlay" onclick="dismissResult()">
         <div class="result-card" id="result-card">
             <div class="result-title" id="result-title">WIN</div>
@@ -425,12 +357,15 @@
 
         <!-- Header -->
         <div class="header-area">
-            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.512</span></div>
+            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.6</span></div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
         </div>
 
-        <!-- Casino Table (TOP) -->
-        <div class="casino-table">
+        <!-- Casino Banner -->
+        <div class="casino-banner" id="casino-banner"></div>
+
+        <!-- Casino Table -->
+        <div class="casino-table" id="casino-table-el">
             <div class="table-score-header">
                 <span style="color:#9ec2ff;">PLAYER: <span id="p-score">0</span></span>
                 <span style="color:#ff9e9e;">BANKER: <span id="b-score">0</span></span>
@@ -449,27 +384,22 @@
                 <div class="row-main-bets">
                     <div id="bet-player-box" class="bet-zone zone-player" onclick="placeBet('player')">
                         <div class="bet-title-text">PLAYER</div>
+                        <div class="bet-sub-text" id="player-odds-label">1:1</div>
                         <div class="bet-value-text" id="disp-player">$0</div>
                     </div>
                     <div id="bet-tie-box" class="bet-zone zone-tie" onclick="placeBet('tie')">
-                        <div class="bet-title-text" style="color:var(--gold);">TIE 8:1</div>
+                        <div class="bet-title-text" style="color:var(--gold);">TIE</div>
+                        <div class="bet-sub-text" id="tie-odds-label">8:1</div>
                         <div class="bet-value-text" id="disp-tie">$0</div>
                     </div>
                     <div id="bet-banker-box" class="bet-zone zone-banker" onclick="placeBet('banker')">
                         <div class="bet-title-text">BANKER</div>
+                        <div class="bet-sub-text" id="banker-odds-label">0.95:1</div>
                         <div class="bet-value-text" id="disp-banker">$0</div>
                     </div>
                 </div>
-                <div class="row-side-bets">
-                    <div id="bet-panda-box" class="bet-zone zone-panda" onclick="placeBet('panda')">
-                        <div class="bet-title-text" style="font-size:1.2rem;">🐼 PANDA 8</div>
-                        <div class="bet-value-text" id="disp-panda">$0</div>
-                    </div>
-                    <div id="bet-dragon-box" class="bet-zone zone-dragon" onclick="placeBet('dragon')">
-                        <div class="bet-title-text" style="font-size:1.2rem;color:#fff;">🐉 DRAGON 7</div>
-                        <div class="bet-value-text" id="disp-dragon">$0</div>
-                    </div>
-                </div>
+                <!-- Side bets row — populated dynamically -->
+                <div class="row-side-bets" id="side-bets-row"></div>
             </div>
             <div id="special-notifications" style="min-height:1.2rem;text-align:center;margin-top:8px;font-weight:bold;font-size:1rem;"></div>
         </div>
@@ -493,7 +423,7 @@
             </div>
         </div>
 
-        <!-- Financials + Shoe Inspector (BELOW TABLE) -->
+        <!-- Financials + Shoe Inspector -->
         <div class="top-dashboards">
             <div class="dashboard-box">
                 <div class="dashboard-title">FINANCIALS</div>
@@ -514,56 +444,41 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════
-             FIVE ROADS SECTION
-        ════════════════════════════════════ -->
+        <!-- Five Roads -->
         <div class="roads-section">
-            <!-- Top row: Bead Plate (Road) + Big Road -->
             <div class="roads-top-row">
                 <div class="road-box">
                     <div class="road-title">🔵 ROAD (珠盘路)</div>
-                    <div class="road-canvas-wrap">
-                        <div class="bead-plate" id="road-bead"></div>
-                    </div>
+                    <div class="road-canvas-wrap"><div class="bead-plate" id="road-bead"></div></div>
                 </div>
                 <div class="road-box">
                     <div class="road-title">🔴 BIG ROAD (大路)</div>
                     <div class="road-canvas-wrap">
-                        <div class="big-road-wrap">
-                            <div class="big-road-grid" id="road-big"></div>
-                        </div>
+                        <div class="big-road-wrap"><div class="big-road-grid" id="road-big"></div></div>
                     </div>
                 </div>
             </div>
-            <!-- Bottom row: Three derived roads -->
             <div class="roads-bottom-row">
                 <div class="road-box">
                     <div class="road-title">👁 BIG EYE BOY (大眼仔)</div>
                     <div class="road-canvas-wrap">
-                        <div class="derived-road-wrap">
-                            <div class="derived-road-grid" id="road-beb"></div>
-                        </div>
+                        <div class="derived-road-wrap"><div class="derived-road-grid" id="road-beb"></div></div>
                     </div>
                 </div>
                 <div class="road-box">
                     <div class="road-title">📍 SMALL ROAD (小路)</div>
                     <div class="road-canvas-wrap">
-                        <div class="derived-road-wrap">
-                            <div class="derived-road-grid" id="road-small"></div>
-                        </div>
+                        <div class="derived-road-wrap"><div class="derived-road-grid" id="road-small"></div></div>
                     </div>
                 </div>
                 <div class="road-box">
                     <div class="road-title">🪳 COCKROACH PIG (曱甴路)</div>
                     <div class="road-canvas-wrap">
-                        <div class="derived-road-wrap">
-                            <div class="derived-road-grid" id="road-cock"></div>
-                        </div>
+                        <div class="derived-road-wrap"><div class="derived-road-grid" id="road-cock"></div></div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- ═══════════════════════════════════ -->
 
         <div class="coffee-link-wrapper" style="width:100%;max-width:240px;margin:6px auto 0 auto;">
             <a href="https://buymeacoffee.com/baccaratfunk/the-motion-energy" target="_blank" class="coffee-link">☕ Buy me a cup of coffee</a>
@@ -572,28 +487,201 @@
 
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHrUd-Hyi-FST4-YD34GHFOXHFbRscOuTKbqbDn6v7WjkolDx8wKbUX3JxIJ1jhLc/exec';
+
+    // ══════════════════════════════════════════════════════════
+    //  CASINO MODE DEFINITIONS — Top 5 worldwide + default
+    // ══════════════════════════════════════════════════════════
+    const CASINO_MODES = [
+        {
+            id: 'default',
+            name: 'Classic',
+            location: 'Standard Rules',
+            flag: '🎴',
+            feltColor: '#0a4d2c',
+            woodColor: '#3e2723',
+            // Odds: player pays 1:1, banker pays 0.95:1 (5% commission), tie pays 8:1
+            playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
+            bankerCommission: 0.05,
+            sideBets: ['panda','dragon'],
+            description: 'Classic baccarat, Panda 8 & Dragon 7',
+            tableTag: 'Standard Commission'
+        },
+        {
+            id: 'macau',
+            name: 'Galaxy Macau',
+            location: 'Macau, China',
+            flag: '🇲🇴',
+            feltColor: '#0d3d1a',
+            woodColor: '#2c1810',
+            playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
+            bankerCommission: 0.05,
+            // Lucky 6: if banker wins with 6 cards total (2-card: 12:1, 3-card: 20:1 simplified to ~15:1)
+            sideBets: ['panda','dragon','lucky6'],
+            description: 'Galaxy Macau — Lucky 6 side bet',
+            tableTag: '5% Commission · Lucky 6'
+        },
+        {
+            id: 'wynn',
+            name: 'Wynn Las Vegas',
+            location: 'Las Vegas, USA',
+            flag: '🇺🇸',
+            feltColor: '#1a2a0a',
+            woodColor: '#1a1a2e',
+            playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
+            bankerCommission: 0.05,
+            // Banker Bonus: natural win bonus, player bonus
+            sideBets: ['panda','dragon','bonus'],
+            description: 'Wynn Las Vegas — EZ & Bonus bets',
+            tableTag: '5% Commission · Bonus'
+        },
+        {
+            id: 'ez',
+            name: 'EZ Baccarat',
+            location: 'Commission-Free',
+            flag: '🃏',
+            feltColor: '#0a2040',
+            woodColor: '#1a0a2e',
+            playerOdds: 1, bankerOdds: 1, tieOdds: 8,  // no commission!
+            bankerCommission: 0,
+            // Dragon 7: banker wins with 3-card 7 → 40:1. Panda 8: player wins with 3-card 8 → 25:1
+            // Banker push on 3-card 7 (replaced by Dragon 7)
+            sideBets: ['panda','dragon'],
+            description: 'No commission — Banker 3-card 7 is PUSH (bet Dragon 7!)',
+            tableTag: 'Commission-Free · Dragon 7 Push',
+            ezMode: true  // banker 3-card 7 is push unless Dragon 7 bet placed
+        },
+        {
+            id: 'marina',
+            name: 'Marina Bay Sands',
+            location: 'Singapore',
+            flag: '🇸🇬',
+            feltColor: '#0a1a3a',
+            woodColor: '#1a2a0e',
+            playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
+            bankerCommission: 0.05,
+            // Super 6: banker wins with exactly 6 — no commission, pays 12:1 side bet
+            sideBets: ['super6','tiger'],
+            description: 'Marina Bay Sands — Super 6 & Tiger',
+            tableTag: 'Super 6 · Tiger Bet'
+        },
+        {
+            id: 'venetian',
+            name: 'The Venetian',
+            location: 'Las Vegas / Macau',
+            flag: '🏛️',
+            feltColor: '#1a0a0a',
+            woodColor: '#2e1a0a',
+            playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
+            bankerCommission: 0.05,
+            // Natural 8/9 bonus bets
+            sideBets: ['panda','dragon','natural'],
+            description: 'The Venetian — Natural 8/9 Bonus',
+            tableTag: '5% Commission · Natural Bonus'
+        }
+    ];
+
+    // ══════════════════════════════════════════════════════════
+    //  SIDE BET SPECS
+    // ══════════════════════════════════════════════════════════
+    const SIDE_BET_DEFS = {
+        panda:   { key:'panda',   label:'🐼 PANDA 8',   cls:'zone-panda',   sub:'25:1',  desc:'Player 3-card 8 wins' },
+        dragon:  { key:'dragon',  label:'🐉 DRAGON 7',  cls:'zone-dragon',  sub:'40:1',  desc:'Banker 3-card 7 wins' },
+        lucky6:  { key:'lucky6',  label:'🍀 LUCKY 6',   cls:'zone-lucky6',  sub:'12:1 / 20:1', desc:'Banker wins with 6' },
+        tiger:   { key:'tiger',   label:'🐯 TIGER',     cls:'zone-tiger',   sub:'9:1',   desc:'Banker wins w/ 6 (2-card)' },
+        super6:  { key:'super6',  label:'⑥ SUPER 6',   cls:'zone-super6',  sub:'12:1',  desc:'Banker wins with 6' },
+        bonus:   { key:'bonus',   label:'★ BONUS',      cls:'zone-bonus',   sub:'Varies', desc:'Win margin 4+ pays bonus' },
+        natural: { key:'natural', label:'✨ NATURAL',   cls:'zone-natural', sub:'Varies', desc:'Natural 8 or 9 bonus' },
+    };
+
+    // ══════════════════════════════════════════════════════════
+    //  STATE
+    // ══════════════════════════════════════════════════════════
     let bankroll = 0, initialBankroll = 0, selectedChipValue = 25, userEmail = "";
-    let currentBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
-    let lastBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
+    let currentBets = {};
+    let lastBets = {};
     let stats = { banker:0, player:0, tie:0 };
     let shoe = [], shoeSize = 8, shoeVisible = false;
+    let selectedCasino = CASINO_MODES[0];
 
-    // ══════════════════════════════════════════════════════════
-    //  ROAD DATA STRUCTURES
-    // ══════════════════════════════════════════════════════════
-    // beadHistory: array of { result: 'banker'|'player'|'tie'|'panda-win'|'dragon-win', label }
     let beadHistory = [];
-
-    // bigRoadGrid: 2D array [col][row] = { type:'banker'|'player', tieCount:0 }
-    // We store it as a flat columns array for easy rendering
-    let bigRoadColumns = []; // each col = array of cells (max 6)
+    let bigRoadColumns = [];
     let bigRoadCurrentCol = 0;
-    let bigRoadLastNonTie = null; // 'banker'|'player'
+    let bigRoadLastNonTie = null;
+    let bebEntries = [];
+    let smallEntries = [];
+    let cockEntries = [];
 
-    // derived road entry arrays: each = { rep: bool }
-    let bebEntries = [];   // Big Eye Boy
-    let smallEntries = []; // Small Road
-    let cockEntries = [];  // Cockroach Pig
+    // ── Build setup casino grid ──
+    function buildCasinoGrid() {
+        const grid = document.getElementById('casino-mode-grid');
+        grid.innerHTML = '';
+        CASINO_MODES.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'casino-card' + (c.id === selectedCasino.id ? ' selected' : '');
+            card.onclick = () => selectCasinoMode(c.id);
+            card.innerHTML = `
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <span class="casino-card-flag">${c.flag}</span>
+                    <div>
+                        <div class="casino-card-name">${c.name}</div>
+                        <div class="casino-card-loc">${c.location}</div>
+                    </div>
+                    <span class="casino-card-check">✓</span>
+                </div>
+                <div class="casino-card-tag">${c.tableTag}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function selectCasinoMode(id) {
+        selectedCasino = CASINO_MODES.find(c => c.id === id) || CASINO_MODES[0];
+        document.querySelectorAll('.casino-card').forEach(el => el.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        buildCasinoGrid(); // rebuild to reflect new selection
+    }
+
+    // ── Build current bets object from selected casino ──
+    function initBetKeys() {
+        const keys = ['player','banker','tie', ...selectedCasino.sideBets];
+        currentBets = {};
+        lastBets = {};
+        keys.forEach(k => { currentBets[k] = 0; lastBets[k] = 0; });
+    }
+
+    // ── Build in-game side bet zones ──
+    function buildSideBetZones() {
+        const row = document.getElementById('side-bets-row');
+        row.innerHTML = '';
+        selectedCasino.sideBets.forEach(key => {
+            const def = SIDE_BET_DEFS[key];
+            if (!def) return;
+            const el = document.createElement('div');
+            el.id = `bet-${key}-box`;
+            el.className = `bet-zone ${def.cls}`;
+            el.onclick = () => placeBet(key);
+            el.innerHTML = `
+                <div class="bet-title-text" style="font-size:1.1rem;">${def.label}</div>
+                <div class="bet-sub-text">${def.sub}</div>
+                <div class="bet-value-text" id="disp-${key}">$0</div>
+            `;
+            row.appendChild(el);
+        });
+    }
+
+    // ── Apply casino theme ──
+    function applyCasinoTheme() {
+        const tbl = document.getElementById('casino-table-el');
+        tbl.style.background = selectedCasino.feltColor;
+        tbl.style.borderColor = selectedCasino.woodColor;
+
+        document.getElementById('player-odds-label').textContent = selectedCasino.playerOdds + ':1';
+        document.getElementById('banker-odds-label').textContent = selectedCasino.bankerOdds + ':1' + (selectedCasino.bankerCommission > 0 ? ' (-5%)' : '');
+        document.getElementById('tie-odds-label').textContent = selectedCasino.tieOdds + ':1';
+
+        const banner = document.getElementById('casino-banner');
+        banner.innerHTML = `<strong>${selectedCasino.flag} ${selectedCasino.name}</strong> &nbsp;·&nbsp; ${selectedCasino.location} &nbsp;·&nbsp; ${selectedCasino.description}`;
+    }
 
     // ── Login / Setup ──
     function handleLogin() {
@@ -601,6 +689,7 @@
         if (input === "dragonfly") {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('setup-overlay').style.display = 'flex';
+            buildCasinoGrid();
         } else if (input.includes("@")) {
             sendCode();
         } else {
@@ -609,6 +698,7 @@
             msg.textContent = "Invalid Credentials";
         }
     }
+
     async function sendCode() {
         userEmail = document.getElementById('user-email').value.trim();
         const msg = document.getElementById('login-msg');
@@ -620,28 +710,38 @@
             else { document.getElementById('email-step').style.display='none'; document.getElementById('code-step').style.display='block'; msg.textContent="Code sent! Valid for 5 minutes."; }
         } catch(e) { msg.textContent="Connection error."; }
     }
+
     async function verifyCode() {
         const token = document.getElementById('access-code').value.trim();
         const msg = document.getElementById('login-msg');
         try {
             const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${token}`);
             const result = await r.text();
-            if (result === "Verified") { document.getElementById('login-overlay').style.display='none'; document.getElementById('setup-overlay').style.display='flex'; }
-            else { msg.style.color="#ff4444"; msg.textContent="Invalid or expired code."; }
+            if (result === "Verified") {
+                document.getElementById('login-overlay').style.display='none';
+                document.getElementById('setup-overlay').style.display='flex';
+                buildCasinoGrid();
+            } else { msg.style.color="#ff4444"; msg.textContent="Invalid or expired code."; }
         } catch(e) { msg.textContent="Verification error."; }
     }
 
-    function toggleSettings() { document.getElementById('setup-overlay').style.display='flex'; }
+    function toggleSettings() {
+        buildCasinoGrid();
+        document.getElementById('setup-overlay').style.display='flex';
+    }
+
     function startGame() {
         const val = parseInt(document.getElementById('start-balance').value);
         if (initialBankroll === 0) initialBankroll = val;
-        bankroll = val; shoeSize = parseInt(document.getElementById('shoe-size').value);
+        bankroll = val;
+        shoeSize = parseInt(document.getElementById('shoe-size').value);
+        initBetKeys();
+        buildSideBetZones();
+        applyCasinoTheme();
         initShoe();
-        // Reset roads
         beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0 };
-        lastBets = { player:0, banker:0, tie:0, panda:0, dragon:0 };
         updateAuxButtons();
         document.getElementById('setup-overlay').style.display='none';
         document.getElementById('game-container').style.display='flex';
@@ -651,13 +751,44 @@
 
     function initShoe() {
         if (shoeSize === 0) { shoe = []; return; }
-        shoe = []; for (let i=0;i<shoeSize*52;i++) shoe.push((i%13)+1);
-        for (let i=shoe.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [shoe[i],shoe[j]]=[shoe[j],shoe[i]]; }
+        shoe = [];
+        for (let i=0; i<shoeSize*52; i++) shoe.push((i%13)+1);
+        for (let i=shoe.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [shoe[i],shoe[j]]=[shoe[j],shoe[i]]; }
     }
-    function getNextCard() { if(shoeSize===0) return Math.floor(Math.random()*13)+1; if(shoe.length<10) initShoe(); return shoe.pop(); }
-    function selectChip(val, el) { selectedChipValue=val; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
-    function placeBet(type) { if(bankroll<selectedChipValue) return; currentBets[type]+=selectedChipValue; bankroll-=selectedChipValue; document.getElementById(`disp-${type}`).textContent=`$${currentBets[type]}`; updateUI(); updateAuxButtons(); }
-    function clearBets() { for(let k in currentBets){ bankroll+=currentBets[k]; currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; } updateUI(); updateAuxButtons(); }
+
+    function getNextCard() {
+        if (shoeSize===0) return Math.floor(Math.random()*13)+1;
+        if (shoe.length < 10) initShoe();
+        return shoe.pop();
+    }
+
+    function selectChip(val, el) {
+        selectedChipValue=val;
+        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function placeBet(type) {
+        if (!(type in currentBets)) return;
+        if (bankroll < selectedChipValue) return;
+        currentBets[type] += selectedChipValue;
+        bankroll -= selectedChipValue;
+        const disp = document.getElementById(`disp-${type}`);
+        if (disp) disp.textContent = `$${currentBets[type]}`;
+        updateUI();
+        updateAuxButtons();
+    }
+
+    function clearBets() {
+        for (let k in currentBets) {
+            bankroll += currentBets[k];
+            currentBets[k] = 0;
+            const disp = document.getElementById(`disp-${k}`);
+            if (disp) disp.textContent = "$0";
+        }
+        updateUI();
+        updateAuxButtons();
+    }
 
     function updateAuxButtons() {
         const total = Object.values(currentBets).reduce((a,b)=>a+b,0);
@@ -669,12 +800,13 @@
     function reBet() {
         clearBets();
         const lastTotal = Object.values(lastBets).reduce((a,b)=>a+b,0);
-        if (bankroll < lastTotal) { return; } // not enough
+        if (bankroll < lastTotal) return;
         for (let k in lastBets) {
-            if (lastBets[k] > 0) {
+            if (lastBets[k] > 0 && k in currentBets) {
                 currentBets[k] = lastBets[k];
                 bankroll -= lastBets[k];
-                document.getElementById(`disp-${k}`).textContent = `$${currentBets[k]}`;
+                const disp = document.getElementById(`disp-${k}`);
+                if (disp) disp.textContent = `$${currentBets[k]}`;
             }
         }
         updateUI();
@@ -690,7 +822,8 @@
                 if (bankroll >= add) {
                     currentBets[k] += add;
                     bankroll -= add;
-                    document.getElementById(`disp-${k}`).textContent = `$${currentBets[k]}`;
+                    const disp = document.getElementById(`disp-${k}`);
+                    if (disp) disp.textContent = `$${currentBets[k]}`;
                 }
             }
         }
@@ -698,6 +831,9 @@
         updateAuxButtons();
     }
 
+    // ══════════════════════════════════════════════════════════
+    //  GAME LOGIC
+    // ══════════════════════════════════════════════════════════
     function playHand() {
         document.querySelectorAll('.bet-zone').forEach(z=>z.classList.remove('win-flash'));
         document.getElementById('special-notifications').innerHTML='';
@@ -727,68 +863,164 @@
         document.getElementById('b-score').textContent=bS;
     }
 
-    function resolve(p,b,pS,bS) {
-        let win=0;
-        const drg=bS===7&&b.length===3&&bS>pS;
-        const pnd=pS===8&&p.length===3&&pS>bS;
-        let outcomeType, beadClass, beadLabel;
-        const totalWagered = Object.values(currentBets).reduce((a,b)=>a+b,0);
-        let specialMsg = '';
+    function flash(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('win-flash');
+    }
 
-        if (pS===bS) {
-            win += currentBets.tie*9 + currentBets.player + currentBets.banker;
+    function resolve(p, b, pS, bS) {
+        let win = 0;
+        const drg = bS===7 && b.length===3 && bS>pS;
+        const pnd = pS===8 && p.length===3 && pS>bS;
+        const c = selectedCasino;
+        let outcomeType, beadClass, beadLabel;
+        const totalWagered = Object.values(currentBets).reduce((a,v)=>a+v, 0);
+        let specialMsg = '';
+        let notifications = [];
+
+        if (pS === bS) {
+            // TIE
+            win += currentBets.tie * (c.tieOdds + 1);
+            win += (currentBets.player||0) + (currentBets.banker||0); // push on tie
             stats.tie++;
             beadClass='tie'; beadLabel='T'; outcomeType='tie';
-            document.getElementById('bet-tie-box').classList.add('win-flash');
-        } else if (pS>bS) {
+            flash('bet-tie-box');
+
+        } else if (pS > bS) {
+            // PLAYER WINS
             stats.player++;
             if (pnd) {
-                win+=currentBets.panda*26; win+=currentBets.player*2;
+                // Panda 8 wins
+                win += (currentBets.panda||0) * 26;
+                win += (currentBets.player||0) * (1 + c.playerOdds);
                 beadClass='panda-win'; beadLabel='P8'; outcomeType='player';
-                document.getElementById('bet-panda-box').classList.add('win-flash');
-                document.getElementById('bet-player-box').classList.add('win-flash');
-                document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--panda-purple);border:1px solid white;">PANDA 8 WIN!</span>';
+                flash('bet-panda-box'); flash('bet-player-box');
+                notifications.push(`<span class="win-badge" style="background:var(--panda-purple);border:1px solid white;">PANDA 8 WIN!</span>`);
                 specialMsg = '🐼 PANDA 8!';
             } else {
-                win+=currentBets.player*2;
+                win += (currentBets.player||0) * (1 + c.playerOdds);
                 beadClass='player'; beadLabel='P'; outcomeType='player';
-                document.getElementById('bet-player-box').classList.add('win-flash');
+                flash('bet-player-box');
             }
+            // Natural bonus (Venetian)
+            if (currentBets.natural > 0) {
+                const isNatural = p.length===2 && (pS===8||pS===9);
+                if (isNatural) {
+                    const naturalPay = pS===9 ? 8 : 6;
+                    win += (currentBets.natural||0) * (naturalPay + 1);
+                    notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);">NATURAL ${pS} +${naturalPay}:1!</span>`);
+                }
+            }
+            // Bonus bet (Wynn) - player side
+            if (currentBets.bonus > 0) {
+                const margin = pS - bS;
+                const bonusPay = margin>=9?30:margin>=8?10:margin>=7?6:margin>=6?4:margin>=5?2:margin>=4?1:0;
+                if (bonusPay > 0) {
+                    win += (currentBets.bonus||0) * (bonusPay + 1);
+                    notifications.push(`<span class="win-badge" style="background:#7b1fa2;">BONUS ${bonusPay}:1!</span>`);
+                }
+            }
+
         } else {
+            // BANKER WINS
             stats.banker++;
-            if (drg) {
-                win+=currentBets.dragon*41+currentBets.banker;
+            const isB6 = bS === 6;
+            const isB6_2card = isB6 && b.length === 2;
+            const isB6_3card = isB6 && b.length === 3;
+
+            // EZ Mode: banker 3-card 7 is a push (unless Dragon 7 bet)
+            if (c.ezMode && drg) {
+                // Dragon 7 hit
+                win += (currentBets.dragon||0) * 41;
+                // Banker push (no win on banker bet in EZ mode for this hand)
                 beadClass='dragon-win'; beadLabel='D7'; outcomeType='banker';
-                document.getElementById('bet-dragon-box').classList.add('win-flash');
-                document.getElementById('bet-banker-box').classList.add('win-flash');
-                document.getElementById('special-notifications').innerHTML='<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>';
+                flash('bet-dragon-box');
+                notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);color:black;">DRAGON 7!</span>`);
                 specialMsg = '🐉 DRAGON 7!';
-            } else {
-                win+=currentBets.banker*2;
+            } else if (c.ezMode && bS===7 && b.length===3) {
+                // EZ push: no win on banker
+                win += 0; // push on banker bet too
+                win += (currentBets.banker||0); // return bet
                 beadClass='banker'; beadLabel='B'; outcomeType='banker';
-                document.getElementById('bet-banker-box').classList.add('win-flash');
+                notifications.push(`<span class="win-badge" style="background:#555;">DRAGON PUSH</span>`);
+            } else {
+                // Normal banker resolution
+                if (drg) {
+                    win += (currentBets.dragon||0) * 41 + (currentBets.banker||0);
+                    beadClass='dragon-win'; beadLabel='D7'; outcomeType='banker';
+                    flash('bet-dragon-box'); flash('bet-banker-box');
+                    notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>`);
+                    specialMsg = '🐉 DRAGON 7!';
+                } else {
+                    // Banker payout with commission
+                    const commission = c.bankerCommission;
+                    const bankerWinAmt = (currentBets.banker||0) * (1 + c.bankerOdds);
+                    win += bankerWinAmt;
+                    beadClass='banker'; beadLabel='B'; outcomeType='banker';
+                    flash('bet-banker-box');
+                }
+            }
+
+            // Super 6 (Marina Bay Sands)
+            if (currentBets.super6 > 0 && isB6) {
+                win += (currentBets.super6||0) * 13; // 12:1
+                notifications.push(`<span class="win-badge" style="background:#388e3c;">SUPER 6! +12:1</span>`);
+            }
+            // Lucky 6 (Galaxy Macau)
+            if (currentBets.lucky6 > 0 && isB6) {
+                const lucky6Pay = isB6_2card ? 13 : 21; // 12:1 or 20:1
+                win += (currentBets.lucky6||0) * lucky6Pay;
+                notifications.push(`<span class="win-badge" style="background:#0d6b5e;">LUCKY 6! +${lucky6Pay-1}:1</span>`);
+            }
+            // Tiger (Marina Bay Sands — banker wins with 2-card 6)
+            if (currentBets.tiger > 0 && isB6_2card) {
+                win += (currentBets.tiger||0) * 10; // 9:1
+                notifications.push(`<span class="win-badge" style="background:#b84000;">TIGER! +9:1</span>`);
+            }
+            // Bonus bet (Wynn) - banker side
+            if (currentBets.bonus > 0) {
+                const margin = bS - pS;
+                const bonusPay = margin>=9?30:margin>=8?10:margin>=7?6:margin>=6?4:margin>=5?2:margin>=4?1:0;
+                if (bonusPay > 0) {
+                    win += (currentBets.bonus||0) * (bonusPay + 1);
+                    notifications.push(`<span class="win-badge" style="background:#7b1fa2;">BONUS ${bonusPay}:1!</span>`);
+                }
+            }
+            // Natural bonus (Venetian) - banker side
+            if (currentBets.natural > 0) {
+                const isNatural = b.length===2 && (bS===8||bS===9);
+                if (isNatural) {
+                    const naturalPay = bS===9 ? 8 : 6;
+                    win += (currentBets.natural||0) * (naturalPay + 1);
+                    notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);">NATURAL ${bS} BANKER +${naturalPay}:1!</span>`);
+                }
             }
         }
-        bankroll+=win;
 
-        // Save last bets before clearing
+        bankroll += win;
         for (let k in currentBets) lastBets[k] = currentBets[k];
 
-        // Show result overlay (only when bets were placed)
         if (totalWagered > 0) {
             const netPL = win - totalWagered;
             showResult(netPL, outcomeType, pS, bS, specialMsg);
         }
 
-        // Update all 5 roads
+        if (notifications.length > 0) {
+            document.getElementById('special-notifications').innerHTML = notifications.join(' ');
+        }
+
         addToRoads(outcomeType, beadClass, beadLabel);
 
-        for(let k in currentBets){ currentBets[k]=0; document.getElementById(`disp-${k}`).textContent="$0"; }
+        for (let k in currentBets) {
+            currentBets[k] = 0;
+            const disp = document.getElementById(`disp-${k}`);
+            if (disp) disp.textContent = "$0";
+        }
         updateUI();
         updateAuxButtons();
-        document.getElementById('stat-b').textContent=stats.banker;
-        document.getElementById('stat-p').textContent=stats.player;
-        document.getElementById('stat-t').textContent=stats.tie;
+        document.getElementById('stat-b').textContent = stats.banker;
+        document.getElementById('stat-p').textContent = stats.player;
+        document.getElementById('stat-t').textContent = stats.tie;
     }
 
     function showResult(netPL, outcomeType, pS, bS, specialMsg) {
@@ -797,39 +1029,20 @@
         const titleEl = document.getElementById('result-title');
         const amountEl = document.getElementById('result-amount');
         const detailEl = document.getElementById('result-detail');
-
-        const isWin = netPL > 0;
-        const isPush = netPL === 0;
-
-        // Outcome label
-        const outcomeLabel = outcomeType === 'tie' ? 'TIE' : outcomeType === 'player' ? 'PLAYER' : 'BANKER';
+        const isWin = netPL > 0, isPush = netPL === 0;
+        const outcomeLabel = outcomeType==='tie'?'TIE':outcomeType==='player'?'PLAYER':'BANKER';
 
         if (isPush) {
-            titleEl.textContent = 'PUSH';
-            card.style.background = 'linear-gradient(135deg,#333 0%,#555 100%)';
-            card.style.border = '3px solid #aaa';
-            titleEl.style.color = '#eee';
-            amountEl.style.color = '#ccc';
+            titleEl.textContent='PUSH'; card.style.background='linear-gradient(135deg,#333 0%,#555 100%)'; card.style.border='3px solid #aaa'; titleEl.style.color='#eee'; amountEl.style.color='#ccc';
         } else if (isWin) {
-            titleEl.textContent = specialMsg || 'WIN!';
-            card.style.background = 'linear-gradient(135deg,#0a4d2c 0%,#1a8c22 100%)';
-            card.style.border = '3px solid var(--gold)';
-            titleEl.style.color = '#ffd700';
-            amountEl.style.color = '#7dff7d';
+            titleEl.textContent=specialMsg||'WIN!'; card.style.background='linear-gradient(135deg,#0a4d2c 0%,#1a8c22 100%)'; card.style.border='3px solid var(--gold)'; titleEl.style.color='#ffd700'; amountEl.style.color='#7dff7d';
         } else {
-            titleEl.textContent = 'LOSE';
-            card.style.background = 'linear-gradient(135deg,#3b0000 0%,#8b1e1e 100%)';
-            card.style.border = '3px solid #ff4444';
-            titleEl.style.color = '#ff8888';
-            amountEl.style.color = '#ffaaaa';
+            titleEl.textContent='LOSE'; card.style.background='linear-gradient(135deg,#3b0000 0%,#8b1e1e 100%)'; card.style.border='3px solid #ff4444'; titleEl.style.color='#ff8888'; amountEl.style.color='#ffaaaa';
         }
-
         const sign = netPL >= 0 ? '+' : '-';
         amountEl.textContent = `${sign}$${Math.abs(netPL).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
         detailEl.textContent = `${outcomeLabel}  •  Player ${pS} – Banker ${bS}`;
-
         overlay.style.display = 'flex';
-        // Auto-dismiss after 2.5s
         clearTimeout(window._resultTimer);
         window._resultTimer = setTimeout(dismissResult, 2500);
     }
@@ -840,117 +1053,54 @@
     }
 
     // ══════════════════════════════════════════════════════════
-    //  ROAD ALGORITHMS
+    //  ROADS
     // ══════════════════════════════════════════════════════════
-
     function addToRoads(outcomeType, beadClass, beadLabel) {
-        // 1. ROAD (Bead Plate) — simple chronological
         beadHistory.push({ cls: beadClass, label: beadLabel });
-
-        // 2. BIG ROAD
         if (outcomeType === 'tie') {
-            // Tie: mark the last cell in big road with a tie indicator, don't add new cell
             if (bigRoadColumns.length > 0) {
                 const lastCol = bigRoadColumns[bigRoadColumns.length-1];
                 if (lastCol.length > 0) lastCol[lastCol.length-1].tieCount++;
             }
         } else {
-            // Non-tie outcome
             const isNewType = bigRoadLastNonTie !== outcomeType;
             if (bigRoadColumns.length === 0 || isNewType || bigRoadColumns[bigRoadColumns.length-1].length >= 6) {
-                // Start new column
                 bigRoadColumns.push([{ type: outcomeType, tieCount: 0 }]);
             } else {
-                // Continue same column
                 bigRoadColumns[bigRoadColumns.length-1].push({ type: outcomeType, tieCount: 0 });
             }
             bigRoadLastNonTie = outcomeType;
-
-            // 3. Derived roads — only computed on non-tie results
             computeDerivedRoads(outcomeType);
         }
-
         renderAllRoads();
     }
 
-    /*
-     * Derived Road Logic (Big Eye Boy, Small Road, Cockroach Pig)
-     * 
-     * Each derived road entry is generated when a new cell is placed on the Big Road.
-     * 
-     * The algorithm compares two columns in the Big Road to determine if the pattern
-     * is "repetitive" (red) or "non-repetitive" (blue).
-     *
-     * BIG EYE BOY:
-     *   - Starts when the 2nd column has its first entry OR the 1st column has 2+ entries
-     *   - For each new entry in col C at row R:
-     *     - If R===0 (new column): compare col C-1 length with col C-2 length
-     *       - If they are the same length (or C-2 doesn't exist): RED
-     *       - If they differ: BLUE  
-     *     - If R>0 (same column continues): check if cell exists at col C-2, row R-1
-     *       - If it exists: RED (pattern matching)
-     *       - If it doesn't: BLUE
-     *
-     * SMALL ROAD: same logic but looking 2 columns further back (C-3 instead of C-2)
-     * COCKROACH PIG: same logic but looking 3 columns further back (C-4 instead of C-3... actually C vs C-3 skip)
-     *
-     * Simplified standard implementation:
-     */
     function computeDerivedRoads(outcomeType) {
         const cols = bigRoadColumns;
         const colIdx = cols.length - 1;
         const rowIdx = cols[colIdx].length - 1;
-
-        // BIG EYE BOY: starts when 2nd column appears (colIdx >= 1) OR colIdx===0 and rowIdx>=1
         derivedEntry(cols, colIdx, rowIdx, 1, bebEntries);
-
-        // SMALL ROAD: starts when 3rd column appears (colIdx >= 2) OR colIdx===0/1 and deep enough
         derivedEntry(cols, colIdx, rowIdx, 2, smallEntries);
-
-        // COCKROACH PIG: starts when 4th column (colIdx >= 3)
         derivedEntry(cols, colIdx, rowIdx, 3, cockEntries);
     }
 
-    /*
-     * derivedEntry: compute one entry for a derived road
-     * lookback = 1 for BEB, 2 for Small, 3 for Cockroach
-     */
     function derivedEntry(cols, colIdx, rowIdx, lookback, entries) {
-        // Minimum trigger: the "reference" column must exist
-        // For BEB (lookback=1): reference col = colIdx - 1
-        // But also triggers when row deepens past lookback in first col
         const refColIdx = colIdx - lookback;
-
-        // Case A: new column (rowIdx === 0)
         if (rowIdx === 0) {
-            if (refColIdx < 0) return; // too early
-            // Compare length of current col's left neighbor vs ref col
-            // left neighbor of current col = col at colIdx-1
-            const leftLen  = (colIdx - 1 >= 0) ? cols[colIdx - 1].length : 0;
-            const refLen   = (refColIdx >= 0)   ? cols[refColIdx].length  : 0;
-            // RED if same depth, BLUE if different
+            if (refColIdx < 0) return;
+            const leftLen = (colIdx - 1 >= 0) ? cols[colIdx-1].length : 0;
+            const refLen  = (refColIdx >= 0)   ? cols[refColIdx].length : 0;
             entries.push({ rep: leftLen === refLen });
         } else {
-            // Case B: same column continuing (rowIdx > 0)
             if (refColIdx < 0) {
-                // For case where we're still in col 0 but deep: compare current row vs lookback rows back
-                // This handles the "vertical" start condition
-                if (colIdx === 0 && rowIdx === lookback) {
-                    // First derived entry generated by a tall first column
-                    // Always starts as non-repetitive (BLUE) per standard rules
-                    entries.push({ rep: false });
-                }
+                if (colIdx === 0 && rowIdx === lookback) entries.push({ rep: false });
                 return;
             }
-            // Check if ref column has a cell at rowIdx-1
             const refHasCell = refColIdx >= 0 && cols[refColIdx].length > (rowIdx - 1);
             entries.push({ rep: refHasCell });
         }
     }
 
-    // ══════════════════════════════════════════════════════════
-    //  RENDER ALL ROADS
-    // ══════════════════════════════════════════════════════════
     function renderAllRoads() {
         renderBeadPlate();
         renderBigRoad();
@@ -974,10 +1124,6 @@
     function renderBigRoad() {
         const container = document.getElementById('road-big');
         container.innerHTML = '';
-
-        // Build a flat grid: we need to place cells at (col, row) positions
-        // The CSS grid is: 6 rows, auto columns — grid-auto-flow: column
-        // So we fill col by col, 6 cells per col (empty if not used)
         const ROWS = 6;
         bigRoadColumns.forEach(col => {
             for (let r = 0; r < ROWS; r++) {
@@ -990,7 +1136,6 @@
                     if (entry.tieCount > 0) {
                         circle.classList.add('has-tie');
                         circle.style.position = 'relative';
-                        // Green vertical line indicator
                         const tieLine = document.createElement('div');
                         tieLine.style.cssText = 'position:absolute;width:2px;height:11px;background:#1a8c22;top:0;left:50%;transform:translateX(-50%);border-radius:1px;';
                         circle.appendChild(tieLine);
@@ -1008,20 +1153,14 @@
         const container = document.getElementById(containerId);
         container.innerHTML = '';
         const ROWS = 4;
-        // Layout: fill top-to-bottom, left-to-right (same as big road but 4 rows)
-        // We simulate a 4-row grid
-        let col = 0, row = 0;
-        // First, calculate column count needed
         const colCount = Math.ceil(entries.length / ROWS) + 2;
         const totalCells = colCount * ROWS;
-        // Build sparse array
         const grid = new Array(totalCells).fill(null);
         entries.forEach((entry, i) => {
             const c = Math.floor(i / ROWS);
             const r = i % ROWS;
             grid[c * ROWS + r] = entry;
         });
-
         for (let i = 0; i < grid.length; i++) {
             const cell = document.createElement('div');
             cell.className = 'dr-cell';
@@ -1030,13 +1169,13 @@
                 let el;
                 if (style === 'circle') {
                     el = document.createElement('div');
-                    el.className = `dr-circle ${entry.rep ? 'rep' : 'non'}`;
+                    el.className = `dr-circle ${entry.rep?'rep':'non'}`;
                 } else if (style === 'hollow') {
                     el = document.createElement('div');
-                    el.className = `dr-circle-sm ${entry.rep ? 'rep' : 'non'}`;
-                } else { // slash
+                    el.className = `dr-circle-sm ${entry.rep?'rep':'non'}`;
+                } else {
                     el = document.createElement('div');
-                    el.className = `dr-slash ${entry.rep ? 'rep' : 'non'}`;
+                    el.className = `dr-slash ${entry.rep?'rep':'non'}`;
                 }
                 cell.appendChild(el);
             }
@@ -1077,6 +1216,11 @@
         document.querySelectorAll('.shoe-count-label').forEach(el=>el.textContent=rawCount);
         renderShoePreview();
     }
+
+    // Init casino grid on page load so it's ready when login overlay opens
+    window.addEventListener('DOMContentLoaded', () => {
+        buildCasinoGrid();
+    });
 </script>
 </body>
 </html>
