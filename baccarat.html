@@ -299,7 +299,11 @@
             <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.6</h2>
             <div id="email-step">
                 <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
-                <br><br>
+                <label style="display:flex;align-items:center;gap:8px;margin:12px auto 0;width:90%;cursor:pointer;font-size:0.75rem;color:rgba(255,255,255,0.6);text-align:left;">
+                   <input type="checkbox" id="marketing-consent" checked style="width:16px;height:16px;accent-color:var(--gold);flex-shrink:0;">
+                    Keep me updated on new features &amp; updates
+                </label>
+                <br>
                 <button class="main-deal-btn" onclick="handleLogin()" style="width:100%;font-size:1.1rem;padding:10px 0;">Access</button>
             </div>
             <div id="code-step" style="display:none;">
@@ -730,7 +734,8 @@
         msg.style.color = "var(--gold)";
         msg.textContent = "Checking server...";
         try {
-            const r = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail), { method: 'POST' });
+            const consent = document.getElementById('marketing-consent') ? document.getElementById('marketing-consent').checked : false;
+        const r = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail) + "&consent=" + consent, { method: 'POST' });
             const result = await r.text();
             if (result === "Quota Exceeded") {
                 msg.style.color = "#ff4444";
