@@ -36,7 +36,6 @@
         .setup-card { background: #0b2e1a; padding: 30px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; width: 85%; max-width: 420px; box-shadow: 0 0 50px rgba(0,0,0,0.9); max-height: 90vh; overflow-y: auto; }
         .setup-card input, .setup-card select { width: 90%; padding: 12px; margin: 10px 0; background: #000; color: #fff; border: 1px solid var(--gold); border-radius: 5px; font-size: 1rem; text-align: center; }
 
-        /* Casino Mode Selector */
         .casino-mode-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -62,11 +61,9 @@
         .casino-card-check { position: absolute; top: 6px; right: 8px; color: var(--gold); font-size: 0.9rem; display: none; }
         .casino-card.selected .casino-card-check { display: block; }
 
-        /* Side bet badges on setup */
         .side-bet-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
         .sbt { font-size: 0.55rem; background: rgba(212,175,55,0.2); border: 1px solid rgba(212,175,55,0.4); border-radius: 3px; padding: 1px 4px; color: rgba(255,255,255,0.7); }
 
-        /* Casino mode banner in-game */
         .casino-banner {
             background: rgba(0,0,0,0.5);
             border: 1px solid rgba(212,175,55,0.4);
@@ -89,7 +86,6 @@
             box-sizing: border-box;
         }
 
-        /* Roads */
         .roads-section { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .roads-top-row { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
         .roads-bottom-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
@@ -114,9 +110,7 @@
         .br-circle.player { background: var(--player-blue); border-color: #0d3c7a; }
         .br-circle.has-tie::after { content: ''; position: absolute; width: 2px; height: 11px; background: #1a8c22; top: 3px; left: 50%; transform: translateX(-50%); }
 
-        /* ── Mobile Big Road: shrink cells so more columns fit without horizontal scroll ── */
         @media (max-width: 768px) {
-            /* Big road: use smaller cells so ~20 columns visible at once */
             .big-road-wrap { height: 88px; padding: 2px; }
             .big-road-grid {
                 grid-template-rows: repeat(6, 12px);
@@ -128,7 +122,6 @@
             .br-circle { width: 10px; height: 10px; border-width: 1.5px; }
             .br-circle.has-tie::after { width: 1.5px; height: 7px; top: 1px; }
 
-            /* Bead plate: shrink too so it matches height */
             .bead-plate {
                 grid-template-rows: repeat(6, 12px);
                 grid-auto-columns: 12px;
@@ -138,7 +131,6 @@
             }
             .bead { width: 12px; height: 12px; font-size: 6px; }
 
-            /* Derived roads: scale down slightly too */
             .derived-road-wrap { height: 58px; padding: 2px; }
             .derived-road-grid {
                 grid-template-rows: repeat(4, 12px);
@@ -167,18 +159,15 @@
         .dr-slash.rep::before { background: #e02020; }
         .dr-slash.non::before { background: var(--player-blue); }
 
-        /* Top Dashboard */
         .top-dashboards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
         .dashboard-box { background: rgba(0,0,0,0.4); border: 2px solid var(--gold); border-radius: 8px; padding: 12px; box-sizing: border-box; }
         .dashboard-title { text-align: center; color: var(--gold); font-weight: bold; font-size: 1.05rem; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 4px; position: relative; }
         .fin-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin: 4px 0; font-family: monospace; }
 
-        /* Header */
         .header-area { display: flex; justify-content: center; align-items: center; width: 100%; position: relative; margin-bottom: 5px; }
         .header-title { font-size: 2rem; color: var(--gold); letter-spacing: 3px; text-align: center; font-weight: bold; text-shadow: 2px 2px 4px #000; margin: 0; }
         .settings-btn { position: absolute; right: 10px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
 
-        /* Casino Table */
         .casino-table {
             background: var(--felt-green);
             border: 16px solid var(--wood-trim);
@@ -209,7 +198,6 @@
         .zone-tie { background: var(--tie-green); border: 4px double var(--gold); width: 160px; height: 80px; }
         .zone-panda { background: var(--panda-purple); width: 155px; height: 64px; }
         .zone-dragon { background: var(--dragon-orange); width: 155px; height: 64px; }
-        /* New side bet zones */
         .zone-lucky6 { background: linear-gradient(135deg, #1a4a6b, #0d6b5e); width: 155px; height: 64px; }
         .zone-tiger { background: linear-gradient(135deg, #5a1a00, #b84000); width: 155px; height: 64px; }
         .zone-super6 { background: linear-gradient(135deg, #1b5e20, #388e3c); width: 155px; height: 64px; }
@@ -242,7 +230,6 @@
         .coffee-link-wrapper { text-align: center; margin-top: auto; padding-top: 5px; }
         .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg,#FFDD00 0%,var(--gold) 100%); color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.8rem; width: 100%; box-sizing: border-box; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
-        /* Result Overlay */
         #result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.82); display: none; justify-content: center; align-items: center; z-index: 500; cursor: pointer; animation: fadeInOverlay 0.25s ease; }
         @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
         .result-card { border-radius: 24px; padding: 36px 50px; text-align: center; box-shadow: 0 0 80px rgba(0,0,0,0.9); animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); min-width: 260px; }
@@ -251,28 +238,30 @@
         .result-amount { font-size: 1.8rem; font-weight: bold; margin-bottom: 8px; }
         .result-tap { font-size: 0.85rem; opacity: 0.6; margin-top: 14px; letter-spacing: 1px; }
 
-        /* Rebet / Double */
         .aux-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 22px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: background 0.15s; }
         .aux-btn:hover { background: rgba(212,175,55,0.15); }
         .aux-btn:disabled { opacity: 0.3; cursor: default; }
 
-        /* Shoe inspector */
         .inspector-placeholder-label { color: rgba(255,255,255,0.3); text-align: center; font-size: 0.85rem; margin-top: 10px; }
         .shoe-preview-container { flex-wrap: wrap; gap: 3px; font-size: 10px; font-family: monospace; margin-top: 5px; max-height: 80px; overflow-y: auto; background: #000; padding: 6px; border-radius: 4px; }
         .preview-card { color: white; border: 1px solid #333; padding: 1px 3px; min-width: 14px; text-align: center; }
         .next-card { color: var(--gold) !important; border-color: var(--gold) !important; font-weight: bold; }
 
-        /* Section label */
         .section-label { font-size: 0.7rem; color: rgba(212,175,55,0.6); text-transform: uppercase; letter-spacing: 2px; text-align: left; margin-bottom: 2px; padding-left: 2px; }
 
-        /* Mobile */
+        /* Session checking spinner */
+        #session-check-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; }
+        .session-spinner { width: 48px; height: 48px; border: 4px solid rgba(212,175,55,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #session-check-overlay p { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; }
+
         @media (max-width: 768px) {
             .aux-btn { padding: 8px 14px; font-size: 0.8rem; }
             body { padding: 0; background: #08110b; }
             .game-content { padding: 10px; gap: 10px; }
             .header-title { font-size: 1.6rem; }
             .top-dashboards { grid-template-columns: 1fr; }
-            .roads-top-row { grid-template-columns: 1fr 2fr; } /* keep side-by-side on mobile, more space for big road */
+            .roads-top-row { grid-template-columns: 1fr 2fr; }
             .roads-bottom-row { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
             .casino-table { background: #092414; border: none; border-radius: 12px; box-shadow: none; padding: 15px 10px; }
             .table-score-header { width: 100%; justify-content: space-around; font-size: 1.1rem; background: rgba(0,0,0,0.4); padding: 8px 0; border-radius: 4px; }
@@ -299,7 +288,13 @@
 </head>
 <body>
 
-    <div id="login-overlay" class="overlay">
+    <!-- Session checking spinner (shown while validating saved session) -->
+    <div id="session-check-overlay">
+        <div class="session-spinner"></div>
+        <p>VERIFYING SESSION...</p>
+    </div>
+
+    <div id="login-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
             <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.6</h2>
             <div id="email-step">
@@ -320,15 +315,10 @@
     <div id="setup-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
             <h2 style="color:var(--gold);font-size:1.4rem;">TABLE SETUP</h2>
-
             <p style="margin:8px 0 4px;color:var(--gold);font-size:0.85rem;letter-spacing:1px;">CASINO MODE</p>
-            <div class="casino-mode-grid" id="casino-mode-grid">
-                <!-- populated by JS -->
-            </div>
-
+            <div class="casino-mode-grid" id="casino-mode-grid"></div>
             <p style="margin:14px 0 4px;">Initial Bankroll:</p>
             <input type="number" id="start-balance" value="5000">
-
             <p style="margin:8px 0 4px;">Shoe Size:</p>
             <select id="shoe-size">
                 <option value="1">1 Deck</option>
@@ -355,17 +345,14 @@
 
     <div class="game-content" id="game-container" style="display:none;">
 
-        <!-- Header -->
         <div class="header-area">
             <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.6</span></div>
             <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
             <button id="sound-toggle-btn" class="settings-btn" onclick="toggleSound()" style="right:54px;" title="Toggle Sound">🔊</button>
         </div>
 
-        <!-- Casino Banner -->
         <div class="casino-banner" id="casino-banner"></div>
 
-        <!-- Casino Table -->
         <div class="casino-table" id="casino-table-el">
             <div class="table-score-header">
                 <span style="color:#9ec2ff;">PLAYER: <span id="p-score">0</span></span>
@@ -399,13 +386,11 @@
                         <div class="bet-value-text" id="disp-banker">$0</div>
                     </div>
                 </div>
-                <!-- Side bets row — populated dynamically -->
                 <div class="row-side-bets" id="side-bets-row"></div>
             </div>
             <div id="special-notifications" style="min-height:1.2rem;text-align:center;margin-top:8px;font-weight:bold;font-size:1rem;"></div>
         </div>
 
-        <!-- Chips + Deal -->
         <div class="controls-row">
             <div class="chip-tray">
                 <div class="chip c1" onclick="selectChip(1,this)">$1</div>
@@ -424,7 +409,6 @@
             </div>
         </div>
 
-        <!-- Financials + Shoe Inspector -->
         <div class="top-dashboards">
             <div class="dashboard-box">
                 <div class="dashboard-title">FINANCIALS</div>
@@ -445,7 +429,6 @@
             </div>
         </div>
 
-        <!-- Five Roads -->
         <div class="roads-section">
             <div class="roads-top-row">
                 <div class="road-box">
@@ -490,7 +473,61 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHrUd-Hyi-FST4-YD34GHFOXHFbRscOuTKbqbDn6v7WjkolDx8wKbUX3JxIJ1jhLc/exec';
 
     // ══════════════════════════════════════════════════════════
-    //  CASINO MODE DEFINITIONS — Top 5 worldwide + default
+    //  SESSION MANAGEMENT
+    // ══════════════════════════════════════════════════════════
+    const SESSION_EMAIL_KEY = 'df_email';
+    const SESSION_TOKEN_KEY = 'df_session';
+
+    // Called on page load — checks localStorage for a saved session and validates it
+    async function checkExistingSession() {
+        const savedEmail = localStorage.getItem(SESSION_EMAIL_KEY);
+        const savedToken = localStorage.getItem(SESSION_TOKEN_KEY);
+
+        if (!savedEmail || !savedToken) {
+            hideSplash();
+            showLoginOverlay();
+            return;
+        }
+
+        try {
+            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(savedEmail)}&token=${encodeURIComponent(savedToken)}&sessionCheck=true`);
+            const result = await r.text();
+
+            if (result === 'SessionValid') {
+                userEmail = savedEmail;
+                hideSplash();
+                buildCasinoGrid();
+                document.getElementById('setup-overlay').style.display = 'flex';
+            } else {
+                // Expired or invalid — clear and show login
+                localStorage.removeItem(SESSION_EMAIL_KEY);
+                localStorage.removeItem(SESSION_TOKEN_KEY);
+                hideSplash();
+                showLoginOverlay();
+            }
+        } catch (e) {
+            // Network error — fall through to login
+            hideSplash();
+            showLoginOverlay();
+        }
+    }
+
+    function hideSplash() {
+        document.getElementById('session-check-overlay').style.display = 'none';
+    }
+
+    function showLoginOverlay() {
+        document.getElementById('login-overlay').style.display = 'flex';
+    }
+
+    // Save session token returned by backend after successful code verification
+    function saveSession(email, token) {
+        localStorage.setItem(SESSION_EMAIL_KEY, email);
+        localStorage.setItem(SESSION_TOKEN_KEY, token);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  CASINO MODE DEFINITIONS
     // ══════════════════════════════════════════════════════════
     const CASINO_MODES = [
         {
@@ -500,7 +537,6 @@
             flag: '🎴',
             feltColor: '#0a4d2c',
             woodColor: '#3e2723',
-            // Odds: player pays 1:1, banker pays 0.95:1 (5% commission), tie pays 8:1
             playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
             bankerCommission: 0.05,
             sideBets: ['panda','dragon'],
@@ -516,7 +552,6 @@
             woodColor: '#2c1810',
             playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
             bankerCommission: 0.05,
-            // Lucky 6: if banker wins with 6 cards total (2-card: 12:1, 3-card: 20:1 simplified to ~15:1)
             sideBets: ['panda','dragon','lucky6'],
             description: 'Galaxy Macau — Lucky 6 side bet',
             tableTag: '5% Commission · Lucky 6'
@@ -530,7 +565,6 @@
             woodColor: '#1a1a2e',
             playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
             bankerCommission: 0.05,
-            // Banker Bonus: natural win bonus, player bonus
             sideBets: ['panda','dragon','bonus'],
             description: 'Wynn Las Vegas — EZ & Bonus bets',
             tableTag: '5% Commission · Bonus'
@@ -542,14 +576,12 @@
             flag: '🃏',
             feltColor: '#0a2040',
             woodColor: '#1a0a2e',
-            playerOdds: 1, bankerOdds: 1, tieOdds: 8,  // no commission!
+            playerOdds: 1, bankerOdds: 1, tieOdds: 8,
             bankerCommission: 0,
-            // Dragon 7: banker wins with 3-card 7 → 40:1. Panda 8: player wins with 3-card 8 → 25:1
-            // Banker push on 3-card 7 (replaced by Dragon 7)
             sideBets: ['panda','dragon'],
             description: 'No commission — Banker 3-card 7 is PUSH (bet Dragon 7!)',
             tableTag: 'Commission-Free · Dragon 7 Push',
-            ezMode: true  // banker 3-card 7 is push unless Dragon 7 bet placed
+            ezMode: true
         },
         {
             id: 'marina',
@@ -560,7 +592,6 @@
             woodColor: '#1a2a0e',
             playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
             bankerCommission: 0.05,
-            // Super 6: banker wins with exactly 6 — no commission, pays 12:1 side bet
             sideBets: ['super6','tiger'],
             description: 'Marina Bay Sands — Super 6 & Tiger',
             tableTag: 'Super 6 · Tiger Bet'
@@ -574,16 +605,12 @@
             woodColor: '#2e1a0a',
             playerOdds: 1, bankerOdds: 0.95, tieOdds: 8,
             bankerCommission: 0.05,
-            // Natural 8/9 bonus bets
             sideBets: ['panda','dragon','natural'],
             description: 'The Venetian — Natural 8/9 Bonus',
             tableTag: '5% Commission · Natural Bonus'
         }
     ];
 
-    // ══════════════════════════════════════════════════════════
-    //  SIDE BET SPECS
-    // ══════════════════════════════════════════════════════════
     const SIDE_BET_DEFS = {
         panda:   { key:'panda',   label:'🐼 PANDA 8',   cls:'zone-panda',   sub:'25:1',  desc:'Player 3-card 8 wins' },
         dragon:  { key:'dragon',  label:'🐉 DRAGON 7',  cls:'zone-dragon',  sub:'40:1',  desc:'Banker 3-card 7 wins' },
@@ -612,7 +639,9 @@
     let smallEntries = [];
     let cockEntries = [];
 
-    // ── Build setup casino grid ──
+    // ══════════════════════════════════════════════════════════
+    //  CASINO GRID
+    // ══════════════════════════════════════════════════════════
     function buildCasinoGrid() {
         const grid = document.getElementById('casino-mode-grid');
         grid.innerHTML = '';
@@ -637,12 +666,9 @@
 
     function selectCasinoMode(id) {
         selectedCasino = CASINO_MODES.find(c => c.id === id) || CASINO_MODES[0];
-        document.querySelectorAll('.casino-card').forEach(el => el.classList.remove('selected'));
-        event.currentTarget.classList.add('selected');
-        buildCasinoGrid(); // rebuild to reflect new selection
+        buildCasinoGrid();
     }
 
-    // ── Build current bets object from selected casino ──
     function initBetKeys() {
         const keys = ['player','banker','tie', ...selectedCasino.sideBets];
         currentBets = {};
@@ -650,7 +676,6 @@
         keys.forEach(k => { currentBets[k] = 0; lastBets[k] = 0; });
     }
 
-    // ── Build in-game side bet zones ──
     function buildSideBetZones() {
         const row = document.getElementById('side-bets-row');
         row.innerHTML = '';
@@ -670,21 +695,20 @@
         });
     }
 
-    // ── Apply casino theme ──
     function applyCasinoTheme() {
         const tbl = document.getElementById('casino-table-el');
         tbl.style.background = selectedCasino.feltColor;
         tbl.style.borderColor = selectedCasino.woodColor;
-
         document.getElementById('player-odds-label').textContent = selectedCasino.playerOdds + ':1';
         document.getElementById('banker-odds-label').textContent = selectedCasino.bankerOdds + ':1' + (selectedCasino.bankerCommission > 0 ? ' (-5%)' : '');
         document.getElementById('tie-odds-label').textContent = selectedCasino.tieOdds + ':1';
-
         const banner = document.getElementById('casino-banner');
         banner.innerHTML = `<strong>${selectedCasino.flag} ${selectedCasino.name}</strong> &nbsp;·&nbsp; ${selectedCasino.location} &nbsp;·&nbsp; ${selectedCasino.description}`;
     }
 
-    // ── Login / Setup ──
+    // ══════════════════════════════════════════════════════════
+    //  LOGIN / AUTH
+    // ══════════════════════════════════════════════════════════
     function handleLogin() {
         const input = document.getElementById('user-email').value.trim().toLowerCase();
         if (input === "dragonfly") {
@@ -703,32 +727,58 @@
     async function sendCode() {
         userEmail = document.getElementById('user-email').value.trim();
         const msg = document.getElementById('login-msg');
-        msg.style.color = "var(--gold)"; msg.textContent = "Checking server...";
+        msg.style.color = "var(--gold)";
+        msg.textContent = "Checking server...";
         try {
-            const r = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail), { method:'POST' });
+            const r = await fetch(SCRIPT_URL + "?email=" + encodeURIComponent(userEmail), { method: 'POST' });
             const result = await r.text();
-            if (result === "Quota Exceeded") { msg.style.color="#ff4444"; msg.textContent="Google Daily Email Limit Reached."; }
-            else { document.getElementById('email-step').style.display='none'; document.getElementById('code-step').style.display='block'; msg.textContent="Code sent! Valid for 5 minutes."; }
-        } catch(e) { msg.textContent="Connection error."; }
+            if (result === "Quota Exceeded") {
+                msg.style.color = "#ff4444";
+                msg.textContent = "Google Daily Email Limit Reached.";
+            } else {
+                document.getElementById('email-step').style.display = 'none';
+                document.getElementById('code-step').style.display = 'block';
+                msg.textContent = "Code sent! Valid for 5 minutes.";
+            }
+        } catch(e) {
+            msg.textContent = "Connection error.";
+        }
     }
 
     async function verifyCode() {
         const token = document.getElementById('access-code').value.trim();
         const msg = document.getElementById('login-msg');
+        msg.style.color = "var(--gold)";
+        msg.textContent = "Verifying...";
         try {
-            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${token}`);
+            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(token)}`);
             const result = await r.text();
-            if (result === "Verified") {
-                document.getElementById('login-overlay').style.display='none';
-                document.getElementById('setup-overlay').style.display='flex';
+
+            // Backend now returns "Verified:<sessionToken>" instead of just "Verified"
+            if (result.startsWith('Verified:')) {
+                const sessionToken = result.split(':')[1];
+                saveSession(userEmail, sessionToken);
+                document.getElementById('login-overlay').style.display = 'none';
                 buildCasinoGrid();
-            } else { msg.style.color="#ff4444"; msg.textContent="Invalid or expired code."; }
-        } catch(e) { msg.textContent="Verification error."; }
+                document.getElementById('setup-overlay').style.display = 'flex';
+            } else if (result === 'Verified') {
+                // Fallback: backend not yet updated — still let them in, just no session saved
+                document.getElementById('login-overlay').style.display = 'none';
+                buildCasinoGrid();
+                document.getElementById('setup-overlay').style.display = 'flex';
+            } else {
+                msg.style.color = "#ff4444";
+                msg.textContent = "Invalid or expired code.";
+            }
+        } catch(e) {
+            msg.style.color = "#ff4444";
+            msg.textContent = "Verification error.";
+        }
     }
 
     function toggleSettings() {
         buildCasinoGrid();
-        document.getElementById('setup-overlay').style.display='flex';
+        document.getElementById('setup-overlay').style.display = 'flex';
     }
 
     function startGame() {
@@ -744,12 +794,15 @@
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0 };
         updateAuxButtons();
-        document.getElementById('setup-overlay').style.display='none';
-        document.getElementById('game-container').style.display='flex';
+        document.getElementById('setup-overlay').style.display = 'none';
+        document.getElementById('game-container').style.display = 'flex';
         renderAllRoads();
         updateUI();
     }
 
+    // ══════════════════════════════════════════════════════════
+    //  SHOE
+    // ══════════════════════════════════════════════════════════
     function initShoe() {
         sfxShuffle();
         if (shoeSize === 0) { shoe = []; return; }
@@ -764,8 +817,11 @@
         return shoe.pop();
     }
 
+    // ══════════════════════════════════════════════════════════
+    //  BETTING
+    // ══════════════════════════════════════════════════════════
     function selectChip(val, el) {
-        selectedChipValue=val;
+        selectedChipValue = val;
         document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
         el.classList.add('active');
         sfxChip();
@@ -837,7 +893,7 @@
     }
 
     // ══════════════════════════════════════════════════════════
-    //  SOUND ENGINE  (Web Audio API — no external files)
+    //  SOUND ENGINE
     // ══════════════════════════════════════════════════════════
     let _actx = null;
     let soundEnabled = true;
@@ -889,90 +945,31 @@
         } catch(e) {}
     }
 
-    function sfxChip() {
-        _tone('square', 1200, 0.04, 0.18, 0.002, 0, 1, 0.03);
-        _noise(0.04, 0.12, 3500);
-    }
-    function sfxBetPlace() {
-        _tone('triangle', 900, 0.07, 0.22, 0.003, 0.01, 0.6, 0.05);
-        _noise(0.06, 0.1, 2800);
-    }
+    function sfxChip() { _tone('square', 1200, 0.04, 0.18, 0.002, 0, 1, 0.03); _noise(0.04, 0.12, 3500); }
+    function sfxBetPlace() { _tone('triangle', 900, 0.07, 0.22, 0.003, 0.01, 0.6, 0.05); _noise(0.06, 0.1, 2800); }
     function sfxDeal(cardIndex) {
         const delay = cardIndex * 0.13;
-        try {
-            const ctx = getACtx();
-            const t = ctx.currentTime + delay;
-            _noise(0.09, 0.28, 4000, t);
-            _tone('sawtooth', 180, 0.07, 0.06, 0.002, 0, 1, 0.04, t);
-        } catch(e) {}
-    }
-    function sfxThirdCard() {
-        try {
-            const ctx = getACtx();
-            const t = ctx.currentTime;
-            _noise(0.08, 0.22, 3500, t);
-            _tone('sawtooth', 220, 0.06, 0.05, 0.002, 0, 1, 0.04, t);
-        } catch(e) {}
+        try { const ctx = getACtx(); const t = ctx.currentTime + delay; _noise(0.09, 0.28, 4000, t); _tone('sawtooth', 180, 0.07, 0.06, 0.002, 0, 1, 0.04, t); } catch(e) {}
     }
     function sfxWin() {
         const notes = [523, 659, 784, 1047];
-        notes.forEach((f, i) => {
-            try {
-                const ctx = getACtx();
-                const t = ctx.currentTime + i * 0.1;
-                _tone('sine', f, 0.35, 0.3, 0.01, 0, 0.7, 0.2, t);
-                _tone('triangle', f * 2, 0.1, 0.06, 0.005, 0, 1, 0.05, t);
-            } catch(e) {}
-        });
+        notes.forEach((f, i) => { try { const ctx = getACtx(); const t = ctx.currentTime + i * 0.1; _tone('sine', f, 0.35, 0.3, 0.01, 0, 0.7, 0.2, t); _tone('triangle', f * 2, 0.1, 0.06, 0.005, 0, 1, 0.05, t); } catch(e) {} });
     }
     function sfxJackpot() {
         const seq = [523, 659, 784, 659, 1047, 880, 1047];
-        seq.forEach((f, i) => {
-            try {
-                const ctx = getACtx();
-                const t = ctx.currentTime + i * 0.1;
-                _tone('sine', f, 0.25, 0.35, 0.01, 0, 0.8, 0.1, t);
-                _tone('square', f / 2, 0.25, 0.08, 0.01, 0, 0.5, 0.1, t);
-                if (i === seq.length-1) _tone('sine', f, 0.4, 0.4, 0.01, 0, 0.9, 0.3, t+0.05);
-            } catch(e) {}
-        });
+        seq.forEach((f, i) => { try { const ctx = getACtx(); const t = ctx.currentTime + i * 0.1; _tone('sine', f, 0.25, 0.35, 0.01, 0, 0.8, 0.1, t); _tone('square', f / 2, 0.25, 0.08, 0.01, 0, 0.5, 0.1, t); if (i === seq.length-1) _tone('sine', f, 0.4, 0.4, 0.01, 0, 0.9, 0.3, t+0.05); } catch(e) {} });
         _noise(0.6, 0.08, 6000);
     }
     function sfxLose() {
         const notes = [440, 370, 311];
-        notes.forEach((f, i) => {
-            try {
-                const ctx = getACtx();
-                const t = ctx.currentTime + i * 0.12;
-                _tone('sine', f, 0.3, 0.22, 0.01, 0, 0.6, 0.2, t);
-            } catch(e) {}
-        });
+        notes.forEach((f, i) => { try { const ctx = getACtx(); const t = ctx.currentTime + i * 0.12; _tone('sine', f, 0.3, 0.22, 0.01, 0, 0.6, 0.2, t); } catch(e) {} });
     }
     function sfxTie() {
         _tone('sine', 440, 0.15, 0.2, 0.01, 0, 0.8, 0.08);
-        try {
-            const ctx = getACtx();
-            _tone('sine', 554, 0.15, 0.2, 0.01, 0, 0.8, 0.08, ctx.currentTime + 0.18);
-        } catch(e) {}
+        try { const ctx = getACtx(); _tone('sine', 554, 0.15, 0.2, 0.01, 0, 0.8, 0.08, ctx.currentTime + 0.18); } catch(e) {}
     }
-    function sfxClear() {
-        _tone('triangle', 350, 0.08, 0.15, 0.005, 0, 1, 0.06);
-    }
-    function sfxShuffle() {
-        for (let i=0; i<5; i++) {
-            try {
-                const ctx = getACtx();
-                _noise(0.1, 0.18, 3000 + i*400, ctx.currentTime + i*0.07);
-            } catch(e) {}
-        }
-    }
-    function sfxSideBetWin() {
-        _tone('sine', 1047, 0.2, 0.25, 0.005, 0, 0.7, 0.15);
-        try {
-            const ctx = getACtx();
-            _tone('sine', 1319, 0.1, 0.2, 0.005, 0, 0.6, 0.12, ctx.currentTime + 0.08);
-        } catch(e) {}
-    }
+    function sfxClear() { _tone('triangle', 350, 0.08, 0.15, 0.005, 0, 1, 0.06); }
+    function sfxShuffle() { for (let i=0; i<5; i++) { try { const ctx = getACtx(); _noise(0.1, 0.18, 3000 + i*400, ctx.currentTime + i*0.07); } catch(e) {} } }
     function toggleSound() {
         soundEnabled = !soundEnabled;
         const btn = document.getElementById('sound-toggle-btn');
@@ -1029,18 +1026,15 @@
         let notifications = [];
 
         if (pS === bS) {
-            // TIE
             win += currentBets.tie * (c.tieOdds + 1);
-            win += (currentBets.player||0) + (currentBets.banker||0); // push on tie
+            win += (currentBets.player||0) + (currentBets.banker||0);
             stats.tie++;
             beadClass='tie'; beadLabel='T'; outcomeType='tie';
             flash('bet-tie-box');
 
         } else if (pS > bS) {
-            // PLAYER WINS
             stats.player++;
             if (pnd) {
-                // Panda 8 wins
                 win += (currentBets.panda||0) * 26;
                 win += (currentBets.player||0) * (1 + c.playerOdds);
                 beadClass='panda-win'; beadLabel='P8'; outcomeType='player';
@@ -1052,7 +1046,6 @@
                 beadClass='player'; beadLabel='P'; outcomeType='player';
                 flash('bet-player-box');
             }
-            // Natural bonus (Venetian)
             if (currentBets.natural > 0) {
                 const isNatural = p.length===2 && (pS===8||pS===9);
                 if (isNatural) {
@@ -1061,7 +1054,6 @@
                     notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);">NATURAL ${pS} +${naturalPay}:1!</span>`);
                 }
             }
-            // Bonus bet (Wynn) - player side
             if (currentBets.bonus > 0) {
                 const margin = pS - bS;
                 const bonusPay = margin>=9?30:margin>=8?10:margin>=7?6:margin>=6?4:margin>=5?2:margin>=4?1:0;
@@ -1072,29 +1064,22 @@
             }
 
         } else {
-            // BANKER WINS
             stats.banker++;
             const isB6 = bS === 6;
             const isB6_2card = isB6 && b.length === 2;
             const isB6_3card = isB6 && b.length === 3;
 
-            // EZ Mode: banker 3-card 7 is a push (unless Dragon 7 bet)
             if (c.ezMode && drg) {
-                // Dragon 7 hit
                 win += (currentBets.dragon||0) * 41;
-                // Banker push (no win on banker bet in EZ mode for this hand)
                 beadClass='dragon-win'; beadLabel='D7'; outcomeType='banker';
                 flash('bet-dragon-box');
                 notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);color:black;">DRAGON 7!</span>`);
                 specialMsg = '🐉 DRAGON 7!';
             } else if (c.ezMode && bS===7 && b.length===3) {
-                // EZ push: no win on banker
-                win += 0; // push on banker bet too
-                win += (currentBets.banker||0); // return bet
+                win += (currentBets.banker||0);
                 beadClass='banker'; beadLabel='B'; outcomeType='banker';
                 notifications.push(`<span class="win-badge" style="background:#555;">DRAGON PUSH</span>`);
             } else {
-                // Normal banker resolution
                 if (drg) {
                     win += (currentBets.dragon||0) * 41 + (currentBets.banker||0);
                     beadClass='dragon-win'; beadLabel='D7'; outcomeType='banker';
@@ -1102,32 +1087,25 @@
                     notifications.push(`<span class="win-badge" style="background:var(--dragon-orange);color:black;border:1px solid black;">DRAGON 7 WIN!</span>`);
                     specialMsg = '🐉 DRAGON 7!';
                 } else {
-                    // Banker payout with commission
-                    const commission = c.bankerCommission;
-                    const bankerWinAmt = (currentBets.banker||0) * (1 + c.bankerOdds);
-                    win += bankerWinAmt;
+                    win += (currentBets.banker||0) * (1 + c.bankerOdds);
                     beadClass='banker'; beadLabel='B'; outcomeType='banker';
                     flash('bet-banker-box');
                 }
             }
 
-            // Super 6 (Marina Bay Sands)
             if (currentBets.super6 > 0 && isB6) {
-                win += (currentBets.super6||0) * 13; // 12:1
+                win += (currentBets.super6||0) * 13;
                 notifications.push(`<span class="win-badge" style="background:#388e3c;">SUPER 6! +12:1</span>`);
             }
-            // Lucky 6 (Galaxy Macau)
             if (currentBets.lucky6 > 0 && isB6) {
-                const lucky6Pay = isB6_2card ? 13 : 21; // 12:1 or 20:1
+                const lucky6Pay = isB6_2card ? 13 : 21;
                 win += (currentBets.lucky6||0) * lucky6Pay;
                 notifications.push(`<span class="win-badge" style="background:#0d6b5e;">LUCKY 6! +${lucky6Pay-1}:1</span>`);
             }
-            // Tiger (Marina Bay Sands — banker wins with 2-card 6)
             if (currentBets.tiger > 0 && isB6_2card) {
-                win += (currentBets.tiger||0) * 10; // 9:1
+                win += (currentBets.tiger||0) * 10;
                 notifications.push(`<span class="win-badge" style="background:#b84000;">TIGER! +9:1</span>`);
             }
-            // Bonus bet (Wynn) - banker side
             if (currentBets.bonus > 0) {
                 const margin = bS - pS;
                 const bonusPay = margin>=9?30:margin>=8?10:margin>=7?6:margin>=6?4:margin>=5?2:margin>=4?1:0;
@@ -1136,7 +1114,6 @@
                     notifications.push(`<span class="win-badge" style="background:#7b1fa2;">BONUS ${bonusPay}:1!</span>`);
                 }
             }
-            // Natural bonus (Venetian) - banker side
             if (currentBets.natural > 0) {
                 const isNatural = b.length===2 && (bS===8||bS===9);
                 if (isNatural) {
@@ -1180,13 +1157,11 @@
         const amountEl = document.getElementById('result-amount');
         const detailEl = document.getElementById('result-detail');
         const isWin = netPL > 0, isPush = netPL === 0;
-        // Sound
         if (isPush) sfxTie();
         else if (!isWin) sfxLose();
         else if (specialMsg && (specialMsg.includes('DRAGON') || specialMsg.includes('PANDA'))) sfxJackpot();
         else sfxWin();
         const outcomeLabel = outcomeType==='tie'?'TIE':outcomeType==='player'?'PLAYER':'BANKER';
-
         if (isPush) {
             titleEl.textContent='PUSH'; card.style.background='linear-gradient(135deg,#333 0%,#555 100%)'; card.style.border='3px solid #aaa'; titleEl.style.color='#eee'; amountEl.style.color='#ccc';
         } else if (isWin) {
@@ -1351,6 +1326,7 @@
         if (ph) ph.style.display = shoeVisible ? 'none' : 'block';
         renderShoePreview();
     }
+
     function renderShoePreview() {
         if (!shoeVisible) return;
         const fm={1:'A',11:'J',12:'Q',13:'K'};
@@ -1372,9 +1348,11 @@
         renderShoePreview();
     }
 
-    // Init casino grid on page load so it's ready when login overlay opens
+    // ══════════════════════════════════════════════════════════
+    //  INIT — check session on load
+    // ══════════════════════════════════════════════════════════
     window.addEventListener('DOMContentLoaded', () => {
-        buildCasinoGrid();
+        checkExistingSession();
     });
 </script>
 </body>
