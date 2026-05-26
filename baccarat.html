@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Dragonfly To Tie v2.8</title>
+    <title>Dragonfly v2.91</title>
     <style>
         :root {
             --felt-green: #0a4d2c;
@@ -171,9 +171,11 @@
         .fin-divider { border-top: 1px solid rgba(212,175,55,0.2); margin: 3px 0 2px; }
 
         /* ── Header ── */
-        .header-area { display: flex; justify-content: center; align-items: center; width: 100%; position: relative; margin-bottom: 2px; }
-        .header-title { font-size: 1.15rem; color: var(--gold); letter-spacing: 2px; text-align: center; font-weight: bold; text-shadow: 1px 1px 3px #000; margin: 0; }
-        .settings-btn { position: absolute; right: 10px; background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+        .header-area { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 2px; gap: 4px; flex-wrap: wrap; }
+        .header-title { font-size: 1.15rem; color: var(--gold); letter-spacing: 2px; font-weight: bold; text-shadow: 1px 1px 3px #000; margin: 0; flex-shrink: 0; }
+        .header-btns { display: flex; align-items: center; gap: 3px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+        .settings-btn { background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; position: static; flex-shrink: 0; }
+        .logout-btn { border-color: rgba(255,80,80,0.55) !important; color: rgba(255,120,120,0.85) !important; }
 
         /* ── Table: flat rectangle, no wasted oval space ── */
         .casino-table {
@@ -244,6 +246,9 @@
         .action-buttons-group { display: flex; gap: 5px; align-items: center; }
         .main-deal-btn { background: linear-gradient(180deg,#ffe066 0%,var(--gold) 100%); color: black; padding: 6px 22px; font-size: 0.9rem; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 1px; }
         .main-deal-btn:active { transform: scale(0.97); }
+        /* Login buttons share the same look but are NEVER touched by setLang() */
+        .login-btn { background: linear-gradient(180deg,#ffe066 0%,var(--gold) 100%); color: black; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.4); letter-spacing: 1px; }
+        .login-btn:active { transform: scale(0.97); }
         .clear-btn { background: none; border: 1.5px solid var(--gold); color: var(--gold); padding: 5px 10px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.68rem; }
         .aux-btn { background: none; border: 1.5px solid var(--gold); color: var(--gold); padding: 5px 9px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 0.65rem; transition: background 0.15s; white-space: nowrap; }
         .aux-btn:hover { background: rgba(212,175,55,0.15); }
@@ -257,13 +262,16 @@
         .coffee-link-wrapper { text-align: center; padding-top: 2px; }
         .coffee-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: linear-gradient(135deg,#FFDD00 0%,var(--gold) 100%); color: #000; padding: 4px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.7rem; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        #result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.82); display: none; justify-content: center; align-items: center; z-index: 500; cursor: pointer; animation: fadeInOverlay 0.25s ease; }
+        /* ── Side-panel result toast (replaces blocking overlay) ── */
+        #result-overlay { position: fixed; top: 50%; right: 0; transform: translateY(-50%) translateX(110%); width: auto; height: auto; background: none; display: block; z-index: 500; cursor: pointer; pointer-events: none; transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1); }
+        #result-overlay.visible { transform: translateY(-50%) translateX(0); pointer-events: auto; }
+        .result-card { border-radius: 10px 0 0 10px; padding: 10px 14px 10px 12px; text-align: left; box-shadow: -4px 0 24px rgba(0,0,0,0.7); min-width: 110px; max-width: 160px; border-right: none !important; display: flex; flex-direction: column; gap: 2px; }
+        .result-title { font-size: 1.1rem; font-weight: bold; letter-spacing: 2px; line-height: 1.2; }
+        .result-amount { font-size: 1.3rem; font-weight: bold; line-height: 1.2; }
+        .result-detail-side { font-size: 0.65rem; opacity: 0.7; line-height: 1.3; margin-top: 1px; }
+        .result-tap { font-size: 0.58rem; opacity: 0.4; margin-top: 4px; letter-spacing: 0.5px; }
         @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
-        .result-card { border-radius: 20px; padding: 24px 40px; text-align: center; box-shadow: 0 0 60px rgba(0,0,0,0.9); animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); min-width: 220px; }
         @keyframes popIn { from{transform:scale(0.6);opacity:0} to{transform:scale(1);opacity:1} }
-        .result-title { font-size: 2.2rem; font-weight: bold; letter-spacing: 3px; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-        .result-amount { font-size: 1.4rem; font-weight: bold; margin-bottom: 6px; }
-        .result-tap { font-size: 0.75rem; opacity: 0.6; margin-top: 10px; letter-spacing: 1px; }
 
         .inspector-placeholder-label { color: rgba(255,255,255,0.3); text-align: center; font-size: 0.75rem; margin-top: 6px; }
         .shoe-preview-container { flex-wrap: wrap; gap: 2px; font-size: 9px; font-family: monospace; margin-top: 4px; max-height: 60px; overflow-y: auto; background: #000; padding: 4px; border-radius: 3px; }
@@ -298,7 +306,94 @@
             .road-row-derived { gap: 4px; }
             .casino-mode-grid { grid-template-columns: 1fr; }
         }
-        /* ── Shoe End Overlay ── */
+        /* ── Inspector Tabs ── */
+        .insp-tabs { display: flex; gap: 3px; margin-bottom: 6px; border-bottom: 1px solid rgba(212,175,55,0.25); padding-bottom: 5px; }
+        .insp-tab { background: none; border: 1px solid rgba(212,175,55,0.3); color: rgba(255,255,255,0.5); border-radius: 4px; padding: 3px 8px; font-size: 0.62rem; cursor: pointer; transition: all 0.15s; letter-spacing: 0.5px; }
+        .insp-tab.active { background: rgba(212,175,55,0.15); border-color: var(--gold); color: var(--gold); font-weight: bold; }
+        .insp-panel { min-height: 48px; }
+
+        /* ── History list ── */
+        /* ── Hand History ── */
+        .history-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; padding-right: 2px; }
+        .hr-row { display: flex; align-items: center; gap: 4px; padding: 3px 4px; border-radius: 5px; background: rgba(255,255,255,0.03); }
+        .hr-row:hover { background: rgba(255,255,255,0.07); }
+        .hr-num  { color: rgba(255,255,255,0.22); width: 20px; text-align: right; font-size: 0.58rem; flex-shrink: 0; font-family: monospace; }
+        .hr-badge { font-size: 0.58rem; font-weight: bold; letter-spacing: 0.3px; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; min-width: 38px; text-align: center; background: rgba(0,0,0,0.3); }
+        /* Row accent strips */
+        .hr-banker { border-left: 2px solid rgba(192,57,43,0.55); }
+        .hr-player { border-left: 2px solid rgba(41,128,185,0.55); }
+        .hr-tie    { border-left: 2px solid rgba(39,174,96,0.55); }
+        .hr-dragon { border-left: 2px solid rgba(230,126,34,0.75); background: rgba(100,40,0,0.12); }
+        .hr-panda  { border-left: 2px solid rgba(155,89,182,0.75); background: rgba(60,0,90,0.12); }
+        .hr-push   { border-left: 2px solid rgba(136,136,136,0.4); }
+        /* Mini playing cards */
+        .hr-cards { display: flex; gap: 2px; align-items: center; flex: 1; }
+        .hcard { width: 16px; height: 22px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: bold; font-family: monospace; flex-shrink: 0; line-height: 1; }
+        .hcard-p { background: #0d2e6b; color: #9ec2ff; border: 1px solid rgba(100,150,255,0.4); }
+        .hcard-b { background: #6b0d0d; color: #ffaaaa; border: 1px solid rgba(255,100,100,0.4); }
+        .hcard-third { opacity: 0.8; outline: 1px dashed rgba(255,255,255,0.2); outline-offset: -1px; }
+        /* Scores */
+        .hr-scores { display: flex; align-items: center; gap: 1px; font-size: 0.65rem; font-family: monospace; flex-shrink: 0; }
+        .hr-ps { color: #9ec2ff; font-weight: bold; }
+        .hr-bs { color: #ffaaaa; font-weight: bold; }
+        .hr-sep { color: rgba(255,255,255,0.25); font-size: 0.55rem; }
+        .hr-pl { margin-left: auto; font-weight: bold; font-size: 0.6rem; font-family: monospace; flex-shrink: 0; }
+        /* Keep old classes around for loaded saves that don't have card data */
+        .hc-banker { background:#7a1010;color:#ffb3b3; } .hc-player { background:#0d2e6b;color:#b3ccff; }
+        .hc-tie { background:#1a4d1a;color:#b3ffb3; } .hc-dragon { background:#7a4000;color:#ffd480; }
+        .hc-panda { background:#3d0066;color:#d9b3ff; } .hc-push { background:#333;color:#aaa; }
+
+        /* ── Stats chart ── */
+        .stats-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; font-size: 0.68rem; }
+        .stats-bar-label { width: 52px; color: rgba(255,255,255,0.6); text-align: right; flex-shrink: 0; }
+        .stats-bar-track { flex: 1; background: rgba(255,255,255,0.07); border-radius: 3px; height: 10px; overflow: hidden; }
+        .stats-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+        .stats-bar-val { width: 32px; text-align: right; color: rgba(255,255,255,0.7); flex-shrink: 0; }
+        .stats-bar-pct { width: 32px; color: rgba(255,255,255,0.35); font-size: 0.58rem; flex-shrink: 0; }
+
+        /* ── Drag-to-reorder ── */
+        .layout-slot { width: 100%; }
+        .layout-slot.drag-over { outline: 2px dashed var(--gold); outline-offset: -2px; border-radius: 6px; background: rgba(212,175,55,0.06); }
+        .drag-handle {
+            display: inline-flex; align-items: center; gap: 4px; cursor: grab;
+            color: rgba(212,175,55,0.5); font-size: 0.6rem; padding: 0 4px;
+            user-select: none; touch-action: none;
+        }
+        .drag-handle:active { cursor: grabbing; }
+        .drag-handle::before { content: '⠿'; font-size: 0.85rem; }
+        .road-box.dragging { opacity: 0.4; transform: scale(0.98); }
+
+        /* Layout customise button in header */
+        #btn-layout { font-size: 0.65rem; }
+
+        /* Layout panel */
+        #layout-panel {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 700;
+            background: #0b2e1a; border: 2px solid var(--gold); border-radius: 14px;
+            padding: 18px 20px; min-width: 280px; max-width: 360px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
+        }
+        #layout-panel h3 { color: var(--gold); font-size: 0.95rem; letter-spacing: 1px; margin: 0 0 12px; }
+        .layout-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+        .layout-item {
+            display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(212,175,55,0.25); border-radius: 6px; padding: 6px 8px;
+            cursor: grab; user-select: none; font-size: 0.78rem; color: #fff;
+            transition: background 0.15s;
+        }
+        .layout-item:hover { background: rgba(212,175,55,0.1); }
+        .layout-item.li-dragging { opacity: 0.35; }
+        .layout-item .li-icon { font-size: 1rem; flex-shrink: 0; }
+        .layout-item .li-label { flex: 1; }
+        .layout-item .li-arrows { display: flex; flex-direction: column; gap: 1px; }
+        .layout-item .li-arrows button {
+            background: none; border: none; color: rgba(212,175,55,0.6);
+            cursor: pointer; font-size: 0.65rem; padding: 0; line-height: 1;
+        }
+        .layout-item .li-arrows button:hover { color: var(--gold); }
+        .layout-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 1.1rem; }
+        .layout-close:hover { color: #fff; }
         #shoe-end-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.88); display: flex; justify-content: center;
@@ -356,6 +451,40 @@
         #add-funds-popup h3 { color:var(--gold); margin:0 0 14px; font-size:1rem; letter-spacing:1px; }
         #add-funds-popup input { width:80%; padding:8px; background:#000; color:#fff; border:1px solid var(--gold); border-radius:5px; font-size:1rem; text-align:center; margin-bottom:12px; }
         #add-funds-popup .btn-row { display:flex; gap:8px; justify-content:center; }
+        /* ── Copyright footer ── */
+        .copyright-footer {
+            text-align: center; font-size: 0.6rem; color: rgba(255,255,255,0.2);
+            padding: 8px 0 4px; letter-spacing: 0.5px; display: flex;
+            justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap;
+        }
+        .copyright-link { color: rgba(212,175,55,0.35); text-decoration: none; }
+        .copyright-link:hover { color: var(--gold); }
+        .copyright-sep { color: rgba(255,255,255,0.12); }
+        .sub-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 0.58rem; font-weight: bold; letter-spacing: 0.5px; }
+        .sub-badge.active   { background: rgba(26,82,32,0.6); color: #7dff7d; border: 1px solid rgba(125,255,125,0.25); }
+        .sub-badge.trial    { background: rgba(122,95,0,0.6); color: #ffd480; border: 1px solid rgba(255,212,128,0.25); }
+        .sub-badge.expired  { background: rgba(122,16,16,0.6); color: #ffb3b3; border: 1px solid rgba(255,80,80,0.25); }
+        .sub-badge.free     { background: rgba(40,40,40,0.6); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.1); }
+
+        /* ── Terms overlay ── */
+        #terms-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:900; justify-content:center; align-items:center; }
+        .terms-card { background:#0b2e1a; border:2px solid var(--gold); border-radius:14px; padding:24px 28px; max-width:480px; width:90%; max-height:80vh; overflow-y:auto; position:relative; }
+        .terms-card h2 { color:var(--gold); font-size:1rem; letter-spacing:2px; margin:0 0 14px; }
+        .terms-card p { font-size:0.75rem; color:rgba(255,255,255,0.65); line-height:1.7; margin-bottom:10px; }
+        .terms-card h3 { font-size:0.8rem; color:var(--gold); margin:14px 0 4px; }
+        .terms-close { position:absolute; top:12px; right:14px; background:none; border:none; color:rgba(255,255,255,0.4); font-size:1.2rem; cursor:pointer; }
+
+        /* ── Subscription gate overlay ── */
+        #sub-gate-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:800; justify-content:center; align-items:center; }
+        .sub-gate-card { background:linear-gradient(160deg,#0b2e1a,#051a0e); border:2px solid var(--gold); border-radius:16px; padding:28px 32px; text-align:center; max-width:360px; width:90%; box-shadow:0 0 60px rgba(0,0,0,0.9); }
+        .sub-gate-card h2 { color:var(--gold); font-size:1.3rem; letter-spacing:2px; margin:0 0 10px; }
+        .sub-gate-card p { font-size:0.82rem; color:rgba(255,255,255,0.65); margin-bottom:18px; line-height:1.6; }
+        .sub-gate-card .sub-options { display:flex; flex-direction:column; gap:8px; }
+        .sub-option-btn { border:none; border-radius:8px; padding:11px; font-size:0.88rem; font-weight:bold; cursor:pointer; transition:filter 0.15s; }
+        .sub-option-btn:hover { filter:brightness(1.15); }
+        .sub-option-monthly { background:linear-gradient(135deg,#1a5220,#2e7d32); color:#fff; border:1px solid #4caf50; }
+        .sub-option-annual  { background:linear-gradient(135deg,#7a5c00,#c89000); color:#000; border:1px solid #ffd700; }
+        .sub-option-free    { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.15); font-size:0.75rem; }
     </style>
 </head>
 <body>
@@ -368,7 +497,8 @@
 
     <div id="login-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
-            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY TO TIE v2.8</h2>
+            <button id="login-back-btn" onclick="loginBack()" style="display:none;position:absolute;top:12px;left:14px;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.5);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:0.68rem;">← Back to Game</button>
+            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY <span style="font-size:1rem;opacity:0.7;">v2.91</span></h2>
             <div id="email-step">
                 <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
                 <label style="display:flex;align-items:center;gap:8px;margin:12px auto 0;width:90%;cursor:pointer;font-size:0.75rem;color:rgba(255,255,255,0.6);text-align:left;">
@@ -376,13 +506,13 @@
                     Keep me updated on new features &amp; updates
                 </label>
                 <br>
-                <button class="main-deal-btn" onclick="handleLogin()" style="width:100%;font-size:1.1rem;padding:10px 0;">Access</button>
+                <button class="login-btn" onclick="handleLogin()" style="width:100%;font-size:1.1rem;padding:10px 0;">CONTINUE →</button>
             </div>
             <div id="code-step" style="display:none;">
                 <p>Verification Code:</p>
                 <input type="text" id="access-code" placeholder="000000" onkeydown="if(event.key==='Enter') verifyCode()">
                 <br><br>
-                <button class="main-deal-btn" onclick="verifyCode()" style="width:100%;font-size:1.1rem;padding:10px 0;">Verify</button>
+                <button class="login-btn" onclick="verifyCode()" style="width:100%;font-size:1.1rem;padding:10px 0;">VERIFY CODE →</button>
             </div>
             <p id="login-msg" style="font-size:0.85rem;margin-top:15px;color:var(--gold);min-height:1.2rem;"></p>
         </div>
@@ -419,13 +549,13 @@
         </div>
     </div>
 
-    <!-- Result Overlay -->
+    <!-- Result Side Toast -->
     <div id="result-overlay" onclick="dismissResult()">
         <div class="result-card" id="result-card">
             <div class="result-title" id="result-title">WIN</div>
             <div class="result-amount" id="result-amount">+$0</div>
-            <div id="result-detail" style="font-size:1rem;opacity:0.85;margin-bottom:4px;"></div>
-            <div class="result-tap">TAP TO CONTINUE</div>
+            <div class="result-detail-side" id="result-detail"></div>
+            <div class="result-tap">tap to close</div>
         </div>
     </div>
 
@@ -484,29 +614,76 @@
         </div>
     </div>
 
+    <!-- Terms of Use -->
+    <div id="terms-overlay" style="display:none;">
+        <div class="terms-card">
+            <button class="terms-close" onclick="document.getElementById('terms-overlay').style.display='none'">✕</button>
+            <h2>TERMS OF USE</h2>
+            <p><strong style="color:var(--gold);">Dragonfly</strong> is proprietary software. By using this application you agree to the following terms.</p>
+            <h3>Intellectual Property</h3>
+            <p>The Dragonfly name, logo, visual design, user interface layout, color scheme, and overall aesthetic are protected intellectual property. Unauthorized reproduction, copying, or distribution of this software or its design is strictly prohibited.</p>
+            <h3>Permitted Use</h3>
+            <p>Your subscription grants you a personal, non-transferable license to use Dragonfly for your own training and analysis. You may not share your account, resell access, or use the software commercially without written permission.</p>
+            <h3>No Gambling</h3>
+            <p>Dragonfly is a training simulator only. No real money is wagered. Results do not predict or influence real casino outcomes.</p>
+            <h3>Disclaimer</h3>
+            <p>Dragonfly is provided "as is". We make no guarantees regarding uptime, accuracy of simulations, or fitness for any particular purpose.</p>
+            <p style="margin-top:16px;color:rgba(255,255,255,0.3);font-size:0.65rem;">© 2025 Dragonfly · All Rights Reserved</p>
+        </div>
+    </div>
+
+    <!-- Subscription Gate -->
+    <div id="sub-gate-overlay" style="display:none;">
+        <div class="sub-gate-card">
+            <div style="font-size:2rem;margin-bottom:8px;">🐉</div>
+            <h2>SUBSCRIPTION REQUIRED</h2>
+            <p id="sub-gate-msg">Your free trial has ended. Subscribe to continue training with Dragonfly.</p>
+            <div class="sub-options">
+                <button class="sub-option-btn sub-option-monthly" onclick="openSubscribeLink('monthly')">Monthly — $9.99/mo</button>
+                <button class="sub-option-btn sub-option-annual" onclick="openSubscribeLink('annual')">Annual — $79.99/yr &nbsp;<span style="font-size:0.7rem;opacity:0.8;">Save 33%</span></button>
+                <button class="sub-option-btn sub-option-free" onclick="document.getElementById('sub-gate-overlay').style.display='none'">Continue in Free Mode (limited)</button>
+            </div>
+            <p style="margin-top:14px;font-size:0.65rem;color:rgba(255,255,255,0.25);">Questions? Contact us at support@dragonfly.app</p>
+        </div>
+    </div>
+
+    <div id="layout-panel">
+        <button class="layout-close" onclick="closeLayoutPanel()">✕</button>
+        <h3>🔀 CUSTOMISE LAYOUT</h3>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,0.45);margin:0 0 10px;">Drag or use ▲▼ to reorder sections</p>
+        <div class="layout-list" id="layout-list"></div>
+        <button class="main-deal-btn" onclick="applyLayout();closeLayoutPanel()" style="width:100%;font-size:0.85rem;padding:7px;">✓ Apply</button>
+        <button class="aux-btn" onclick="resetLayout();closeLayoutPanel()" style="width:100%;text-align:center;margin-top:6px;">↺ Reset Default</button>
+    </div>
+
     <div class="game-content" id="game-container" style="display:none;">
 
         <div class="header-area">
-            <div class="header-title">DRAGONFLY TO TIE <span style="font-size:0.9rem;vertical-align:middle;opacity:0.7;">v2.8</span></div>
-            <button id="sound-toggle-btn" class="settings-btn" onclick="toggleSound()" style="right:152px;" title="Toggle Sound">🔊</button>
-            <button class="settings-btn" onclick="toggleSettings()" title="Settings" style="right:118px;">⚙️</button>
-            <button id="btn-show-shoe-end" class="settings-btn" onclick="document.getElementById('shoe-end-overlay').style.display='flex'" title="Show shoe summary" style="right:80px;display:none;font-size:0.7rem;">📊</button>
-            <button class="settings-btn" onclick="document.getElementById('load-overlay').style.display='flex'" title="Load saved shoe" style="right:44px;font-size:0.7rem;">📂</button>
-            <button class="settings-btn" onclick="newGame()" title="New Game" style="right:10px;font-size:0.6rem;letter-spacing:0.5px;width:34px;border-radius:8px;">NEW</button>
+            <div class="header-title">DRAGONFLY <span style="font-size:0.85rem;vertical-align:middle;opacity:0.6;">v2.91</span></div>
+            <div class="header-btns">
+                <button id="sound-toggle-btn" class="settings-btn" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+                <button class="settings-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+                <button id="btn-show-shoe-end" class="settings-btn" onclick="document.getElementById('shoe-end-overlay').style.display='flex'" title="Show shoe summary" style="display:none;font-size:0.7rem;">📊</button>
+                <button class="settings-btn" onclick="document.getElementById('load-overlay').style.display='flex'" title="Load saved game">📂</button>
+                <button id="btn-layout" class="settings-btn" onclick="openLayoutPanel()" title="Customise Layout">⊞</button>
+                <button class="settings-btn" onclick="newGame()" title="New Game" style="font-size:0.58rem;letter-spacing:0.3px;width:32px;border-radius:7px;">NEW</button>
+                <button class="settings-btn logout-btn" onclick="logout()" title="Log out" style="font-size:0.58rem;width:32px;border-radius:7px;">OUT</button>
+            </div>
         </div>
 
+        <div class="layout-slot" data-slot="roads">
         <div class="roads-section">
 
             <!-- Row 1: Bead Plate + Big Road side by side -->
             <div class="road-row-top">
                 <div class="road-box" id="rb-bead">
-                    <div class="road-title" onclick="toggleRoad('rb-bead')"><span>🔵 BEAD (珠盘路)</span><span class="toggle-arrow">▲</span></div>
+                    <div class="road-title" onclick="toggleRoad('rb-bead')" data-road="rb-bead"><span>🔵 BEAD (珠盘路)</span><span class="toggle-arrow">▲</span></div>
                     <div class="road-canvas-wrap">
                         <div class="bead-plate" id="road-bead"></div>
                     </div>
                 </div>
                 <div class="road-box" id="rb-big">
-                    <div class="road-title" onclick="toggleRoad('rb-big')"><span>🔴 BIG ROAD (大路)</span><span class="toggle-arrow">▲</span></div>
+                    <div class="road-title" onclick="toggleRoad('rb-big')" data-road="rb-big"><span>🔴 BIG ROAD (大路)</span><span class="toggle-arrow">▲</span></div>
                     <div class="road-canvas-wrap">
                         <div class="big-road-wrap"><div class="big-road-grid" id="road-big"></div></div>
                     </div>
@@ -516,19 +693,19 @@
             <!-- Row 3: Derived roads — 3 equal columns -->
             <div class="road-row-derived">
                 <div class="road-box" id="rb-beb">
-                    <div class="road-title" onclick="toggleRoad('rb-beb')"><span>👁 BIG EYE BOY (大眼仔)</span><span class="toggle-arrow">▲</span></div>
+                    <div class="road-title" onclick="toggleRoad('rb-beb')" data-road="rb-beb"><span>👁 BIG EYE BOY (大眼仔)</span><span class="toggle-arrow">▲</span></div>
                     <div class="road-canvas-wrap">
                         <div class="derived-road-wrap"><div class="derived-road-grid" id="road-beb"></div></div>
                     </div>
                 </div>
                 <div class="road-box" id="rb-small">
-                    <div class="road-title" onclick="toggleRoad('rb-small')"><span>📍 SMALL ROAD (小路)</span><span class="toggle-arrow">▲</span></div>
+                    <div class="road-title" onclick="toggleRoad('rb-small')" data-road="rb-small"><span>📍 SMALL ROAD (小路)</span><span class="toggle-arrow">▲</span></div>
                     <div class="road-canvas-wrap">
                         <div class="derived-road-wrap"><div class="derived-road-grid" id="road-small"></div></div>
                     </div>
                 </div>
                 <div class="road-box" id="rb-cock">
-                    <div class="road-title" onclick="toggleRoad('rb-cock')"><span>🪳 COCKROACH PIG (曱甴路)</span><span class="toggle-arrow">▲</span></div>
+                    <div class="road-title" onclick="toggleRoad('rb-cock')" data-road="rb-cock"><span>🪳 COCKROACH PIG (曱甴路)</span><span class="toggle-arrow">▲</span></div>
                     <div class="road-canvas-wrap">
                         <div class="derived-road-wrap"><div class="derived-road-grid" id="road-cock"></div></div>
                     </div>
@@ -536,7 +713,9 @@
             </div>
 
         </div>
+        </div><!-- /slot:roads -->
 
+        <div class="layout-slot" data-slot="table">
         <div class="casino-banner" id="casino-banner"></div>
 
         <div class="casino-table" id="casino-table-el">
@@ -600,33 +779,36 @@
             <div class="action-buttons-group">
                 <button id="btn-rebet" class="aux-btn" onclick="reBet()" disabled title="Repeat last bet">↩ REBET</button>
                 <button id="btn-double" class="aux-btn" onclick="doubleBet()" disabled title="Double current bets">✕2 DOUBLE</button>
+                <button id="btn-deal" class="main-deal-btn" onclick="playHand()">DEAL</button>
                 <button onclick="clearBets()" class="clear-btn">CLEAR</button>
                 <button class="aux-btn" onclick="document.getElementById('add-funds-popup').style.display='block'" title="Add funds to bankroll">+$</button>
                 <button class="aux-btn" onclick="manualSaveGame()" title="Save game now">💾</button>
-                <button class="main-deal-btn" onclick="playHand()">DEAL</button>
             </div>
         </div>
 
 
 
+        </div><!-- /slot:table -->
+
+        <div class="layout-slot" data-slot="financials">
         <div class="top-dashboards" style="grid-template-columns:1fr;">
             <div class="dashboard-box">
-                <div class="dashboard-title">FINANCIALS</div>
-                <div class="fin-row"><span>BANKROLL:</span><span class="balance-label" style="color:#fff;font-weight:bold;">$0.00</span></div>
-                <div class="fin-row"><span>SESSION P/L:</span><span class="session-pl-label">+$0.00</span></div>
+                <div class="dashboard-title fin-title">FINANCIALS</div>
+                <div class="fin-row"><span class="fin-label-bankroll">BANKROLL:</span><span class="balance-label" style="color:#fff;font-weight:bold;">$0.00</span></div>
+                <div class="fin-row"><span class="fin-label-pl">SESSION P/L:</span><span class="session-pl-label">+$0.00</span></div>
                 <div class="fin-row fin-divider"></div>
-                <div class="fin-row"><span>HANDS:</span><span id="stat-hands" style="color:var(--gold);">0</span></div>
-                <div class="fin-row"><span style="color:#ff9e9e;">BANKER:</span><span id="stat-b" style="color:#ff9e9e;">0</span></div>
-                <div class="fin-row"><span style="color:#9ec2ff;">PLAYER:</span><span id="stat-p" style="color:#9ec2ff;">0</span></div>
-                <div class="fin-row"><span style="color:#7dff7d;">TIE:</span><span id="stat-t" style="color:#7dff7d;">0</span></div>
+                <div class="fin-row"><span class="fin-label-hands">HANDS:</span><span id="stat-hands" style="color:var(--gold);">0</span></div>
+                <div class="fin-row"><span class="fin-label-banker" style="color:#ff9e9e;">BANKER:</span><span id="stat-b" style="color:#ff9e9e;">0</span></div>
+                <div class="fin-row"><span class="fin-label-player" style="color:#9ec2ff;">PLAYER:</span><span id="stat-p" style="color:#9ec2ff;">0</span></div>
+                <div class="fin-row"><span class="fin-label-tie" style="color:#7dff7d;">TIE:</span><span id="stat-t" style="color:#7dff7d;">0</span></div>
                 <div class="fin-row fin-divider"></div>
-                <div class="fin-row"><span>BETS WON:</span><span id="stat-bets-won" style="color:#7dff7d;">0</span></div>
-                <div class="fin-row"><span>BETS LOST:</span><span id="stat-bets-lost" style="color:#ff9e9e;">0</span></div>
-                <div class="fin-row"><span>VOL WON:</span><span id="stat-vol-won" style="color:#7dff7d;">$0</span></div>
-                <div class="fin-row"><span>VOL LOST:</span><span id="stat-vol-lost" style="color:#ff9e9e;">$0</span></div>
+                <div class="fin-row"><span class="fin-label-bets-won">BETS WON:</span><span id="stat-bets-won" style="color:#7dff7d;">0</span></div>
+                <div class="fin-row"><span class="fin-label-bets-lost">BETS LOST:</span><span id="stat-bets-lost" style="color:#ff9e9e;">0</span></div>
+                <div class="fin-row"><span class="fin-label-vol-won">VOL WON:</span><span id="stat-vol-won" style="color:#7dff7d;">$0</span></div>
+                <div class="fin-row"><span class="fin-label-vol-lost">VOL LOST:</span><span id="stat-vol-lost" style="color:#ff9e9e;">$0</span></div>
                 <div class="fin-row fin-divider"></div>
-                <div class="fin-row"><span>LAST BET:</span><span id="stat-last-bet" style="color:rgba(255,255,255,0.6);">—</span></div>
-                <div class="fin-row"><span>CARDS LEFT:</span><span class="shoe-count-label" style="color:var(--gold);">0</span></div>
+                <div class="fin-row"><span class="fin-label-last-bet">LAST BET:</span><span id="stat-last-bet" style="color:rgba(255,255,255,0.6);">—</span></div>
+                <div class="fin-row"><span class="fin-label-cards">CARDS LEFT:</span><span class="shoe-count-label" style="color:var(--gold);">0</span></div>
             </div>
 
         </div>
@@ -634,17 +816,49 @@
 
 
 
-        <div class="dashboard-box" style="margin-top:0;">
-            <div class="dashboard-title" style="position:relative;">
-                SHOE INSPECTOR
-                <button onclick="toggleShoeVisibility()" style="position:absolute;right:0;top:0;background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.75rem;">[TOGGLE]</button>
-            </div>
-            <div id="shoe-preview-el" class="shoe-preview-container" style="display:none;"></div>
-            <div class="inspector-placeholder-label" id="inspector-placeholder">Inspector Engine Standby</div>
-        </div>
+        </div><!-- /slot:financials -->
 
+        <div class="layout-slot" data-slot="inspector">
+        <div class="dashboard-box" style="margin-top:0;padding-bottom:5px;">
+            <!-- Inspector Tab Bar -->
+            <div class="insp-tabs">
+                <button class="insp-tab active" onclick="switchInspector('shoe')" id="itab-shoe">🃏 Shoe</button>
+                <button class="insp-tab" onclick="switchInspector('history')" id="itab-history">📋 History</button>
+                <button class="insp-tab" onclick="switchInspector('stats')" id="itab-stats">📊 Stats</button>
+            </div>
+            <!-- Shoe Inspector (existing) -->
+            <div id="insp-shoe" class="insp-panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+                    <span class="shoe-inspector-title" style="font-size:0.65rem;color:var(--gold);letter-spacing:1px;font-weight:bold;">REMAINING CARDS</span>
+                    <button onclick="toggleShoeVisibility()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.68rem;padding:0;">[TOGGLE]</button>
+                </div>
+                <div id="shoe-preview-el" class="shoe-preview-container" style="display:none;"></div>
+                <div class="inspector-placeholder-label" id="inspector-placeholder">Inspector Engine Standby</div>
+            </div>
+            <!-- History Inspector -->
+            <div id="insp-history" class="insp-panel" style="display:none;">
+                <div id="history-list" class="history-list"></div>
+                <div class="inspector-placeholder-label" id="history-placeholder" style="display:none;">No hands played yet</div>
+            </div>
+            <!-- Stats Inspector -->
+            <div id="insp-stats" class="insp-panel" style="display:none;">
+                <div id="stats-chart-panel"></div>
+            </div>
+        </div>
+        </div><!-- /slot:inspector -->
+
+        <div class="layout-slot" data-slot="coffee">
         <div class="coffee-link-wrapper" style="width:100%;max-width:240px;margin:6px auto 0 auto;">
             <a href="https://buymeacoffee.com/baccaratfunk/the-motion-energy" target="_blank" class="coffee-link">☕ Buy me a cup of coffee</a>
+        </div>
+        </div><!-- /slot:coffee -->
+
+        <div class="copyright-footer">
+            <span>© 2025 Dragonfly · All Rights Reserved</span>
+            <span class="copyright-sep">·</span>
+            <a href="#" onclick="showTerms()" class="copyright-link">Terms of Use</a>
+            <span class="copyright-sep">·</span>
+            <span id="sub-status-footer"></span>
         </div>
     </div>
 
@@ -710,6 +924,8 @@
         renderAllRoads(); updateUI(); updateAuxButtons();
         refreshAllStatDisplay();
         document.getElementById('game-container').style.display = 'flex';
+        initLayout();
+        initLang();
     }
 
     function showReloginBanner(email) {
@@ -763,7 +979,23 @@
     }
 
     function showLoginOverlay() {
+        // Show "Back to Game" button if a game is in progress
+        const backBtn = document.getElementById('login-back-btn');
+        const inGame = document.getElementById('game-container').style.display !== 'none';
+        const hasSave = !!localStorage.getItem('dragonfly_game_state');
+        if (backBtn) backBtn.style.display = (inGame || hasSave) ? 'block' : 'none';
         document.getElementById('login-overlay').style.display = 'flex';
+    }
+
+    function loginBack() {
+        document.getElementById('login-overlay').style.display = 'none';
+        // If game was restored to screen already, just show it
+        if (document.getElementById('game-container').style.display !== 'none') return;
+        // Otherwise try to restore from save
+        if (loadGameState()) {
+            hideSplash();
+            restoreGameToScreen();
+        }
     }
 
     // Save session token returned by backend after successful code verification
@@ -878,6 +1110,7 @@
     let selectedCasino = CASINO_MODES[0];
 
     let beadHistory = [];
+    let handHistory = []; // parallel array: net P/L per hand
     let bigRoadColumns = [];
     let bigRoadCurrentCol = 0;
     let bigRoadLastNonTie = null;
@@ -1067,12 +1300,102 @@
     //  MULTILINGUAL (i18n)
     // ══════════════════════════════════════════════════════════
     const TRANSLATIONS = {
-        en: { casinoMode:'CASINO MODE', initialBankroll:'Initial Bankroll:', shoeSize:'Shoe Size:', joinTable:'Join Table', infinite:'Infinite', addFunds:'ADD FUNDS', settings:'Settings' },
-        zh: { casinoMode:'赌场模式', initialBankroll:'初始筹码:', shoeSize:'牌靴大小:', joinTable:'加入牌桌', infinite:'无限', addFunds:'增加筹码', settings:'设置' },
-        ja: { casinoMode:'カジノモード', initialBankroll:'初期バンクロール:', shoeSize:'シューサイズ:', joinTable:'テーブルへ', infinite:'無制限', addFunds:'資金追加', settings:'設定' },
-        ko: { casinoMode:'카지노 모드', initialBankroll:'초기 자금:', shoeSize:'슈 크기:', joinTable:'테이블 참가', infinite:'무한', addFunds:'자금 추가', settings:'설정' },
-        pt: { casinoMode:'MODO CASSINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamanho do Sapatilha:', joinTable:'Entrar na Mesa', infinite:'Infinito', addFunds:'Adicionar Fundos', settings:'Configurações' },
-        es: { casinoMode:'MODO CASINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamaño del Zapato:', joinTable:'Unirse a la Mesa', infinite:'Infinito', addFunds:'Agregar Fondos', settings:'Configuración' },
+        en: {
+            // Setup
+            casinoMode:'CASINO MODE', initialBankroll:'Initial Bankroll:', shoeSize:'Shoe Size:',
+            joinTable:'Join Table', infinite:'Infinite', addFunds:'ADD FUNDS', settings:'Settings',
+            // Table
+            playerLabel:'PLAYER', bankerLabel:'BANKER', tieLabel:'TIE',
+            playerGroup:'PLAYER', bankerGroup:'BANKER',
+            // Buttons
+            deal:'DEAL', clear:'CLEAR', rebet:'↩ REBET', double:'✕2 DOUBLE',
+            addMoney:'+$', save:'💾', newGame:'NEW',
+            // Financials
+            financials:'FINANCIALS', bankroll:'BANKROLL:', sessionPL:'SESSION P/L:',
+            hands:'HANDS:', bankerStat:'BANKER:', playerStat:'PLAYER:', tieStat:'TIE:',
+            betsWon:'BETS WON:', betsLost:'BETS LOST:', volWon:'VOL WON:',
+            volLost:'VOL LOST:', lastBet:'LAST BET:', cardsLeft:'CARDS LEFT:',
+            // Shoe inspector
+            shoeInspector:'SHOE INSPECTOR', inspectorStandby:'Inspector Engine Standby',
+            // Roads
+            beadRoad:'🔵 BEAD', bigRoad:'🔴 BIG ROAD', bigEyeBoy:'👁 BIG EYE BOY',
+            smallRoad:'📍 SMALL ROAD', cockroach:'🪳 COCKROACH PIG',
+        },
+        zh: {
+            casinoMode:'赌场模式', initialBankroll:'初始筹码:', shoeSize:'牌靴大小:',
+            joinTable:'加入牌桌', infinite:'无限', addFunds:'增加筹码', settings:'设置',
+            playerLabel:'闲', bankerLabel:'庄', tieLabel:'和',
+            playerGroup:'闲家', bankerGroup:'庄家',
+            deal:'发牌', clear:'清除', rebet:'↩ 重注', double:'✕2 加倍',
+            addMoney:'+筹', save:'💾', newGame:'新游',
+            financials:'财务', bankroll:'筹码:', sessionPL:'本局盈亏:',
+            hands:'手数:', bankerStat:'庄:', playerStat:'闲:', tieStat:'和:',
+            betsWon:'赢注:', betsLost:'输注:', volWon:'赢额:',
+            volLost:'输额:', lastBet:'上注:', cardsLeft:'余牌:',
+            shoeInspector:'牌靴检视', inspectorStandby:'检视引擎待机',
+            beadRoad:'🔵 珠盘路', bigRoad:'🔴 大路', bigEyeBoy:'👁 大眼仔',
+            smallRoad:'📍 小路', cockroach:'🪳 甴曱路',
+        },
+        ja: {
+            casinoMode:'カジノモード', initialBankroll:'初期残高:', shoeSize:'シューサイズ:',
+            joinTable:'テーブルへ', infinite:'無制限', addFunds:'資金追加', settings:'設定',
+            playerLabel:'プレイヤー', bankerLabel:'バンカー', tieLabel:'タイ',
+            playerGroup:'プレイヤー', bankerGroup:'バンカー',
+            deal:'ディール', clear:'クリア', rebet:'↩ 再ベット', double:'✕2 ダブル',
+            addMoney:'+資金', save:'💾', newGame:'新規',
+            financials:'財務', bankroll:'残高:', sessionPL:'損益:',
+            hands:'ハンド数:', bankerStat:'バンカー:', playerStat:'プレイヤー:', tieStat:'タイ:',
+            betsWon:'勝ち数:', betsLost:'負け数:', volWon:'獲得額:',
+            volLost:'損失額:', lastBet:'前ベット:', cardsLeft:'残りカード:',
+            shoeInspector:'シュー検査', inspectorStandby:'検査エンジン待機中',
+            beadRoad:'🔵 ビーズ', bigRoad:'🔴 ビッグロード', bigEyeBoy:'👁 ビッグアイ',
+            smallRoad:'📍 スモールロード', cockroach:'🪳 コックローチ',
+        },
+        ko: {
+            casinoMode:'카지노 모드', initialBankroll:'초기 자금:', shoeSize:'슈 크기:',
+            joinTable:'테이블 참가', infinite:'무한', addFunds:'자금 추가', settings:'설정',
+            playerLabel:'플레이어', bankerLabel:'뱅커', tieLabel:'타이',
+            playerGroup:'플레이어', bankerGroup:'뱅커',
+            deal:'딜', clear:'클리어', rebet:'↩ 재배팅', double:'✕2 더블',
+            addMoney:'+자금', save:'💾', newGame:'새게임',
+            financials:'재무', bankroll:'자금:', sessionPL:'손익:',
+            hands:'핸드수:', bankerStat:'뱅커:', playerStat:'플레이어:', tieStat:'타이:',
+            betsWon:'승리 배팅:', betsLost:'패배 배팅:', volWon:'수익:',
+            volLost:'손실:', lastBet:'마지막 배팅:', cardsLeft:'남은 카드:',
+            shoeInspector:'슈 검사기', inspectorStandby:'검사 엔진 대기 중',
+            beadRoad:'🔵 비드로드', bigRoad:'🔴 빅로드', bigEyeBoy:'👁 빅아이보이',
+            smallRoad:'📍 스몰로드', cockroach:'🪳 바퀴벌레',
+        },
+        pt: {
+            casinoMode:'MODO CASSINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamanho do Sapatilha:',
+            joinTable:'Entrar na Mesa', infinite:'Infinito', addFunds:'Adicionar Fundos', settings:'Configurações',
+            playerLabel:'JOGADOR', bankerLabel:'BANCO', tieLabel:'EMPATE',
+            playerGroup:'JOGADOR', bankerGroup:'BANCO',
+            deal:'DISTRIBUIR', clear:'LIMPAR', rebet:'↩ REVER', double:'✕2 DOBRAR',
+            addMoney:'+$', save:'💾', newGame:'NOVO',
+            financials:'FINANÇAS', bankroll:'BANCA:', sessionPL:'L/P SESSÃO:',
+            hands:'MÃOS:', bankerStat:'BANCO:', playerStat:'JOGADOR:', tieStat:'EMPATE:',
+            betsWon:'APOSTAS GANHAS:', betsLost:'APOSTAS PERDIDAS:', volWon:'VOL GANHO:',
+            volLost:'VOL PERDIDO:', lastBet:'ÚLTIMA APOSTA:', cardsLeft:'CARTAS REST.:',
+            shoeInspector:'INSPETOR DE SAPATILHA', inspectorStandby:'Motor em Espera',
+            beadRoad:'🔵 CONTAS', bigRoad:'🔴 ESTRADA GRANDE', bigEyeBoy:'👁 OLHO GRANDE',
+            smallRoad:'📍 ESTRADA PEQUENA', cockroach:'🪳 BARATA',
+        },
+        es: {
+            casinoMode:'MODO CASINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamaño del Zapato:',
+            joinTable:'Unirse a la Mesa', infinite:'Infinito', addFunds:'Agregar Fondos', settings:'Configuración',
+            playerLabel:'JUGADOR', bankerLabel:'BANCA', tieLabel:'EMPATE',
+            playerGroup:'JUGADOR', bankerGroup:'BANCA',
+            deal:'REPARTIR', clear:'LIMPIAR', rebet:'↩ REREPARTIR', double:'✕2 DOBLAR',
+            addMoney:'+$', save:'💾', newGame:'NUEVO',
+            financials:'FINANZAS', bankroll:'BANCA:', sessionPL:'G/P SESIÓN:',
+            hands:'MANOS:', bankerStat:'BANCA:', playerStat:'JUGADOR:', tieStat:'EMPATE:',
+            betsWon:'APUESTAS GANADAS:', betsLost:'APUESTAS PERDIDAS:', volWon:'VOL GANADO:',
+            volLost:'VOL PERDIDO:', lastBet:'ÚLTIMA APUESTA:', cardsLeft:'CARTAS REST.:',
+            shoeInspector:'INSPECTOR DE ZAPATO', inspectorStandby:'Motor en Espera',
+            beadRoad:'🔵 CUENTAS', bigRoad:'🔴 CAMINO GRANDE', bigEyeBoy:'👁 OJO GRANDE',
+            smallRoad:'📍 CAMINO PEQUEÑO', cockroach:'🪳 CUCARACHA',
+        },
     };
     let currentLang = 'en';
 
@@ -1080,12 +1403,68 @@
         currentLang = lang;
         localStorage.setItem('df_lang', lang);
         const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+        // Update data-i18n elements (setup overlay)
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (t[key]) el.textContent = t[key];
+            if (t[key] !== undefined) el.textContent = t[key];
         });
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+
+        // Update language toggle buttons
+        document.querySelectorAll('.lang-btn').forEach(btn =>
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
+        );
+
+        // ── Live in-game updates ──
+        // Bet zone labels
+        const pBox = document.getElementById('bet-player-box');
+        const bBox = document.getElementById('bet-banker-box');
+        const tBox = document.getElementById('bet-tie-box');
+        if (pBox) pBox.querySelector('.bet-title-text').textContent = t.playerLabel;
+        if (bBox) bBox.querySelector('.bet-title-text').textContent = t.bankerLabel;
+        if (tBox) tBox.querySelector('.bet-title-text').textContent = t.tieLabel;
+
+        // Card group labels
+        document.querySelectorAll('.card-group-label').forEach((el, i) => {
+            el.textContent = i === 0 ? t.playerGroup : t.bankerGroup;
+        });
+
+        // Action buttons — target by ID to avoid touching login buttons
+        const dealBtn = document.getElementById('btn-deal');
+        if (dealBtn) dealBtn.textContent = t.deal;
+        const clearBtn = document.querySelector('.clear-btn');
+        if (clearBtn) clearBtn.textContent = t.clear;
+        const rebetBtn = document.getElementById('btn-rebet');
+        if (rebetBtn) rebetBtn.textContent = t.rebet;
+        const doubleBtn = document.getElementById('btn-double');
+        if (doubleBtn) doubleBtn.textContent = t.double;
+
+        // Financials panel labels
+        const finMap = {
+            '.fin-label-bankroll': t.bankroll, '.fin-label-pl': t.sessionPL,
+            '.fin-label-hands': t.hands, '.fin-label-banker': t.bankerStat,
+            '.fin-label-player': t.playerStat, '.fin-label-tie': t.tieStat,
+            '.fin-label-bets-won': t.betsWon, '.fin-label-bets-lost': t.betsLost,
+            '.fin-label-vol-won': t.volWon, '.fin-label-vol-lost': t.volLost,
+            '.fin-label-last-bet': t.lastBet, '.fin-label-cards': t.cardsLeft,
+        };
+        Object.entries(finMap).forEach(([sel, val]) => {
+            document.querySelectorAll(sel).forEach(el => { if (val) el.textContent = val; });
+        });
+
+        // Dashboard title
+        document.querySelectorAll('.fin-title').forEach(el => el.textContent = t.financials);
+
+        // Shoe inspector
+        document.querySelectorAll('.shoe-inspector-title').forEach(el => el.textContent = t.shoeInspector);
+        const standby = document.getElementById('inspector-placeholder');
+        if (standby && standby.style.display !== 'none') standby.textContent = t.inspectorStandby;
+
+        // Road titles
+        const roadTitleMap = { 'rb-bead': t.beadRoad, 'rb-big': t.bigRoad, 'rb-beb': t.bigEyeBoy, 'rb-small': t.smallRoad, 'rb-cock': t.cockroach };
+        Object.entries(roadTitleMap).forEach(([id, label]) => {
+            const box = document.getElementById(id);
+            if (box) { const span = box.querySelector('.road-title span:first-child'); if (span) span.textContent = label; }
         });
     }
 
@@ -1103,7 +1482,7 @@
         buildSideBetZones();
         applyCasinoTheme();
         initShoe();
-        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        beadHistory = []; handHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
         shoeEnded = false;
@@ -1111,6 +1490,7 @@
         initLang();
         document.getElementById('setup-overlay').style.display = 'none';
         document.getElementById('game-container').style.display = 'flex';
+        initLayout();
         renderAllRoads();
         updateUI();
         saveGameState();
@@ -1139,7 +1519,7 @@
         clearGameState(); // shoe is done, clear auto-restore
 
         // Disable DEAL button
-        const dealBtn = document.querySelector('.main-deal-btn');
+        const dealBtn = document.getElementById('btn-deal');
         if (dealBtn) { dealBtn.disabled = true; dealBtn.style.opacity = '0.4'; }
 
         // Build summary stats
@@ -1190,10 +1570,15 @@
                 volumeWon: stats.volWon,
                 volumeLost: stats.volLost
             },
-            results: beadHistory.map(h => ({
+            results: beadHistory.map((h, i) => ({
                 outcome: h.cls,
                 label: h.label,
-                score: h.score
+                score: h.score,
+                p: h.p || [],
+                b: h.b || [],
+                pS: h.pS ?? null,
+                bS: h.bS ?? null,
+                pl: handHistory[i]
             }))
         };
         const blob = new Blob([JSON.stringify(summary, null, 2)], { type: 'application/json' });
@@ -1215,7 +1600,7 @@
         initShoe();
         initBetKeys();
         // Re-enable DEAL button
-        const dealBtn = document.querySelector('.main-deal-btn');
+        const dealBtn = document.getElementById('btn-deal');
         if (dealBtn) { dealBtn.disabled = false; dealBtn.style.opacity = '1'; }
         document.getElementById('shoe-end-overlay').style.display = 'none';
         renderAllRoads();
@@ -1296,10 +1681,15 @@
             const cls = r.outcome || r.cls || '';
             const label = r.label || '';
             const score = r.score;
+            const p = r.p || [];
+            const b = r.b || [];
+            const pS = r.pS ?? null;
+            const bS = r.bS ?? null;
             let outcomeType = cls.includes('banker') || cls.includes('dragon') ? 'banker'
                            : cls.includes('player') || cls.includes('panda')  ? 'player'
                            : 'tie';
-            beadHistory.push({ cls, label, score });
+            beadHistory.push({ cls, label, score, p, b, pS, bS });
+            handHistory.push(r.pl);
             if (outcomeType === 'tie') {
                 if (bigRoadColumns.length > 0) {
                     const lc = bigRoadColumns[bigRoadColumns.length-1];
@@ -1356,7 +1746,7 @@
         document.getElementById('btn-show-shoe-end').style.display = 'flex';
 
         // Disable betting in review mode
-        document.querySelectorAll('.bet-zone, .chip, .main-deal-btn, #btn-rebet, #btn-double').forEach(el => {
+        document.querySelectorAll('.bet-zone, .chip, #btn-deal, #btn-rebet, #btn-double').forEach(el => {
             el.style.pointerEvents = 'none'; el.style.opacity = '0.3';
         });
     }
@@ -1396,10 +1786,15 @@
             const cls = r.outcome || r.cls || '';
             const label = r.label || '';
             const score = r.score;
+            const p = r.p || [];
+            const b = r.b || [];
+            const pS = r.pS ?? null;
+            const bS = r.bS ?? null;
             let outcomeType = cls.includes('banker') || cls.includes('dragon') ? 'banker'
                            : cls.includes('player') || cls.includes('panda')  ? 'player'
                            : 'tie';
-            beadHistory.push({ cls, label, score });
+            beadHistory.push({ cls, label, score, p, b, pS, bS });
+            handHistory.push(r.pl);
             if (outcomeType === 'tie') {
                 if (bigRoadColumns.length > 0) {
                     const lc = bigRoadColumns[bigRoadColumns.length-1];
@@ -1445,7 +1840,7 @@
         loadedShoeData = null;
 
         // Ensure deal button is enabled
-        const dealBtn = document.querySelector('.main-deal-btn');
+        const dealBtn = document.getElementById('btn-deal');
         if (dealBtn) { dealBtn.disabled = false; dealBtn.style.opacity = '1'; }
 
         document.getElementById('game-container').style.display = 'flex';
@@ -1465,7 +1860,7 @@
         document.getElementById('shoe-end-overlay').style.display = 'none';
         document.getElementById('btn-show-shoe-end').style.display = 'none';
         // Re-enable betting controls
-        document.querySelectorAll('.bet-zone, .chip, .main-deal-btn, #btn-rebet, #btn-double').forEach(el => {
+        document.querySelectorAll('.bet-zone, .chip, #btn-deal, #btn-rebet, #btn-double').forEach(el => {
             el.style.pointerEvents = ''; el.style.opacity = '';
         });
         // If there was an active game, restore it; otherwise go to setup
@@ -1495,17 +1890,17 @@
                 lastBetSummary,
                 ts: Date.now()
             };
-            sessionStorage.setItem(SAVE_KEY, JSON.stringify(state));
+            localStorage.setItem(SAVE_KEY, JSON.stringify(state));
         } catch(e) {}
     }
 
     function loadGameState() {
         try {
-            const raw = sessionStorage.getItem(SAVE_KEY);
+            const raw = localStorage.getItem(SAVE_KEY);
             if (!raw) return false;
             const s = JSON.parse(raw);
             // Only restore if saved in last 8 hours
-            if (Date.now() - s.ts > 8 * 3600 * 1000) { clearGameState(); return false; }
+            if (Date.now() - s.ts > 24 * 3600 * 1000) { clearGameState(); return false; }
             bankroll = s.bankroll;
             initialBankroll = s.initialBankroll;
             shoeSize = s.shoeSize;
@@ -1514,6 +1909,7 @@
             stats = s.stats || { banker:0, player:0, tie:0 };
             shoe = s.shoe || [];
             beadHistory = s.beadHistory || [];
+            handHistory = s.handHistory || new Array(beadHistory.length).fill(undefined);
             bigRoadColumns = s.bigRoadColumns || [];
             bigRoadCurrentCol = s.bigRoadCurrentCol || 0;
             bigRoadLastNonTie = s.bigRoadLastNonTie || null;
@@ -1529,13 +1925,111 @@
     }
 
     function clearGameState() {
-        try { sessionStorage.removeItem(SAVE_KEY); } catch(e) {}
+        try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
     }
 
     // ══════════════════════════════════════════════════════════
     //  SHOE
     // ══════════════════════════════════════════════════════════
-    function initShoe() {
+    // ══════════════════════════════════════════════════════════
+    //  SUBSCRIPTION STATE
+    // ══════════════════════════════════════════════════════════
+    let subscriptionStatus = 'unknown'; // 'active' | 'trial' | 'expired' | 'free' | 'unknown'
+    let subscriptionExpiry = null;
+    let freeHandsRemaining = 20; // hands allowed in free/expired mode
+    const FREE_HAND_LIMIT = 20;
+
+    function updateSubBadge() {
+        const el = document.getElementById('sub-status-footer');
+        if (!el) return;
+        const labels = { active:'✓ SUBSCRIBED', trial:'TRIAL', expired:'EXPIRED', free:'FREE MODE', unknown:'' };
+        const cls    = { active:'active', trial:'trial', expired:'expired', free:'free', unknown:'' };
+        if (subscriptionStatus === 'unknown') { el.innerHTML = ''; return; }
+        el.innerHTML = `<span class="sub-badge ${cls[subscriptionStatus]}">${labels[subscriptionStatus]}${subscriptionExpiry ? ' · ' + subscriptionExpiry : ''}</span>`;
+    }
+
+    function checkSubscriptionGate() {
+        if (subscriptionStatus === 'active') return true;
+        if (subscriptionStatus === 'trial')  return true;
+        // Free / expired: enforce hand limit
+        if (freeHandsRemaining <= 0) {
+            const msg = subscriptionStatus === 'expired'
+                ? 'Your subscription has expired. Subscribe to keep training.'
+                : `Free mode allows ${FREE_HAND_LIMIT} hands. Subscribe for unlimited access.`;
+            document.getElementById('sub-gate-msg').textContent = msg;
+            document.getElementById('sub-gate-overlay').style.display = 'flex';
+            return false;
+        }
+        return true;
+    }
+
+    function openSubscribeLink(plan) {
+        // Point these at your actual payment links (Stripe, Gumroad, etc.)
+        const links = {
+            monthly: 'https://buymeacoffee.com/baccaratfunk',
+            annual:  'https://buymeacoffee.com/baccaratfunk',
+        };
+        window.open(links[plan] || links.monthly, '_blank');
+    }
+
+    function showTerms() {
+        document.getElementById('terms-overlay').style.display = 'flex';
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  SERVER-SIDE SHOE DEALING
+    //  Cards are requested from Google Apps Script one hand at a
+    //  time. The server holds the shoe and returns 4-6 card values.
+    //  Falls back to local dealing if server is unavailable.
+    // ══════════════════════════════════════════════════════════
+    let serverShoeId   = null;   // shoe session ID issued by server
+    let useServerDealing = false; // toggled on when server confirms dealing
+
+    async function requestServerShoe() {
+        const email = localStorage.getItem(SESSION_EMAIL_KEY);
+        const token = localStorage.getItem(SESSION_TOKEN_KEY);
+        if (!email || !token) { useServerDealing = false; return; }
+        try {
+            const r = await fetch(`${SCRIPT_URL}?action=newShoe&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}&decks=${shoeSize}`, { method: 'GET' });
+            const data = await r.json();
+            if (data.shoeId) {
+                serverShoeId = data.shoeId;
+                useServerDealing = true;
+                // Parse subscription status from response
+                if (data.subscription) {
+                    subscriptionStatus = data.subscription.status || 'free';
+                    subscriptionExpiry = data.subscription.expiry || null;
+                    freeHandsRemaining = data.subscription.handsRemaining ?? FREE_HAND_LIMIT;
+                    updateSubBadge();
+                }
+                // If server returns initial shoe for inspector preview, use it
+                if (data.shoe) { shoe = data.shoe; }
+                else { initShoeLocal(); }
+                return;
+            }
+        } catch(e) { /* fall through to local */ }
+        useServerDealing = false;
+        initShoeLocal();
+    }
+
+    async function requestServerHand() {
+        const email = localStorage.getItem(SESSION_EMAIL_KEY);
+        const token = localStorage.getItem(SESSION_TOKEN_KEY);
+        if (!serverShoeId || !email || !token) return null;
+        try {
+            const r = await fetch(`${SCRIPT_URL}?action=dealHand&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}&shoeId=${encodeURIComponent(serverShoeId)}`);
+            const data = await r.json();
+            if (data.error === 'ShoeExpired') { serverShoeId = null; useServerDealing = false; return null; }
+            if (data.cards && data.cards.length >= 4) {
+                // Update local shoe mirror for inspector
+                if (data.remaining !== undefined) shoe = data.remaining || [];
+                return data.cards; // [p1, p2, b1, b2, p3?, b3?]  (values 1-13)
+            }
+        } catch(e) { /* fall through */ }
+        return null;
+    }
+
+    function initShoeLocal() {
         sfxShuffle();
         if (shoeSize === 0) { shoe = []; return; }
         shoe = [];
@@ -1543,20 +2037,26 @@
         for (let i=shoe.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [shoe[i],shoe[j]]=[shoe[j],shoe[i]]; }
     }
 
-    // Cut card: shoe ends after this many cards remain
-    let cutCardThreshold = 14; // ~14 cards = reasonable cut regardless of shoe size
+    function initShoe() {
+        // Always init locally first for instant start; server shoe loads async
+        initShoeLocal();
+        requestServerShoe().then(() => {
+            updateUI(); // refresh card count after server responds
+        }).catch(() => {});
+    }
+
+    let cutCardThreshold = 14;
     let shoeEnded = false;
 
     function getNextCard() {
         if (shoeSize === 0) return Math.floor(Math.random()*13)+1;
-        if (shoe.length === 0) return 1; // safety — should not happen after endShoe check
+        if (shoe.length === 0) return 1;
         return shoe.pop();
     }
 
-    // Check BEFORE a hand is dealt whether enough cards remain
     function canDealHand() {
-        if (shoeSize === 0) return true; // infinite mode
-        return shoe.length >= 6; // need at least 6 for a max hand (player+banker each get up to 3)
+        if (shoeSize === 0) return true;
+        return shoe.length >= 6;
     }
 
     // Warn when getting close to cut card
@@ -1735,18 +2235,57 @@
     //  GAME LOGIC
     // ══════════════════════════════════════════════════════════
     function playHand() {
-        // Check if shoe is exhausted
-        if (!canDealHand()) {
-            endShoe();
-            return;
-        }
-        // Check if we hit the cut card mid-shoe (will end after this hand)
+        // ── Subscription gate ──
+        if (!checkSubscriptionGate()) return;
+
+        // ── Shoe exhausted? ──
+        if (!canDealHand()) { endShoe(); return; }
         const hitCutCard = (shoeSize > 0 && shoe.length <= cutCardThreshold);
 
         document.querySelectorAll('.bet-zone').forEach(z=>z.classList.remove('win-flash'));
         document.getElementById('special-notifications').innerHTML='';
+
+        // Count free hands
+        if (subscriptionStatus === 'free' || subscriptionStatus === 'expired') {
+            freeHandsRemaining = Math.max(0, freeHandsRemaining - 1);
+        }
+
+        // ── Server-side dealing ──
+        if (useServerDealing && serverShoeId) {
+            const dealBtn = document.getElementById('btn-deal');
+            if (dealBtn) { dealBtn.disabled = true; dealBtn.style.opacity = '0.6'; }
+            requestServerHand().then(cards => {
+                if (dealBtn) { dealBtn.disabled = false; dealBtn.style.opacity = '1'; }
+                if (!cards) {
+                    // Server failed — fall back to local for this hand
+                    playHandLocal(hitCutCard);
+                    return;
+                }
+                // cards = [p1, p2, b1, b2, p3?, b3?]
+                sfxDeal(0); sfxDeal(1); sfxDeal(2); sfxDeal(3);
+                const gV = v => v >= 10 ? 0 : v;
+                const p = [cards[0], cards[1]];
+                const b = [cards[2], cards[3]];
+                let pS = (gV(p[0]) + gV(p[1])) % 10;
+                let bS = (gV(b[0]) + gV(b[1])) % 10;
+                if (cards[4]) { p.push(cards[4]); pS = (pS + gV(cards[4])) % 10; }
+                if (cards[5]) { b.push(cards[5]); bS = (bS + gV(cards[5])) % 10; }
+                renderHand(p, b, pS, bS);
+                resolve(p, b, pS, bS);
+                if (hitCutCard && shoeSize > 0) setTimeout(endShoe, 2800);
+            }).catch(() => {
+                if (dealBtn) { dealBtn.disabled = false; dealBtn.style.opacity = '1'; }
+                playHandLocal(hitCutCard);
+            });
+            return;
+        }
+
+        playHandLocal(hitCutCard);
+    }
+
+    function playHandLocal(hitCutCard) {
         sfxDeal(0); sfxDeal(1); sfxDeal(2); sfxDeal(3);
-        const gV=(v)=>v>=10?0:v;
+        const gV = v => v >= 10 ? 0 : v;
         let p=[getNextCard(),getNextCard()], b=[getNextCard(),getNextCard()];
         let pS=(gV(p[0])+gV(p[1]))%10, bS=(gV(b[0])+gV(b[1]))%10;
         if (pS<=5 && bS<8) {
@@ -1761,10 +2300,7 @@
         } else if(bS<=5&&pS>=6&&pS<8){ b.push(getNextCard()); bS=(bS+gV(b[b.length-1]))%10; }
         renderHand(p,b,pS,bS);
         resolve(p,b,pS,bS);
-        // End the shoe after this hand if cut card was reached
-        if (hitCutCard && shoeSize > 0) {
-            setTimeout(endShoe, 2800); // wait for result overlay to show first
-        }
+        if (hitCutCard && shoeSize > 0) setTimeout(endShoe, 2800);
     }
 
     function renderHand(p,b,pS,bS) {
@@ -1891,7 +2427,10 @@
         }
 
         bankroll += win;
-        for (let k in currentBets) lastBets[k] = currentBets[k];
+        // Only update lastBets when there was actually a bet — preserves rebet across skipped hands
+        if (totalWagered > 0) {
+            for (let k in currentBets) lastBets[k] = currentBets[k];
+        }
 
         if (totalWagered > 0) {
             const netPL = win - totalWagered;
@@ -1903,15 +2442,20 @@
         }
 
         const winScore = outcomeType==='banker' ? bS : outcomeType==='player' ? pS : Math.max(pS,bS);
-        addToRoads(outcomeType, beadClass, beadLabel, winScore);
+        addToRoads(outcomeType, beadClass, beadLabel, winScore, p, b, pS, bS);
 
         // Track extended stats
         stats.hands++;
-        if (totalWagered > 0) {
-            const netPL = win - totalWagered;
-            if (netPL > 0) { stats.betsWon++; stats.volWon += netPL; }
-            else if (netPL < 0) { stats.betsLost++; stats.volLost += Math.abs(netPL); }
+        const netPLThisHand = totalWagered > 0 ? win - totalWagered : undefined;
+        handHistory.push(netPLThisHand);
+        if (netPLThisHand !== undefined) {
+            if (netPLThisHand > 0) { stats.betsWon++; stats.volWon += netPLThisHand; }
+            else if (netPLThisHand < 0) { stats.betsLost++; stats.volLost += Math.abs(netPLThisHand); }
         }
+
+        // Refresh whichever inspector tab is open
+        if (activeInspectorTab === 'history') renderHistoryInspector();
+        else if (activeInspectorTab === 'stats') renderStatsInspector();
 
         // Build last-bet summary
         const lastBetParts = [];
@@ -1954,22 +2498,22 @@
         }
         const sign = netPL >= 0 ? '+' : '-';
         amountEl.textContent = `${sign}$${Math.abs(netPL).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-        detailEl.textContent = `${outcomeLabel}  •  Player ${pS} – Banker ${bS}`;
-        overlay.style.display = 'flex';
+        detailEl.textContent = `${outcomeLabel}  P${pS}–B${bS}`;
+        overlay.classList.add('visible');
         clearTimeout(window._resultTimer);
-        window._resultTimer = setTimeout(dismissResult, 2500);
+        window._resultTimer = setTimeout(dismissResult, 2000);
     }
 
     function dismissResult() {
         clearTimeout(window._resultTimer);
-        document.getElementById('result-overlay').style.display = 'none';
+        document.getElementById('result-overlay').classList.remove('visible');
     }
 
     // ══════════════════════════════════════════════════════════
     //  ROADS
     // ══════════════════════════════════════════════════════════
-    function addToRoads(outcomeType, beadClass, beadLabel, winScore) {
-        beadHistory.push({ cls: beadClass, label: beadLabel, score: winScore });
+    function addToRoads(outcomeType, beadClass, beadLabel, winScore, p, b, pS, bS) {
+        beadHistory.push({ cls: beadClass, label: beadLabel, score: winScore, p: p||[], b: b||[], pS: pS??null, bS: bS??null });
         if (outcomeType === 'tie') {
             if (bigRoadColumns.length > 0) {
                 const lastCol = bigRoadColumns[bigRoadColumns.length-1];
@@ -2153,12 +2697,300 @@
         if (wrap) wrap.scrollLeft = wrap.scrollWidth;
     }
 
+    // ══════════════════════════════════════════════════════════
+    //  LAYOUT CUSTOMISATION ENGINE
+    // ══════════════════════════════════════════════════════════
+    const LAYOUT_KEY = 'df_layout_order';
+
+    // All draggable slots in their default order
+    const SLOT_DEFS = [
+        { id: 'roads',      icon: '🎯', label: 'Scoreboards' },
+        { id: 'table',      icon: '🎰', label: 'Table + Controls' },
+        { id: 'financials', icon: '💰', label: 'Financials' },
+        { id: 'inspector',  icon: '🔍', label: 'Shoe Inspector' },
+        { id: 'coffee',     icon: '☕', label: 'Support' },
+    ];
+
+    function getLayoutOrder() {
+        try {
+            const saved = localStorage.getItem(LAYOUT_KEY);
+            if (saved) {
+                const order = JSON.parse(saved);
+                // Validate all known slots are present
+                if (SLOT_DEFS.every(s => order.includes(s.id))) return order;
+            }
+        } catch(e) {}
+        return SLOT_DEFS.map(s => s.id);
+    }
+
+    function saveLayoutOrder(order) {
+        localStorage.setItem(LAYOUT_KEY, JSON.stringify(order));
+    }
+
+    function applyLayoutOrder(order) {
+        const container = document.getElementById('game-container');
+        if (!container) return;
+        // Keep non-slot children (header) in place
+        const header = container.querySelector('.header-area');
+        // Remove all slots from DOM
+        const slots = {};
+        container.querySelectorAll('.layout-slot[data-slot]').forEach(el => {
+            slots[el.getAttribute('data-slot')] = el;
+            el.remove();
+        });
+        // Re-append in order after header
+        order.forEach(id => {
+            if (slots[id]) container.appendChild(slots[id]);
+        });
+    }
+
+    function applyLayout() {
+        const order = getCurrentPanelOrder();
+        saveLayoutOrder(order);
+        applyLayoutOrder(order);
+    }
+
+    function resetLayout() {
+        localStorage.removeItem(LAYOUT_KEY);
+        applyLayoutOrder(SLOT_DEFS.map(s => s.id));
+        buildLayoutPanel();
+    }
+
+    // ── Panel UI ──
+    let panelOrder = [];
+
+    function openLayoutPanel() {
+        panelOrder = getLayoutOrder();
+        buildLayoutPanel();
+        document.getElementById('layout-panel').style.display = 'block';
+    }
+
+    function closeLayoutPanel() {
+        document.getElementById('layout-panel').style.display = 'none';
+    }
+
+    function getCurrentPanelOrder() {
+        return [...document.querySelectorAll('#layout-list .layout-item')].map(el => el.getAttribute('data-slot-id'));
+    }
+
+    function buildLayoutPanel() {
+        const list = document.getElementById('layout-list');
+        list.innerHTML = '';
+        const order = panelOrder.length ? panelOrder : getLayoutOrder();
+        order.forEach((id, idx) => {
+            const def = SLOT_DEFS.find(s => s.id === id);
+            if (!def) return;
+            const item = document.createElement('div');
+            item.className = 'layout-item';
+            item.setAttribute('data-slot-id', id);
+            item.draggable = true;
+            item.innerHTML = `
+                <span class="li-icon">${def.icon}</span>
+                <span class="li-label">${def.label}</span>
+                <span class="li-arrows">
+                    <button onclick="movePanelItem('${id}',-1)" title="Move up">▲</button>
+                    <button onclick="movePanelItem('${id}',1)" title="Move down">▼</button>
+                </span>`;
+
+            // Drag events
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', id);
+                item.classList.add('li-dragging');
+            });
+            item.addEventListener('dragend', () => item.classList.remove('li-dragging'));
+            item.addEventListener('dragover', e => { e.preventDefault(); item.style.outline = '1px solid var(--gold)'; });
+            item.addEventListener('dragleave', () => item.style.outline = '');
+            item.addEventListener('drop', e => {
+                e.preventDefault();
+                item.style.outline = '';
+                const draggedId = e.dataTransfer.getData('text/plain');
+                if (draggedId === id) return;
+                const currentOrder = getCurrentPanelOrder();
+                const fromIdx = currentOrder.indexOf(draggedId);
+                const toIdx = currentOrder.indexOf(id);
+                currentOrder.splice(fromIdx, 1);
+                currentOrder.splice(toIdx, 0, draggedId);
+                panelOrder = currentOrder;
+                buildLayoutPanel();
+            });
+
+            // Touch drag (mobile)
+            let touchStartY = 0, touchItem = null;
+            item.addEventListener('touchstart', e => {
+                touchStartY = e.touches[0].clientY;
+                touchItem = id;
+                item.style.opacity = '0.5';
+            }, { passive: true });
+            item.addEventListener('touchend', e => {
+                item.style.opacity = '';
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dy) > 24) movePanelItem(touchItem, dy > 0 ? 1 : -1);
+            });
+
+            list.appendChild(item);
+        });
+    }
+
+    function movePanelItem(id, dir) {
+        const order = getCurrentPanelOrder();
+        const idx = order.indexOf(id);
+        const newIdx = idx + dir;
+        if (newIdx < 0 || newIdx >= order.length) return;
+        [order[idx], order[newIdx]] = [order[newIdx], order[idx]];
+        panelOrder = order;
+        buildLayoutPanel();
+    }
+
+    function initLayout() {
+        const order = getLayoutOrder();
+        applyLayoutOrder(order);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  INSPECTOR TABS
+    // ══════════════════════════════════════════════════════════
+    let activeInspectorTab = 'shoe';
+
+    function switchInspector(tab) {
+        activeInspectorTab = tab;
+        ['shoe','history','stats'].forEach(t => {
+            const panel = document.getElementById(`insp-${t}`);
+            const btn   = document.getElementById(`itab-${t}`);
+            if (panel) panel.style.display = t === tab ? '' : 'none';
+            if (btn)   btn.classList.toggle('active', t === tab);
+        });
+        if (tab === 'history') renderHistoryInspector();
+        if (tab === 'stats')   renderStatsInspector();
+    }
+
+    // History tab: card-deal history — shoe-inspector style, dealt order, color-coded
+    function renderHistoryInspector() {
+        const list = document.getElementById('history-list');
+        const ph   = document.getElementById('history-placeholder');
+        if (!list) return;
+        if (!beadHistory || beadHistory.length === 0) {
+            list.innerHTML = '';
+            if (ph) ph.style.display = 'block';
+            return;
+        }
+        if (ph) ph.style.display = 'none';
+
+        const fm = v => v===1?'A':v===11?'J':v===12?'Q':v===13?'K':String(v);
+
+        // Deal order: P1 B1 P2 B2 [P3] [B3]
+        const dealtOrder = (p, b) => {
+            const seq = [];
+            if (p[0] !== undefined) seq.push({ val: p[0], role: 'p' });
+            if (b[0] !== undefined) seq.push({ val: b[0], role: 'b' });
+            if (p[1] !== undefined) seq.push({ val: p[1], role: 'p' });
+            if (b[1] !== undefined) seq.push({ val: b[1], role: 'b' });
+            if (p[2] !== undefined) seq.push({ val: p[2], role: 'p', third: true });
+            if (b[2] !== undefined) seq.push({ val: b[2], role: 'b', third: true });
+            return seq;
+        };
+
+        list.innerHTML = [...beadHistory].reverse().map((h, ri) => {
+            const i   = beadHistory.length - 1 - ri;
+            const cls = h.cls || '';
+            const num = i + 1;
+            const p   = h.p || [];
+            const b   = h.b || [];
+            const pS  = h.pS ?? '?';
+            const bS  = h.bS ?? '?';
+
+            // Outcome identity
+            let rowCls, badge, accentColor;
+            if (cls.includes('dragon')) {
+                rowCls = 'hr-dragon'; badge = '🐉 D7';  accentColor = '#e67e22';
+            } else if (cls.includes('panda')) {
+                rowCls = 'hr-panda';  badge = '🐼 P8';  accentColor = '#9b59b6';
+            } else if (cls.includes('banker')) {
+                rowCls = 'hr-banker'; badge = 'BANK';   accentColor = '#c0392b';
+            } else if (cls.includes('player')) {
+                rowCls = 'hr-player'; badge = 'PLAY';   accentColor = '#2980b9';
+            } else if (cls.includes('tie')) {
+                rowCls = 'hr-tie';    badge = 'TIE';    accentColor = '#27ae60';
+            } else {
+                rowCls = 'hr-push';   badge = h.label || '?'; accentColor = '#888';
+            }
+
+            // P/L
+            const plEntry = handHistory[i];
+            const plHtml = plEntry !== undefined
+                ? `<span class="hr-pl" style="color:${plEntry>=0?'#7dff7d':'#ff9e9e'};">${plEntry>=0?'+':'\u2212'}$${Math.abs(plEntry).toFixed(0)}</span>`
+                : '';
+
+            // Cards in deal order with separating dot for 3rd card
+            const seq = dealtOrder(p, b);
+            const cardsHtml = seq.map((c, ci) => {
+                const thirdCls = c.third ? ' hcard-third' : '';
+                const lbl = fm(c.val);
+                const cardCls = c.role === 'p' ? 'hcard-p' : 'hcard-b';
+                return `<div class="hcard ${cardCls}${thirdCls}">${lbl}</div>`;
+            }).join('');
+
+            return `<div class="hr-row ${rowCls}">
+                <span class="hr-num">${num}</span>
+                <span class="hr-badge" style="border-left:2px solid ${accentColor};color:${accentColor};">${badge}</span>
+                <div class="hr-cards">${cardsHtml}</div>
+                <div class="hr-scores"><span class="hr-ps">${pS}</span><span class="hr-sep">:</span><span class="hr-bs">${bS}</span></div>
+                ${plHtml}
+            </div>`;
+        }).join('');
+    }
+
+    // Stats tab: bar chart of B/P/T/Dragon/Panda
+    function renderStatsInspector() {
+        const panel = document.getElementById('stats-chart-panel');
+        if (!panel) return;
+        const total = stats.hands || 1;
+        const dragon = beadHistory.filter(h => (h.cls||'').includes('dragon')).length;
+        const panda  = beadHistory.filter(h => (h.cls||'').includes('panda')).length;
+        const banker = stats.banker - dragon;
+        const player = stats.player - panda;
+
+        const rows = [
+            { label: 'BANKER', val: banker, color: '#c0392b', pct: banker/total },
+            { label: 'PLAYER', val: player, color: '#2980b9', pct: player/total },
+            { label: 'TIE',    val: stats.tie, color: '#27ae60', pct: stats.tie/total },
+            { label: 'DRAGON', val: dragon, color: '#e67e22', pct: dragon/total },
+            { label: 'PANDA',  val: panda,  color: '#8e44ad', pct: panda/total  },
+        ];
+
+        panel.innerHTML = rows.map(r => `
+            <div class="stats-bar-row">
+                <span class="stats-bar-label">${r.label}</span>
+                <div class="stats-bar-track">
+                    <div class="stats-bar-fill" style="width:${Math.round(r.pct*100)}%;background:${r.color};"></div>
+                </div>
+                <span class="stats-bar-val">${r.val}</span>
+                <span class="stats-bar-pct">${Math.round(r.pct*100)}%</span>
+            </div>`).join('')
+            + `<div style="margin-top:6px;font-size:0.62rem;color:rgba(255,255,255,0.3);text-align:center;">${total} hands · B:P ratio ${stats.player>0?(stats.banker/stats.player).toFixed(2):'—'}</div>`;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  LOGOUT
+    // ══════════════════════════════════════════════════════════
+    function logout() {
+        const inGame = document.getElementById('game-container').style.display !== 'none';
+        const msg = inGame
+            ? 'Log out? Your game will be saved and you can continue next time you log in.'
+            : 'Log out?';
+        if (!confirm(msg)) return;
+        if (inGame) saveGameState(); // persist before logging out
+        localStorage.removeItem('df_session');
+        // Keep email so login form pre-fills
+        document.getElementById('game-container').style.display = 'none';
+        document.getElementById('shoe-end-overlay').style.display = 'none';
+        showLoginOverlay();
+    }
+
     function toggleRoad(id) {
         const box = document.getElementById(id);
         if (box) box.classList.toggle('collapsed');
     }
 
-    // ══════════════════════════════════════════════════════════
     // ══════════════════════════════════════════════════════════
     function toggleShoeVisibility() {
         shoeVisible = !shoeVisible;
@@ -2357,6 +3189,7 @@
         if (loadGameState()) {
             hideSplash();
             restoreGameToScreen();
+            initLayout();
         } else {
             checkExistingSession();
         }
