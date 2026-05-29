@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-title" content="Dragonfly">
     <meta name="theme-color" content="#05140b">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
-    <title>Dragonfly v3.17</title>
+    <title>Dragonfly v3.42.3</title>
     <style>
         :root {
             --felt-green: #0a4d2c;
@@ -89,14 +89,14 @@
             max-width: 1400px;
             display: flex;
             flex-direction: column;
-            padding: 4px 8px;
+            padding: 4px 8px 28px 8px;
             gap: 4px;
             box-sizing: border-box;
         }
 
         .roads-section { display: flex; flex-direction: column; gap: 3px; width: 100%; }
         .road-row-top { display: grid; grid-template-columns: 1fr 2fr; gap: 3px; width: 100%; }
-        .road-row-derived { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+        .road-row-derived { display: flex; flex-direction: column; gap: 3px; width: 100%; } /* kept for compat */
 
         .road-box { background: rgba(0,0,0,0.4); border: 1.5px solid var(--gold); border-radius: 5px; padding: 3px 4px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; }
         .road-title { display: flex; justify-content: space-between; align-items: center; color: var(--gold); font-weight: bold; font-size: 0.6rem; letter-spacing: 1px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 2px; flex-shrink: 0; cursor: pointer; user-select: none; }
@@ -113,22 +113,24 @@
         .bead.panda-win { background: var(--panda-purple); border: 1px solid white; }
         .bead.dragon-win { background: var(--dragon-orange); color: black; border: 1px solid black; }
 
-        .big-road-wrap { overflow-x: auto; height: 72px; padding: 2px; box-sizing: border-box; position: relative; }
-        .bet-road-wrap { overflow-x: auto; height: 72px; padding: 2px; box-sizing: border-box; position: relative; }
-        .bet-road-grid { display: grid; grid-template-rows: repeat(6, 11px); grid-auto-flow: column; grid-auto-columns: 12px; gap: 1px; height: 68px; }
-        .br-bet-cell { width: 12px; height: 11px; display: flex; align-items: center; justify-content: center; }
-        .br-bet-circle { width: 9px; height: 9px; border-radius: 50%; box-sizing: border-box; position: relative; display: flex; align-items: center; justify-content: center; }
-        .br-bet-win    { background: #1a6b2a; border: 1px solid #2ecc71; }
-        .br-bet-loss   { background: #6b1a1a; border: 1px solid #e74c3c; }
-        .br-bet-push   { background: #3a3a3a; border: 1px solid #888; }
-        .br-bet-nobet  { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
-        .br-bet-circle .bet-amt { position:absolute; font-size:4px; color:rgba(255,255,255,0.7); white-space:nowrap; bottom:-6px; left:50%; transform:translateX(-50%); pointer-events:none; }
-        .big-road-grid { display: grid; grid-template-rows: repeat(6, 11px); grid-auto-flow: column; grid-auto-columns: 12px; gap: 1px; height: 68px; }
-        .br-cell { width: 12px; height: 11px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .br-circle { width: 9px; height: 9px; border-radius: 50%; border: 1px solid; box-sizing: border-box; }
-        .br-circle.banker { background: var(--banker-red); border-color: #6a0000; }
-        .br-circle.player { background: var(--player-blue); border-color: #0d3c7a; }
-        .br-circle.has-tie::after { content: ''; position: absolute; width: 1px; height: 7px; background: #1a8c22; top: 1px; left: 50%; transform: translateX(-50%); }
+        .big-road-wrap { overflow-x: auto; height: 78px; padding: 2px; box-sizing: border-box; position: relative; }
+        .bet-road-wrap { overflow-x: auto; height: 78px; padding: 2px; box-sizing: border-box; position: relative; }
+        .bet-road-grid { display: flex; flex-direction: row; align-items: flex-start; gap: 1px; min-height: 74px; }
+        .br-bet-cell { width: 14px; height: 12px; display: flex; align-items: center; justify-content: center; }
+        .br-bet-circle { width: 11px; height: 11px; border-radius: 50%; box-sizing: border-box; position: relative; display: flex; align-items: center; justify-content: center; font-size: 5px; font-weight: bold; color: rgba(255,255,255,0.8); }
+        .br-bet-win    { background: #1a7a30; border: 1.5px solid #2ecc71; }
+        .br-bet-loss   { background: #7a1a1a; border: 1.5px solid #e74c3c; }
+        .br-bet-push   { background: #2a2a2a; border: 1.5px solid #555; }
+        .br-bet-nobet  { background: #555; border-color: #888; }
+        .br-bet-tie    { background: rgba(26,140,34,0.15); border: 1px solid rgba(26,140,34,0.3); }
+        .big-road-grid { display: flex; flex-direction: row; align-items: flex-start; gap: 1px; min-height: 74px; }
+        .br-column { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+        .br-cell { width: 14px; height: 12px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .br-circle { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid; box-sizing: border-box; position: relative; overflow: visible; }
+        .br-circle.banker { background: #c0392b; border-color: #7a1a1a; }
+        .br-circle.player { background: #2471a3; border-color: #0d3c7a; }
+        .br-circle.dragon-win { background: #e67e22; border-color: #b45309; }
+        .br-circle.panda-win { background: #8e44ad; border-color: #5b2c6f; }
 
         @media (max-width: 768px) {
             .big-road-wrap { height: 78px; padding: 2px; }
@@ -166,20 +168,20 @@
             .road-row-derived { gap: 5px; }
         }
 
-        .derived-road-wrap { overflow-x: auto; height: 72px; padding: 2px; box-sizing: border-box; position: relative; }
-        .derived-road-grid { display: grid; grid-template-rows: repeat(6, 11px); grid-auto-flow: column; grid-auto-columns: 12px; gap: 1px; height: 68px; }
-        .road-inline-label { position: absolute; top: 4px; left: 5px; font-size: 0.5rem; color: rgba(212,175,55,0.5); font-weight: bold; letter-spacing: 0.5px; pointer-events: none; z-index: 2; }
-        .dr-cell { width: 13px; height: 12px; display: flex; align-items: center; justify-content: center; }
-        .dr-circle { width: 10px; height: 10px; border-radius: 50%; }
-        .dr-circle.rep { background: #e02020; }
-        .dr-circle.non { background: var(--player-blue); }
-        .dr-circle-sm { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid; background: transparent; box-sizing: border-box; }
-        .dr-circle-sm.rep { border-color: #e02020; }
-        .dr-circle-sm.non { border-color: var(--player-blue); }
+        .derived-road-wrap { overflow-x: auto; height: 74px; padding: 2px; box-sizing: border-box; position: relative; }
+        .derived-road-grid { display: grid; grid-template-rows: repeat(6, 11px); grid-auto-flow: column; grid-auto-columns: 13px; gap: 1px; height: 68px; }
+        .road-inline-label { position: absolute; bottom: 5px; left: 6px; font-size: 1.1rem; color: rgba(212,175,55,0.75); font-weight: bold; letter-spacing: 1px; pointer-events: none; z-index: 3; white-space: nowrap; }
+        .dr-cell { width: 12px; height: 11px; display: flex; align-items: center; justify-content: center; }
+        .dr-circle { width: 9px; height: 9px; border-radius: 50%; }
+        .dr-circle.rep { background: #c0392b; }
+        .dr-circle.non { background: #2471a3; }
+        .dr-circle-sm { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid; background: transparent; box-sizing: border-box; }
+        .dr-circle-sm.rep { border-color: #c0392b; }
+        .dr-circle-sm.non { border-color: #2471a3; }
         .dr-slash { width: 10px; height: 10px; position: relative; }
         .dr-slash::before { content: ''; position: absolute; width: 12px; height: 1.5px; border-radius: 1px; top: 4px; left: -1px; transform: rotate(-45deg); }
-        .dr-slash.rep::before { background: #e02020; }
-        .dr-slash.non::before { background: var(--player-blue); }
+        .dr-slash.rep::before { background: #c0392b; }
+        .dr-slash.non::before { background: #2471a3; }
 
         /* ── Dashboards ── */
         .top-dashboards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
@@ -574,8 +576,11 @@
         /* ── Copyright footer ── */
         .copyright-footer {
             text-align: center; font-size: 0.6rem; color: rgba(255,255,255,0.2);
-            padding: 8px 0 4px; letter-spacing: 0.5px; display: flex;
+            padding: 6px 0 4px; letter-spacing: 0.5px; display: flex;
             justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #050e07;
+            border-top: 1px solid rgba(212,175,55,0.08); z-index: 10;
         }
         .copyright-link { color: rgba(212,175,55,0.35); text-decoration: none; }
         .copyright-link:hover { color: var(--gold); }
@@ -618,7 +623,7 @@
     <div id="login-overlay" class="overlay" style="display:none;">
         <div class="setup-card">
             <button id="login-back-btn" onclick="loginBack()" style="display:none;position:absolute;top:12px;left:14px;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.5);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:0.68rem;">← Back to Game</button>
-            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY <span style="font-size:1rem;opacity:0.7;">v3.17</span></h2>
+            <h2 style="color:var(--gold);margin-bottom:20px;font-size:1.4rem;">DRAGONFLY <span style="font-size:1rem;opacity:0.7;">v3.42.3</span></h2>
             <div id="email-step">
                 <input type="text" id="user-email" placeholder="Email Address" autocomplete="off" onkeydown="if(event.key==='Enter') handleLogin()">
                 <label style="display:flex;align-items:center;gap:8px;margin:12px auto 0;width:90%;cursor:pointer;font-size:0.75rem;color:rgba(255,255,255,0.6);text-align:left;">
@@ -799,7 +804,7 @@
     <div class="game-content" id="game-container" style="display:none;">
 
         <div class="header-area">
-            <div class="header-title">DRAGONFLY <span style="font-size:0.85rem;vertical-align:middle;opacity:0.6;">v3.17</span></div>
+            <div class="header-title">DRAGONFLY <span style="font-size:0.85rem;vertical-align:middle;opacity:0.6;">v3.42.3</span></div>
             <div class="header-btns">
                 <button id="sound-toggle-btn" class="settings-btn" onclick="toggleSound()" title="Toggle Sound">🔊</button>
                 <button class="settings-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
@@ -808,62 +813,64 @@
                 <button id="btn-layout" class="settings-btn" onclick="openLayoutPanel()" title="Customise Layout">⊞</button>
                 <button class="settings-btn" onclick="openBtnCustomPanel()" title="Customise Buttons">🎛</button>
                 <button class="settings-btn" onclick="openSimulator()" title="Strategy Simulator" style="font-size:0.65rem;">🧪</button>
+                <button class="settings-btn" onclick="if(confirm('Clear all saved data and start fresh?')){localStorage.clear();location.reload();}" title="Clear saved data" style="font-size:0.65rem;">🗑</button>
                 <button class="settings-btn" onclick="newGame()" title="New Game" style="font-size:0.58rem;letter-spacing:0.3px;width:32px;border-radius:7px;">NEW</button>
                 <button class="settings-btn logout-btn" onclick="logout()" title="Log out" style="font-size:0.58rem;width:32px;border-radius:7px;">OUT</button>
             </div>
         </div>
 
-        <div class="layout-slot" data-slot="roads">
-        <div class="roads-section">
-
-            <!-- Bead + Big Road side by side -->
-            <div class="road-row-top">
-                <div class="road-box" id="rb-bead">
-                    <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-bead')">
-                        <div class="road-inline-label" id="rb-bead-lbl">BEAD 珠盘路</div>
-                        <div class="bead-plate" id="road-bead"></div>
-                    </div>
-                </div>
-                <div class="road-box" id="rb-big">
-                    <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-big')">
-                        <div class="road-inline-label" id="rb-big-lbl">BIG ROAD 大路</div>
-                        <div class="big-road-wrap"><div class="big-road-grid" id="road-big"></div></div>
-                    </div>
+        <!-- Bead + Big Road — own draggable slot -->
+        <div class="layout-slot" data-slot="road-bead">
+            <div class="road-box" id="rb-bead">
+                <div class="road-canvas-wrap" onclick="toggleRoad('rb-bead')" style="cursor:pointer;">
+                    <div class="road-inline-label" id="rb-bead-lbl">BEAD</div>
+                    <div class="bead-plate" id="road-bead"></div>
                 </div>
             </div>
+        </div><!-- /slot:road-bead -->
 
-            <!-- Betting Road — full width, mirrors Big Road -->
-            <div class="road-box" id="rb-betting" style="padding:2px;">
-                <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-betting')">
+        <div class="layout-slot" data-slot="road-big">
+            <div class="road-box" id="rb-big">
+                <div class="road-canvas-wrap" onclick="toggleRoad('rb-big')" style="cursor:pointer;">
+                    <div class="road-inline-label" id="rb-big-lbl">BIG ROAD</div>
+                    <div class="big-road-wrap"><div class="big-road-grid" id="road-big"></div></div>
+                </div>
+            </div>
+        </div><!-- /slot:road-big -->
+
+        <!-- Betting Road — own draggable slot -->
+        <div class="layout-slot" data-slot="road-betting">
+            <div class="road-box" id="rb-betting">
+                <div class="road-canvas-wrap" onclick="toggleRoad('rb-betting')" style="cursor:pointer;">
                     <div class="road-inline-label" id="rb-betting-lbl">BETTING ROAD</div>
                     <div class="bet-road-wrap"><div class="bet-road-grid" id="road-betting"></div></div>
-                </div>
             </div>
+        </div><!-- /slot:road-betting -->
 
-            <!-- Derived roads — each full width, 6 rows deep, stacking columns -->
-            <div class="road-row-derived">
-                <div class="road-box" id="rb-beb" style="padding:2px;">
-                    <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-beb')">
-                        <div class="road-inline-label" id="rb-beb-lbl">BIG EYE BOY 大眼仔</div>
-                        <div class="derived-road-wrap"><div class="derived-road-grid" id="road-beb"></div></div>
-                    </div>
-                </div>
-                <div class="road-box" id="rb-small" style="padding:2px;">
-                    <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-small')">
-                        <div class="road-inline-label" id="rb-small-lbl">SMALL ROAD 小路</div>
+        <!-- Big Eye Boy — own draggable slot -->
+        <div class="layout-slot" data-slot="road-beb">
+            <div class="road-box" id="rb-beb">
+                <div class="road-canvas-wrap" onclick="toggleRoad('rb-beb')" style="cursor:pointer;">
+                    <div class="road-inline-label" id="rb-beb-lbl">BIG EYE BOY</div>
+                    <div class="derived-road-wrap"><div class="derived-road-grid" id="road-beb"></div></div>
+            </div>
+        </div><!-- /slot:road-beb -->
+
+        <!-- Small Road + Cockroach Pig — own draggable slot -->
+        <div class="layout-slot" data-slot="road-derived">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
+                <div class="road-box" id="rb-small">
+                    <div class="road-canvas-wrap" onclick="toggleRoad('rb-small')" style="cursor:pointer;">
+                        <div class="road-inline-label" id="rb-small-lbl">SMALL ROAD</div>
                         <div class="derived-road-wrap"><div class="derived-road-grid" id="road-small"></div></div>
-                    </div>
                 </div>
-                <div class="road-box" id="rb-cock" style="padding:2px;">
-                    <div class="road-canvas-wrap" style="cursor:pointer;" onclick="toggleRoad('rb-cock')">
-                        <div class="road-inline-label" id="rb-cock-lbl">COCKROACH PIG 曱甴路</div>
+                <div class="road-box" id="rb-cock">
+                    <div class="road-canvas-wrap" onclick="toggleRoad('rb-cock')" style="cursor:pointer;">
+                        <div class="road-inline-label" id="rb-cock-lbl">COCKROACH PIG</div>
                         <div class="derived-road-wrap"><div class="derived-road-grid" id="road-cock"></div></div>
-                    </div>
                 </div>
             </div>
-
-        </div>
-        </div><!-- /slot:roads -->
+        </div><!-- /slot:road-derived -->
 
         <div class="layout-slot" data-slot="table">
         <div class="casino-banner" id="casino-banner"></div>
@@ -1564,8 +1571,8 @@
             // Shoe inspector
             shoeInspector:'SHOE INSPECTOR', inspectorStandby:'Inspector Engine Standby',
             // Roads
-            beadRoad:'🔵 BEAD', bigRoad:'🔴 BIG ROAD', bigEyeBoy:'👁 BIG EYE BOY',
-            smallRoad:'📍 SMALL ROAD', cockroach:'🪳 COCKROACH PIG',
+            beadRoad:'BEAD', bigRoad:'BIG ROAD', bigEyeBoy:'BIG EYE BOY',
+            smallRoad:'SMALL ROAD', cockroach:'COCKROACH PIG',
         },
         zh: {
             casinoMode:'赌场模式', initialBankroll:'初始筹码:', shoeSize:'牌靴大小:',
@@ -1579,8 +1586,8 @@
             betsWon:'赢注:', betsLost:'输注:', volWon:'赢额:',
             volLost:'输额:', lastBet:'上注:', cardsLeft:'余牌:',
             shoeInspector:'牌靴检视', inspectorStandby:'检视引擎待机',
-            beadRoad:'🔵 珠盘路', bigRoad:'🔴 大路', bigEyeBoy:'👁 大眼仔',
-            smallRoad:'📍 小路', cockroach:'🪳 甴曱路',
+            beadRoad:'珠盘路', bigRoad:'大路', bigEyeBoy:'大眼仔',
+            smallRoad:'小路', cockroach:'甴曱路',
         },
         ja: {
             casinoMode:'カジノモード', initialBankroll:'初期残高:', shoeSize:'シューサイズ:',
@@ -1594,8 +1601,8 @@
             betsWon:'勝ち数:', betsLost:'負け数:', volWon:'獲得額:',
             volLost:'損失額:', lastBet:'前ベット:', cardsLeft:'残りカード:',
             shoeInspector:'シュー検査', inspectorStandby:'検査エンジン待機中',
-            beadRoad:'🔵 ビーズ', bigRoad:'🔴 ビッグロード', bigEyeBoy:'👁 ビッグアイ',
-            smallRoad:'📍 スモールロード', cockroach:'🪳 コックローチ',
+            beadRoad:'ビーズ', bigRoad:'ビッグロード', bigEyeBoy:'ビッグアイ',
+            smallRoad:'スモールロード', cockroach:'コックローチ',
         },
         ko: {
             casinoMode:'카지노 모드', initialBankroll:'초기 자금:', shoeSize:'슈 크기:',
@@ -1609,8 +1616,8 @@
             betsWon:'승리 배팅:', betsLost:'패배 배팅:', volWon:'수익:',
             volLost:'손실:', lastBet:'마지막 배팅:', cardsLeft:'남은 카드:',
             shoeInspector:'슈 검사기', inspectorStandby:'검사 엔진 대기 중',
-            beadRoad:'🔵 비드로드', bigRoad:'🔴 빅로드', bigEyeBoy:'👁 빅아이보이',
-            smallRoad:'📍 스몰로드', cockroach:'🪳 바퀴벌레',
+            beadRoad:'비드로드', bigRoad:'빅로드', bigEyeBoy:'빅아이보이',
+            smallRoad:'스몰로드', cockroach:'바퀴벌레',
         },
         pt: {
             casinoMode:'MODO CASSINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamanho do Sapatilha:',
@@ -1624,8 +1631,8 @@
             betsWon:'APOSTAS GANHAS:', betsLost:'APOSTAS PERDIDAS:', volWon:'VOL GANHO:',
             volLost:'VOL PERDIDO:', lastBet:'ÚLTIMA APOSTA:', cardsLeft:'CARTAS REST.:',
             shoeInspector:'INSPETOR DE SAPATILHA', inspectorStandby:'Motor em Espera',
-            beadRoad:'🔵 CONTAS', bigRoad:'🔴 ESTRADA GRANDE', bigEyeBoy:'👁 OLHO GRANDE',
-            smallRoad:'📍 ESTRADA PEQUENA', cockroach:'🪳 BARATA',
+            beadRoad:'CONTAS', bigRoad:'ESTRADA GRANDE', bigEyeBoy:'OLHO GRANDE',
+            smallRoad:'ESTRADA PEQUENA', cockroach:'BARATA',
         },
         es: {
             casinoMode:'MODO CASINO', initialBankroll:'Banca Inicial:', shoeSize:'Tamaño del Zapato:',
@@ -1728,7 +1735,7 @@
         buildSideBetZones();
         applyCasinoTheme();
         initShoe();
-        beadHistory = []; handHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        beadHistory = []; handHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null; resetDerivedState();
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
         shoeEnded = false;
@@ -1749,7 +1756,7 @@
         currentBets = {}; lastBets = {};
         stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
         shoe = []; shoeFullCopy = []; shoeEnded = false;
-        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null; resetDerivedState();
         bebEntries = []; smallEntries = []; cockEntries = [];
         document.getElementById('game-container').style.display = 'none';
         document.getElementById('shoe-end-overlay').style.display = 'none';
@@ -1841,7 +1848,7 @@
     function startNewShoe() {
         // Keep bankroll, reset shoe and road data only
         shoeEnded = false;
-        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        beadHistory = []; bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null; resetDerivedState();
         bebEntries = []; smallEntries = []; cockEntries = [];
         stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
         initShoe();
@@ -1920,45 +1927,15 @@
 
         // Rebuild road data from saved results array
         beadHistory = [];
-        bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null; resetDerivedState();
         bebEntries = []; smallEntries = []; cockEntries = [];
 
         (s.results || []).forEach(r => {
-            // Map saved outcome label to outcomeType
             const cls = r.outcome || r.cls || '';
-            const label = r.label || '';
-            const score = r.score;
-            const p = r.p || [];
-            const b = r.b || [];
-            const pS = r.pS ?? null;
-            const bS = r.bS ?? null;
-            let outcomeType = cls.includes('banker') || cls.includes('dragon') ? 'banker'
-                           : cls.includes('player') || cls.includes('panda')  ? 'player'
-                           : 'tie';
-            beadHistory.push({ cls, label, score, p, b, pS, bS });
+            beadHistory.push({ cls, label: r.label||'', score: r.score, p: r.p||[], b: r.b||[], pS: r.pS??null, bS: r.bS??null });
             handHistory.push(r.pl);
-            if (outcomeType === 'tie') {
-                if (bigRoadColumns.length > 0) {
-                    const lc = bigRoadColumns[bigRoadColumns.length-1];
-                    if (lc.length > 0) lc[lc.length-1].tieCount++;
-                }
-            } else {
-                const isNewType = bigRoadLastNonTie !== outcomeType;
-                if (bigRoadColumns.length === 0 || isNewType) {
-                    bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: bigRoadColumns.length, row: 0 }]);
-                } else {
-                    const lastCol = bigRoadColumns[bigRoadColumns.length-1];
-                    const lastEntry = lastCol[lastCol.length-1];
-                    if (lastEntry.row < 5) {
-                        lastCol.push({ type: outcomeType, tieCount: 0, col: lastEntry.col, row: lastEntry.row + 1 });
-                    } else {
-                        bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: lastEntry.col + 1, row: 5, dragonTail: true }]);
-                    }
-                }
-                bigRoadLastNonTie = outcomeType;
-                computeDerivedRoads(outcomeType);
-            }
         });
+        rebuildBigRoad();
 
         // Populate shoe-end summary from loaded data
         const pl = s.sessionPL;
@@ -2026,44 +2003,15 @@
 
         // ── Rebuild road history ──
         beadHistory = [];
-        bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null;
+        bigRoadColumns = []; bigRoadCurrentCol = 0; bigRoadLastNonTie = null; resetDerivedState();
         bebEntries = []; smallEntries = []; cockEntries = [];
 
         (s.results || []).forEach(r => {
             const cls = r.outcome || r.cls || '';
-            const label = r.label || '';
-            const score = r.score;
-            const p = r.p || [];
-            const b = r.b || [];
-            const pS = r.pS ?? null;
-            const bS = r.bS ?? null;
-            let outcomeType = cls.includes('banker') || cls.includes('dragon') ? 'banker'
-                           : cls.includes('player') || cls.includes('panda')  ? 'player'
-                           : 'tie';
-            beadHistory.push({ cls, label, score, p, b, pS, bS });
+            beadHistory.push({ cls, label: r.label||'', score: r.score, p: r.p||[], b: r.b||[], pS: r.pS??null, bS: r.bS??null });
             handHistory.push(r.pl);
-            if (outcomeType === 'tie') {
-                if (bigRoadColumns.length > 0) {
-                    const lc = bigRoadColumns[bigRoadColumns.length-1];
-                    if (lc.length > 0) lc[lc.length-1].tieCount++;
-                }
-            } else {
-                const isNewType = bigRoadLastNonTie !== outcomeType;
-                if (bigRoadColumns.length === 0 || isNewType) {
-                    bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: bigRoadColumns.length, row: 0 }]);
-                } else {
-                    const lastCol = bigRoadColumns[bigRoadColumns.length-1];
-                    const lastEntry = lastCol[lastCol.length-1];
-                    if (lastEntry.row < 5) {
-                        lastCol.push({ type: outcomeType, tieCount: 0, col: lastEntry.col, row: lastEntry.row + 1 });
-                    } else {
-                        bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: lastEntry.col + 1, row: 5, dragonTail: true }]);
-                    }
-                }
-                bigRoadLastNonTie = outcomeType;
-                computeDerivedRoads(outcomeType);
-            }
         });
+        rebuildBigRoad();
 
         // ── Restore shoe if mid-session save, otherwise deal fresh shoe ──
         shoeEnded = false;
@@ -2155,11 +2103,13 @@
             const state = {
                 bankroll, initialBankroll, totalDeposits, shoeSize, betMode,
                 currentBets, lastBets, stats,
-                shoe, beadHistory, bigRoadColumns,
+                shoe, shoeFullCopy, shoeEnded,
+                beadHistory, handHistory,
                 bigRoadCurrentCol, bigRoadLastNonTie,
                 bebEntries, smallEntries, cockEntries,
                 casinoId: selectedCasino.id,
                 lastBetSummary,
+                soundEnabled,
                 ts: Date.now()
             };
             localStorage.setItem(SAVE_KEY, JSON.stringify(state));
@@ -2182,11 +2132,18 @@
             lastBets = s.lastBets || {};
             stats = s.stats || { banker:0, player:0, tie:0 };
             shoe = s.shoe || [];
+            shoeFullCopy = s.shoeFullCopy || (s.shoe ? [...s.shoe] : []);
+            shoeEnded = s.shoeEnded || false;
             beadHistory = s.beadHistory || [];
             handHistory = s.handHistory || new Array(beadHistory.length).fill(undefined);
-            bigRoadColumns = s.bigRoadColumns || [];
+            bigRoadColumns = []; // will be rebuilt from beadHistory
             bigRoadCurrentCol = s.bigRoadCurrentCol || 0;
             bigRoadLastNonTie = s.bigRoadLastNonTie || null;
+            if (s.soundEnabled !== undefined) {
+                soundEnabled = s.soundEnabled;
+                const btn = document.getElementById('sound-toggle-btn');
+                if (btn) btn.textContent = soundEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07';
+            }
             bebEntries = s.bebEntries || [];
             smallEntries = s.smallEntries || [];
             cockEntries = s.cockEntries || [];
@@ -2426,7 +2383,9 @@
     //  SOUND ENGINE
     // ══════════════════════════════════════════════════════════
     let _actx = null;
-    let soundEnabled = true;
+    let soundEnabled = (function() {
+        try { const v = localStorage.getItem('df_sound'); return v === null ? true : v === '1'; } catch(e) { return true; }
+    })();
 
     function getACtx() {
         if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2504,6 +2463,7 @@
         soundEnabled = !soundEnabled;
         const btn = document.getElementById('sound-toggle-btn');
         if (btn) btn.textContent = soundEnabled ? '🔊' : '🔇';
+        try { localStorage.setItem('df_sound', soundEnabled ? '1' : '0'); } catch(e) {}
         if (soundEnabled) sfxChip();
     }
 
@@ -2857,32 +2817,197 @@
     // ══════════════════════════════════════════════════════════
     //  ROADS
     // ══════════════════════════════════════════════════════════
+    // ── Big Road column helper — always gets max col + 1 to avoid collisions ──
+    // Rebuild bigRoadColumns from scratch from beadHistory
+    // This is the ONLY way to guarantee correct column structure
+    // Compute the display grid from bigRoadColumns
+    // Returns { grid, maxCol, orderedEntries }
+    // grid[displayCol][displayRow] = entry
+    // orderedEntries = entries in display order (for betting road mapping)
+    function computeBigRoadGrid() {
+        const grid = {};
+        const orderedEntries = []; // in display order
+        let displayCol = 0, displayRow = 0;
+        let lastType = null;
+        let maxCol = 0;
+
+        bigRoadColumns.forEach((colEntries) => {
+            colEntries.forEach((entry, idx) => {
+                const isFirstInSegment = idx === 0;
+                if (isFirstInSegment) {
+                    if (lastType === null) {
+                        displayCol = 0; displayRow = 0;
+                    } else if (entry.dragonTail) {
+                        displayCol++;
+                        // displayRow stays same (row 5)
+                    } else {
+                        displayCol++;
+                        displayRow = 0;
+                    }
+                    lastType = entry.type;
+                } else {
+                    if (displayRow < 5) {
+                        displayRow++;
+                    } else {
+                        displayCol++;
+                    }
+                }
+                const placed = { ...entry, _dc: displayCol, _dr: displayRow };
+                if (!grid[displayCol]) grid[displayCol] = {};
+                grid[displayCol][displayRow] = placed;
+                orderedEntries.push(placed);
+                if (displayCol > maxCol) maxCol = displayCol;
+            });
+        });
+
+        return { grid, maxCol, orderedEntries };
+    }
+
+    function rebuildBigRoad() {
+        bigRoadColumns = [];
+        bigRoadLastNonTie = null;
+        resetDerivedState();
+
+        for (let i = 0; i < beadHistory.length; i++) {
+            const h = beadHistory[i];
+            const cls = h.cls || '';
+            let outcomeType;
+            if (cls.includes('tie')) {
+                outcomeType = 'tie';
+            } else if (cls.includes('banker') || cls.includes('dragon')) {
+                outcomeType = 'banker';
+            } else if (cls.includes('player') || cls.includes('panda')) {
+                outcomeType = 'player';
+            } else {
+                continue;
+            }
+
+            if (outcomeType === 'tie') {
+                if (bigRoadColumns.length > 0) {
+                    const lc = bigRoadColumns[bigRoadColumns.length - 1];
+                    if (lc.length > 0) lc[lc.length - 1].tieCount++;
+                }
+            } else {
+                pushBigRoadEntry(outcomeType);
+            }
+        }
+    }
+
+    // ── Big Road grid builder — exact algorithm from validated reference ──
+    function buildBigRoadGrid(history) {
+        // grid[row][col] = { type, tieCount }  (row-major like the reference)
+        const totalRows = 6;
+        const grid = Array(totalRows).fill(null).map(() => []);
+        let lastNonTie = null;
+        let curR = 0, curC = 0;
+        let activeCellCoords = null;
+        let maxCol = 0;
+
+        for (const h of history) {
+            const cls = h.cls || '';
+            let type;
+            if      (cls.includes('tie'))                             type = 'tie';
+            else if (cls.includes('banker')||cls.includes('dragon'))  type = 'banker';
+            else if (cls.includes('player')||cls.includes('panda'))   type = 'player';
+            else continue;
+
+            if (type === 'tie') {
+                // Stack tie on last placed cell
+                if (activeCellCoords) {
+                    const cell = grid[activeCellCoords.r][activeCellCoords.c];
+                    if (cell) cell.tieCount++;
+                }
+                continue;
+            }
+
+            if (lastNonTie === null) {
+                // First hand ever
+                grid[0][0] = { type, tieCount: 0 };
+                curR = 0; curC = 0;
+                activeCellCoords = { r: 0, c: 0 };
+
+            } else if (type === lastNonTie) {
+                // Same streak — try to go DOWN
+                let nextR = curR + 1;
+                let nextC = curC;
+
+                // If bottom hit OR cell blocked → dragon tail RIGHT at same row
+                if (nextR >= totalRows || grid[nextR][nextC]) {
+                    nextR = curR;
+                    nextC = curC + 1;
+                }
+
+                // Scan right until empty
+                while (grid[nextR][nextC]) nextC++;
+
+                grid[nextR][nextC] = { type, tieCount: 0 };
+                curR = nextR; curC = nextC;
+                activeCellCoords = { r: curR, c: curC };
+
+            } else {
+                // New streak — row 0 of first completely empty column
+                let targetCol = 0;
+                while (grid[0][targetCol]) targetCol++;
+                grid[0][targetCol] = { type, tieCount: 0 };
+                curR = 0; curC = targetCol;
+                activeCellCoords = { r: 0, c: targetCol };
+            }
+
+            if (curC > maxCol) maxCol = curC;
+            lastNonTie = type;
+        }
+
+        // Convert row-major grid to col-major for rendering { grid[col][row] }
+        const cgrid = {};
+        for (let r = 0; r < totalRows; r++) {
+            for (let c = 0; c < grid[r].length; c++) {
+                if (grid[r][c]) {
+                    if (!cgrid[c]) cgrid[c] = {};
+                    cgrid[c][r] = grid[r][c];
+                }
+            }
+        }
+
+        return { grid: cgrid, maxCol };
+    }
+
+    function pushBigRoadEntry(outcomeType) {
+        // Keep bigRoadColumns for derived road compatibility
+        const isNewType = bigRoadLastNonTie !== outcomeType;
+        const action = isNewType ? 'col' : 'row';
+
+        if (bigRoadColumns.length === 0 || isNewType) {
+            bigRoadColumns.push([{ type: outcomeType, tieCount: 0 }]);
+        } else {
+            const lastSeg = bigRoadColumns[bigRoadColumns.length - 1];
+            if (lastSeg[0].type !== outcomeType) {
+                bigRoadColumns.push([{ type: outcomeType, tieCount: 0 }]);
+            } else {
+                lastSeg.push({ type: outcomeType, tieCount: 0 });
+                // Mark dragon tail on the segment if we're past row 5
+                if (lastSeg.length > 6) {
+                    bigRoadColumns.push([{ type: outcomeType, tieCount: 0, dragonTail: true }]);
+                    bigRoadColumns[bigRoadColumns.length - 2].pop();
+                }
+            }
+        }
+        bigRoadLastNonTie = outcomeType;
+        computeDerivedRoads(action);
+    }
+
     function addToRoads(outcomeType, beadClass, beadLabel, winScore, p, b, pS, bS) {
         beadHistory.push({ cls: beadClass, label: beadLabel, score: winScore, p: p||[], b: b||[], pS: pS??null, bS: bS??null });
         if (outcomeType === 'tie') {
+            // Ties add green line to last Big Road entry but skip derived roads
             if (bigRoadColumns.length > 0) {
                 const lastCol = bigRoadColumns[bigRoadColumns.length-1];
                 if (lastCol.length > 0) lastCol[lastCol.length-1].tieCount++;
             }
         } else {
             const isNewType = bigRoadLastNonTie !== outcomeType;
-            if (bigRoadColumns.length === 0 || isNewType) {
-                // New streak: start a new column at row 0
-                bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: bigRoadColumns.length, row: 0 }]);
-            } else {
-                // Same streak: continue downward, or dragon-tail right if at row 6
-                const lastCol = bigRoadColumns[bigRoadColumns.length-1];
-                const lastEntry = lastCol[lastCol.length-1];
-                if (lastEntry.row < 5) {
-                    // Normal: go down in same column
-                    lastCol.push({ type: outcomeType, tieCount: 0, col: lastEntry.col, row: lastEntry.row + 1 });
-                } else {
-                    // Dragon tail: go right at row 5
-                    bigRoadColumns.push([{ type: outcomeType, tieCount: 0, col: lastEntry.col + 1, row: 5, dragonTail: true }]);
-                }
-            }
-            bigRoadLastNonTie = outcomeType;
-            computeDerivedRoads(outcomeType);
+            let action;
+            pushBigRoadEntry(outcomeType);
+            // action is set inside pushBigRoadEntry via computeDerivedRoads
         }
         renderAllRoads();
     }
@@ -2890,51 +3015,123 @@
     // Build logical streak columns: each streak is one logical column
     // bigRoadColumns array entries with dragonTail=true are continuations of the same streak
     function getLogicalStreakCols() {
-        const streakCols = []; // each item = array of entries in that streak
+        // Each entry in bigRoadColumns is either a new streak (non-dragonTail first entry)
+        // or a dragon tail (continuation of same streak).
+        // Group them: each NEW non-dragonTail bigRoadColumns entry starts a new logical streak.
+        const streakCols = [];
         bigRoadColumns.forEach(col => {
-            col.forEach(entry => {
-                if (entry.row === 0 && !entry.dragonTail) {
-                    streakCols.push([entry]);
-                } else {
-                    if (streakCols.length > 0) {
-                        streakCols[streakCols.length - 1].push(entry);
-                    }
+            const firstEntry = col[0];
+            if (!firstEntry.dragonTail) {
+                // New logical streak
+                streakCols.push([...col]);
+            } else {
+                // Dragon tail — append to last streak
+                if (streakCols.length > 0) {
+                    streakCols[streakCols.length - 1].push(...col);
                 }
-            });
+            }
         });
         return streakCols;
     }
 
-    function computeDerivedRoads(outcomeType) {
-        const logicalCols = getLogicalStreakCols();
-        const colIdx = logicalCols.length - 1;
-        const rowIdx = logicalCols[colIdx].length - 1;
-        derivedEntry(logicalCols, colIdx, rowIdx, 1, bebEntries);
-        derivedEntry(logicalCols, colIdx, rowIdx, 2, smallEntries);
-        derivedEntry(logicalCols, colIdx, rowIdx, 3, cockEntries);
+    // ── Derived Road Algorithm (full rebuild on every render) ──
+    // n=1: Big Eye Boy  (starts col 1 row 1, or col 2 row 0)
+    // n=2: Small Road   (starts col 2 row 1, or col 3 row 0)
+    // n=3: Cockroach    (starts col 3 row 1, or col 4 row 0)
+    // Red = repetitive/trend, Blue = choppy
+    // Matches reference implementations exactly.
+    // ──────────────────────────────────────────────────────────
+
+    function resetDerivedState() {
+        bebEntries   = [];
+        smallEntries = [];
+        cockEntries  = [];
     }
 
-    function derivedEntry(cols, colIdx, rowIdx, lookback, entries) {
-        const refColIdx = colIdx - lookback;
-        if (rowIdx === 0) {
-            if (refColIdx < 0) return;
-            const leftLen = (colIdx - 1 >= 0) ? cols[colIdx-1].length : 0;
-            const refLen  = (refColIdx >= 0)   ? cols[refColIdx].length : 0;
-            entries.push({ rep: leftLen === refLen });
-        } else {
-            if (refColIdx < 0) {
-                if (colIdx === 0 && rowIdx === lookback) entries.push({ rep: false });
-                return;
-            }
-            const refHasCell = refColIdx >= 0 && cols[refColIdx].length > (rowIdx - 1);
-            entries.push({ rep: refHasCell });
-        }
+    // Build flat colour list for derived road with offset n, from current bigRoadColumns
+    function buildDerivedColors(n) {
+        const streakCols = getLogicalStreakCols();
+        // logicalMatrix[colIdx][rowIdx] = truthy if cell exists
+        const logicalMatrix = streakCols.map(col => col.map(() => true));
+        const columnLengths = streakCols.map(col => col.length);
+        const colors = [];
+
+        streakCols.forEach((col, colIdx) => {
+            col.forEach((_, rowIdx) => {
+                if (colIdx < n) return;                          // not enough columns yet
+                if (colIdx === n && rowIdx === 0) return;        // first trigger is row 1 of col n
+
+                let rep;
+                if (rowIdx === 0) {
+                    // New column trigger: compare length of col-1 vs col-(n+1)
+                    const prevLen = columnLengths[colIdx - 1]     || 0;
+                    const refLen  = columnLengths[colIdx - 1 - n] || 0;
+                    rep = (prevLen === refLen);
+                } else if (colIdx === n && rowIdx === 1) {
+                    // Special first-ever entry: col[n] has 2 entries now, compare col[0] length
+                    rep = ((columnLengths[0] || 0) === columnLengths[colIdx] - 1);
+                } else {
+                    // Row > 0: look up cell [colIdx-n][rowIdx] and [colIdx-n][rowIdx-1]
+                    const targetCol = logicalMatrix[colIdx - n] || [];
+                    const curr = targetCol[rowIdx]     != null;
+                    const prev = targetCol[rowIdx - 1] != null;
+                    rep = (curr === prev);
+                }
+                colors.push(rep);
+            });
+        });
+
+        return colors;
     }
+
+    // Convert flat colour list into {rep, col, row} entries using Big-Road stacking
+    function colorsToEntries(colors) {
+        const ROWS = 6;
+        const entries = [];
+        const occupied = {}; // occupied[c][r] = true
+        let lastColor = null;
+        let curCol = 0, curRow = 0;
+
+        colors.forEach(rep => {
+            let tc, tr;
+            if (lastColor === null) {
+                tc = 0; tr = 0;
+            } else if (rep === lastColor) {
+                let nc = curCol, nr = curRow + 1;
+                if (nr >= ROWS || (occupied[nc] && occupied[nc][nr])) {
+                    nc = curCol + 1; nr = curRow;
+                    while (occupied[nc] && occupied[nc][nr]) nc++;
+                }
+                tc = nc; tr = nr;
+            } else {
+                tc = 0;
+                while (occupied[tc] && occupied[tc][0]) tc++;
+                tr = 0;
+            }
+            if (!occupied[tc]) occupied[tc] = {};
+            occupied[tc][tr] = true;
+            curCol = tc; curRow = tr;
+            lastColor = rep;
+            entries.push({ rep, col: tc, row: tr });
+        });
+
+        return entries;
+    }
+
+    function rebuildAllDerivedEntries() {
+        bebEntries   = colorsToEntries(buildDerivedColors(1));
+        smallEntries = colorsToEntries(buildDerivedColors(2));
+        cockEntries  = colorsToEntries(buildDerivedColors(3));
+    }
+
+    // Called by pushBigRoadEntry — full rebuild happens in renderAllRoads
+    function computeDerivedRoads(action) { /* no-op: rebuilt each render */ }
 
     function renderAllRoads() {
         renderBeadPlate();
         renderBigRoad();
         renderBettingRoad();
+        rebuildAllDerivedEntries();
         renderDerivedRoad('road-beb', bebEntries, 'circle');
         renderDerivedRoad('road-small', smallEntries, 'hollow');
         renderDerivedRoad('road-cock', cockEntries, 'slash');
@@ -2959,166 +3156,185 @@
     function renderBigRoad() {
         const container = document.getElementById('road-big');
         container.innerHTML = '';
+        if (!beadHistory || beadHistory.length === 0) return;
 
-        // Build a 2D map of col -> row -> entry using the explicit col/row stored on each entry
-        // For dragon tail entries, they share the same row (5) but have incrementing col values
-        const ROWS = 6;
-        let maxCol = 0;
+        const { grid, maxCol } = buildBigRoadGrid(beadHistory);
+        if (maxCol < 0) return;
 
-        // Flatten all entries and find the rightmost column
-        const allEntries = [];
-        bigRoadColumns.forEach(col => {
-            col.forEach(entry => {
-                allEntries.push(entry);
-                if (entry.col > maxCol) maxCol = entry.col;
-            });
-        });
+        const fm = {1:'A',11:'J',12:'Q',13:'K'};
 
-        const totalCols = maxCol + 1;
-        // Create a sparse grid: grid[col][row] = entry
-        const grid = {};
-        allEntries.forEach(entry => {
-            if (!grid[entry.col]) grid[entry.col] = {};
-            grid[entry.col][entry.row] = entry;
-        });
+        // Build ordered entries for betting road mapping (non-tie, in grid order)
+        const orderedEntries = [];
+        for (let c = 0; c <= maxCol; c++) {
+            if (!grid[c]) continue;
+            for (let r = 0; r < 6; r++) {
+                if (grid[c][r]) orderedEntries.push({ ...grid[c][r], _dc: c, _dr: r });
+            }
+        }
+        window._bigRoadOrderedEntries = orderedEntries;
 
         // Render column by column
-        for (let c = 0; c < totalCols; c++) {
-            for (let r = 0; r < ROWS; r++) {
-                const cell = document.createElement('div');
-                cell.className = 'br-cell';
+        for (let c = 0; c <= maxCol; c++) {
+            const colEl = document.createElement('div');
+            colEl.className = 'br-column';
+
+            for (let r = 0; r < 6; r++) {
+                const cellEl = document.createElement('div');
+                cellEl.className = 'br-cell';
+
                 const entry = grid[c] && grid[c][r];
                 if (entry) {
                     const circle = document.createElement('div');
                     circle.className = `br-circle ${entry.type}`;
                     circle.style.position = 'relative';
-                    if (entry.tieCount > 0) {
-                        circle.classList.add('has-tie');
-                        const tieLine = document.createElement('div');
-                        tieLine.style.cssText = 'position:absolute;width:2px;height:11px;background:#1a8c22;top:0;left:50%;transform:translateX(-50%);border-radius:1px;';
-                        circle.appendChild(tieLine);
+
+                    // Score: find matching bead entry
+                    let nonTieIdx = 0;
+                    const entryIdx = orderedEntries.findIndex(e => e._dc === c && e._dr === r);
+                    for (let bi = 0; bi < beadHistory.length; bi++) {
+                        if ((beadHistory[bi].cls||'').includes('tie')) continue;
+                        if (nonTieIdx === entryIdx) {
+                            const h = beadHistory[bi];
+                            if (h.pS !== null && h.bS !== null) {
+                                const score = entry.type === 'banker' ? h.bS : h.pS;
+                                circle.textContent = score;
+                                circle.style.cssText += ';font-size:5px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;';
+                            }
+                            break;
+                        }
+                        nonTieIdx++;
                     }
-                    cell.appendChild(circle);
+
+                    // Tie marker
+                    if (entry.tieCount > 0) {
+                        const line = document.createElement('div');
+                        line.style.cssText = 'position:absolute;width:1.5px;height:100%;background:#1a8c22;top:0;left:50%;transform:translateX(-50%);border-radius:1px;pointer-events:none;';
+                        circle.appendChild(line);
+                    }
+
+                    cellEl.appendChild(circle);
                 }
-                container.appendChild(cell);
+                colEl.appendChild(cellEl);
             }
+            container.appendChild(colEl);
         }
+
         const wrap = container.parentElement;
-        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
+        if (wrap) requestAnimationFrame(() => { wrap.scrollLeft = wrap.scrollWidth; });
     }
 
-    function renderBettingRoad() {
+        function renderBettingRoad() {
         const container = document.getElementById('road-betting');
         if (!container) return;
         container.innerHTML = '';
+        if (!beadHistory || beadHistory.length === 0) return;
 
-        // Mirror Big Road column structure exactly, but color by bet outcome
-        // Win = green, Loss = red, Push = grey, No bet = dim empty
-        const ROWS = 6;
-        let maxCol = 0;
+        const { grid, maxCol } = buildBigRoadGrid(beadHistory);
+        if (maxCol < 0) return;
 
-        const allEntries = [];
-        bigRoadColumns.forEach(col => {
-            col.forEach(entry => {
-                allEntries.push(entry);
-                if (entry.col > maxCol) maxCol = entry.col;
-            });
-        });
-
-        if (allEntries.length === 0) return;
-
-        // Map each Big Road entry to its hand index in beadHistory
-        // Big Road entries are built in the same order as beadHistory
-        // We need to match col/row to hand index
-        // Build a flat ordered list of non-tie entries (same order as bigRoadColumns traversal)
+        // Build a parallel map: orderedIndex -> handHistory P/L
+        // orderedIndex = position in non-tie sequence (same order as Big Road cells)
+        const plByGridKey = {};   // "col:row" -> pl value
+        let nonTieIdx = 0;
         const orderedEntries = [];
-        bigRoadColumns.forEach(col => col.forEach(e => orderedEntries.push(e)));
-
-        // beadHistory index map: skip ties for Big Road matching (ties don't create new cells)
-        // Build mapping: bigRoad entry index → beadHistory index
-        const entryToHistIdx = [];
-        let bigIdx = 0;
-        for (let i = 0; i < beadHistory.length; i++) {
-            const h = beadHistory[i];
-            const isTie = (h.cls || '').includes('tie');
-            if (!isTie) {
-                entryToHistIdx[bigIdx] = i;
-                bigIdx++;
+        for (let c = 0; c <= maxCol; c++) {
+            if (!grid[c]) continue;
+            for (let r = 0; r < 6; r++) {
+                if (grid[c][r]) orderedEntries.push({ c, r });
             }
         }
 
-        const totalCols = maxCol + 1;
+        // Walk beadHistory to map each non-tie hand to its grid cell
+        let bigIdx = 0;
+        for (let i = 0; i < beadHistory.length; i++) {
+            const isTie = (beadHistory[i].cls || '').includes('tie');
+            if (isTie) continue;
+            const e = orderedEntries[bigIdx];
+            if (e) plByGridKey[e.c + ':' + e.r] = handHistory[i];
+            bigIdx++;
+        }
+
+        // Render — identical structure to renderBigRoad, just colour by P/L
+        for (let c = 0; c <= maxCol; c++) {
+            const colEl = document.createElement('div');
+            colEl.className = 'br-column';
+
+            for (let r = 0; r < 6; r++) {
+                const cellEl = document.createElement('div');
+                cellEl.className = 'br-cell';
+
+                const entry = grid[c] && grid[c][r];
+                if (entry) {
+                    const circle = document.createElement('div');
+                    circle.className = 'br-circle';
+                    circle.style.position = 'relative';
+
+                    const pl = plByGridKey[c + ':' + r];
+                    if      (pl === undefined || pl === null) circle.classList.add('br-bet-nobet');
+                    else if (pl > 0)  { circle.classList.add('br-bet-win');  circle.title = '+$' + pl.toFixed(0); }
+                    else if (pl < 0)  { circle.classList.add('br-bet-loss'); circle.title = '-$' + Math.abs(pl).toFixed(0); }
+                    else              { circle.classList.add('br-bet-push'); }
+
+                    // Tie marker — same green line as Big Road
+                    if (entry.tieCount > 0) {
+                        const line = document.createElement('div');
+                        line.style.cssText = 'position:absolute;width:1.5px;height:100%;background:#1a8c22;top:0;left:50%;transform:translateX(-50%);border-radius:1px;pointer-events:none;';
+                        circle.appendChild(line);
+                    }
+
+                    cellEl.appendChild(circle);
+                }
+                colEl.appendChild(cellEl);
+            }
+            container.appendChild(colEl);
+        }
+
+        const wrap = container.parentElement;
+        if (wrap) requestAnimationFrame(() => { wrap.scrollLeft = wrap.scrollWidth; });
+    }
+    function renderDerivedRoad(containerId, entries, style) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        if (!entries || entries.length === 0) return;
+
+        const ROWS = 6;
+
+        // Build sparse grid from col/row stored on each entry
+        let maxCol = 0;
+        entries.forEach(e => { if (e.col > maxCol) maxCol = e.col; });
+
         const grid = {};
-        orderedEntries.forEach((entry, idx) => {
-            if (!grid[entry.col]) grid[entry.col] = {};
-            grid[entry.col][entry.row] = { entry, histIdx: entryToHistIdx[idx] };
+        entries.forEach(e => {
+            if (!grid[e.col]) grid[e.col] = {};
+            grid[e.col][e.row] = e;
         });
+
+        const totalCols = maxCol + 2; // +2 for breathing room
 
         for (let c = 0; c < totalCols; c++) {
             for (let r = 0; r < ROWS; r++) {
                 const cell = document.createElement('div');
-                cell.className = 'br-bet-cell';
-                const item = grid[c] && grid[c][r];
-                if (item) {
-                    const pl = handHistory[item.histIdx];
-                    const circle = document.createElement('div');
-                    circle.className = 'br-bet-circle';
-                    if (pl === undefined) {
-                        circle.classList.add('br-bet-nobet');
-                        circle.title = 'No bet';
-                    } else if (pl === 0) {
-                        circle.classList.add('br-bet-push');
-                        circle.title = 'Push';
-                    } else if (pl > 0) {
-                        circle.classList.add('br-bet-win');
-                        circle.title = '+$' + pl.toFixed(0);
+                cell.className = 'dr-cell';
+                const entry = grid[c] && grid[c][r];
+                if (entry) {
+                    let el;
+                    if (style === 'circle') {
+                        el = document.createElement('div');
+                        el.className = `dr-circle ${entry.rep?'rep':'non'}`;
+                    } else if (style === 'hollow') {
+                        el = document.createElement('div');
+                        el.className = `dr-circle-sm ${entry.rep?'rep':'non'}`;
                     } else {
-                        circle.classList.add('br-bet-loss');
-                        circle.title = '-$' + Math.abs(pl).toFixed(0);
+                        el = document.createElement('div');
+                        el.className = `dr-slash ${entry.rep?'rep':'non'}`;
                     }
-                    cell.appendChild(circle);
+                    cell.appendChild(el);
                 }
                 container.appendChild(cell);
             }
         }
         const wrap = container.parentElement;
-        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
-    }
-
-    function renderDerivedRoad(containerId, entries, style) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-        const ROWS = 6; // match Big Road — 6 rows deep
-        const colCount = Math.ceil(entries.length / ROWS) + 2;
-        const totalCells = colCount * ROWS;
-        const grid = new Array(totalCells).fill(null);
-        entries.forEach((entry, i) => {
-            const c = Math.floor(i / ROWS);
-            const r = i % ROWS;
-            grid[c * ROWS + r] = entry;
-        });
-        for (let i = 0; i < grid.length; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'dr-cell';
-            const entry = grid[i];
-            if (entry !== null) {
-                let el;
-                if (style === 'circle') {
-                    el = document.createElement('div');
-                    el.className = `dr-circle ${entry.rep?'rep':'non'}`;
-                } else if (style === 'hollow') {
-                    el = document.createElement('div');
-                    el.className = `dr-circle-sm ${entry.rep?'rep':'non'}`;
-                } else {
-                    el = document.createElement('div');
-                    el.className = `dr-slash ${entry.rep?'rep':'non'}`;
-                }
-                cell.appendChild(el);
-            }
-            container.appendChild(cell);
-        }
-        const wrap = container.parentElement;
-        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
+        if (wrap) requestAnimationFrame(() => { wrap.scrollLeft = wrap.scrollWidth; });
     }
 
     // ══════════════════════════════════════════════════════════
@@ -3128,18 +3344,27 @@
 
     // All draggable slots in their default order
     const SLOT_DEFS = [
-        { id: 'roads',      icon: '🎯', label: 'Scoreboards' },
-        { id: 'table',      icon: '🎰', label: 'Table + Controls' },
-        { id: 'financials', icon: '💰', label: 'Financials' },
-        { id: 'inspector',  icon: '🔍', label: 'Shoe Inspector' },
-        { id: 'coffee',     icon: '☕', label: 'Support' },
+        { id: 'road-bead',    icon: '🔵', label: 'Bead Plate' },
+        { id: 'road-big',     icon: '🔴', label: 'Big Road' },
+        { id: 'road-betting', icon: '💰', label: 'Betting Road' },
+        { id: 'road-beb',     icon: '👁', label: 'Big Eye Boy' },
+        { id: 'road-derived', icon: '📍', label: 'Small Road + Cockroach' },
+        { id: 'table',        icon: '🎰', label: 'Table + Controls' },
+        { id: 'financials',   icon: '💵', label: 'Financials' },
+        { id: 'inspector',    icon: '🔍', label: 'Shoe Inspector' },
+        { id: 'coffee',       icon: '☕', label: 'Support' },
     ];
 
     function getLayoutOrder() {
         try {
             const saved = localStorage.getItem(LAYOUT_KEY);
             if (saved) {
-                const order = JSON.parse(saved);
+                let order = JSON.parse(saved);
+                // Migrate old layout that used 'road-main' -> split into road-bead + road-big
+                if (order.includes('road-main')) {
+                    const idx = order.indexOf('road-main');
+                    order.splice(idx, 1, 'road-bead', 'road-big');
+                }
                 // Validate all known slots are present
                 if (SLOT_DEFS.every(s => order.includes(s.id))) return order;
             }
@@ -4185,7 +4410,11 @@
 
         setTimeout(() => {
             const nextEl = el.querySelector('.next-card');
-            if (nextEl) nextEl.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+            if (nextEl) {
+                // Scroll only the container, never the page
+                const wrap = nextEl.closest('.shoe-preview-container');
+                if (wrap) wrap.scrollLeft = nextEl.offsetLeft - (wrap.offsetWidth / 2) + (nextEl.offsetWidth / 2);
+            }
         }, 50);
     }
 
@@ -4343,7 +4572,7 @@
 
     function hasUnsavedChanges() {
         const inGame = document.getElementById('game-container').style.display !== 'none';
-        return inGame && stats.hands > 0 && stats.hands !== lastSavedHandCount;
+        return inGame && stats.hands > 0;
     }
 
     window.addEventListener('beforeunload', (e) => {
@@ -4369,6 +4598,9 @@
     window.addEventListener('DOMContentLoaded', () => {
         initLang();
         scheduleMidnightSave();
+        // Sync sound button to persisted mute pref on every page load
+        const sBtn = document.getElementById('sound-toggle-btn');
+        if (sBtn) sBtn.textContent = soundEnabled ? '🔊' : '🔇';
         if (loadGameState()) {
             hideSplash();
             restoreGameToScreen();
