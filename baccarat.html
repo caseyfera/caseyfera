@@ -227,7 +227,7 @@
         .card-rows { display: flex; gap: 10px; }
         .card-group { display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .card-group-label { font-size: 0.6rem; color: rgba(255,255,255,0.5); letter-spacing: 1px; text-transform: uppercase; }
-        .card-slots-group { display: flex; gap: 3px; justify-content: center; align-items: center; }
+        .card-slots-group { display: flex; gap: 3px; justify-content: flex-start; align-items: center; width: 102px; flex-shrink: 0; }
         .card-placeholder-box { width: 30px; height: 42px; border: 1.5px dashed rgba(255,255,255,0.2); border-radius: 3px; }
 
         /* ── Betting panel: right side of table, fills remaining width ── */
@@ -888,11 +888,13 @@
                         <div class="card-slots-group" id="p-cards">
                             <div class="card-placeholder-box"></div>
                             <div class="card-placeholder-box"></div>
+                            <div class="card-placeholder-box"></div>
                         </div>
                     </div>
                     <div class="card-group">
                         <div class="card-group-label">BANKER</div>
                         <div class="card-slots-group" id="b-cards">
+                            <div class="card-placeholder-box"></div>
                             <div class="card-placeholder-box"></div>
                             <div class="card-placeholder-box"></div>
                         </div>
@@ -980,6 +982,7 @@
                 <button id="btn-double" class="aux-btn" onclick="doubleBet()" disabled title="Double current bets">✕2 DOUBLE</button>
                 <button id="btn-deal" class="main-deal-btn" onclick="playHand()">DEAL</button>
                 <button onclick="clearBets()" class="clear-btn">CLEAR</button>
+                <button class="aux-btn" onclick="jumpToEndOfShoe()" title="Skip to end of shoe" id="btn-end-shoe">⏭ END</button>
                 <button class="aux-btn" onclick="document.getElementById('add-funds-popup').style.display='block'" title="Add funds to bankroll">+$</button>
                 <button class="aux-btn" onclick="manualSaveGame()" title="Save game now">💾</button>
             </div>
@@ -1021,13 +1024,13 @@
         <div class="dashboard-box" style="margin-top:0;padding-bottom:5px;">
             <!-- Inspector Tab Bar -->
             <div class="insp-tabs">
-                <button class="insp-tab active" onclick="switchInspector('shoe')" id="itab-shoe">🃏 Shoe</button>
-                <button class="insp-tab" onclick="switchInspector('history')" id="itab-history">📋 History</button>
+            <button class="insp-tab" onclick="switchInspector('shoe')" id="itab-shoe">🃏 Shoe</button>
+<button class="insp-tab active" onclick="switchInspector('history')" id="itab-history">📋 History</button>
                 <button class="insp-tab" onclick="switchInspector('bets')" id="itab-bets">🎯 Bets</button>
                 <button class="insp-tab" onclick="switchInspector('stats')" id="itab-stats">📊 Stats</button>
             </div>
             <!-- Shoe Inspector (existing) -->
-            <div id="insp-shoe" class="insp-panel">
+          <div id="insp-shoe" class="insp-panel" style="display:none;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
                     <span class="shoe-inspector-title" style="font-size:0.65rem;color:var(--gold);letter-spacing:1px;font-weight:bold;">SHOE INSPECTOR</span>
                     <div style="display:flex;gap:3px;align-items:center;">
@@ -1044,12 +1047,12 @@
                 <div class="inspector-placeholder-label" id="inspector-placeholder" style="display:none;">Inspector Engine Standby</div>
             </div>
             <!-- History Inspector -->
-            <div id="insp-history" class="insp-panel" style="display:none;">
+            <div id="insp-history" class="insp-panel">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
                     <span style="font-size:0.58rem;color:rgba(255,255,255,0.3);letter-spacing:0.5px;">HAND HISTORY</span>
                     <div style="display:flex;gap:3px;">
-                        <button id="hist-mode-deal" onclick="setHistoryMode('deal')" class="view-mode-btn active">DEAL</button>
-                        <button id="hist-mode-table" onclick="setHistoryMode('table')" class="view-mode-btn">TABLE</button>
+                        <button id="hist-mode-deal" onclick="setHistoryMode('deal')" class="view-mode-btn">DEAL</button>
+                        <button id="hist-mode-table" onclick="setHistoryMode('table')" class="view-mode-btn active">TABLE</button>
                     </div>
                 </div>
                 <div id="history-list" class="history-list"></div>
@@ -1327,7 +1330,7 @@
     let bankroll = 0, initialBankroll = 0, totalDeposits = 0, selectedChipValue = 25, userEmail = "";
     let shoeView = 'result'; // 'result' | 'deal'
     let betMode = 'buttons';  // 'buttons' | 'table' | 'both'
-    let historyMode = 'deal';   // 'deal' | 'table'
+    let historyMode = 'table';  // 'deal' | 'table'
     let currentBets = {};
     let lastBets = {};
     let stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
@@ -1764,6 +1767,15 @@
         document.getElementById('setup-overlay').style.display = 'flex';
     }
 
+    function jumpToEndOfShoe() {
+        if (shoeEnded) return;
+        if (shoeSize > 0 && shoe.length > 0) {
+            // Trim shoe to fewer than 6 cards so canDealHand() returns false
+            shoe.splice(0, Math.max(0, shoe.length - 5));
+        }
+        endShoe();
+    }
+
     function endShoe() {
         if (shoeEnded) return;
         shoeEnded = true;
@@ -1774,6 +1786,8 @@
         // Disable DEAL button
         const dealBtn = document.getElementById('btn-deal');
         if (dealBtn) { dealBtn.disabled = true; dealBtn.style.opacity = '0.4'; }
+        const endBtn = document.getElementById('btn-end-shoe');
+        if (endBtn) { endBtn.disabled = true; endBtn.style.opacity = '0.4'; }
 
         // Build summary stats
         const pl = bankroll - initialBankroll - totalDeposits;
@@ -2542,8 +2556,11 @@
     function renderHand(p,b,pS,bS) {
         const s=['♠','♥','♦','♣'];
         const mk=(v)=>{let st=s[Math.floor(Math.random()*4)],lbl=v===1?'A':v===11?'J':v===12?'Q':v===13?'K':v; return `<div class="card ${st==='♥'||st==='♦'?'red':''}"><div>${lbl}</div><div style="font-size:1.4rem;align-self:center;line-height:1;">${st}</div></div>`;};
-        document.getElementById('p-cards').innerHTML=p.map(mk).join('');
-        document.getElementById('b-cards').innerHTML=b.map(mk).join('');
+        const ph=`<div class="card-placeholder-box"></div>`;
+        const pSlots=p.map(mk); while(pSlots.length<3) pSlots.push(ph);
+        const bSlots=b.map(mk); while(bSlots.length<3) bSlots.push(ph);
+        document.getElementById('p-cards').innerHTML=pSlots.join('');
+        document.getElementById('b-cards').innerHTML=bSlots.join('');
         document.getElementById('p-score').textContent=pS;
         document.getElementById('b-score').textContent=bS;
     }
@@ -3650,6 +3667,7 @@
         let netPL = 0, maxDrawdown = 0, peak = startBankroll;
         let currentLossStreak = 0, currentWinStreak = 0;
         let maxLossStreak = 0, maxWinStreak = 0;
+        const handLog = []; // per-hand data for history display
 
         for (const hand of hands) {
             const isTie = hand.outcome === 'tie';
@@ -3701,9 +3719,11 @@
             // Next bet size
             betSize = simNextBetSize(sizing, baseBet, maxBet, actualBet, lastWon, consecutiveWins);
             lastOutcome = outcome;
+
+            handLog.push({ p: hand.p, b: hand.b, pS: hand.pS, bS: hand.bS, outcome, side, bet: actualBet, pl });
         }
 
-        return { netPL, bankroll, handsPlayed, betsPlaced, maxDrawdown, maxWinStreak, maxLossStreak };
+        return { netPL, bankroll, handsPlayed, betsPlaced, maxDrawdown, maxWinStreak, maxLossStreak, handLog };
     }
 
     async function runSimulation() {
@@ -3814,6 +3834,77 @@
 
         document.getElementById('sim-results').style.display = 'block';
         document.getElementById('sim-results').scrollIntoView({ behavior: 'smooth' });
+
+        // Store for shoe history navigation
+        _simResults = results;
+        _simHistIdx = 0;
+        renderSimShoeHistory();
+    }
+
+    let _simResults = [];
+    let _simHistIdx = 0;
+
+    function simHistNav(delta) {
+        _simHistIdx = Math.max(0, Math.min(_simResults.length - 1, _simHistIdx + delta));
+        renderSimShoeHistory();
+    }
+
+    function renderSimShoeHistory() {
+        const container = document.getElementById('sim-shoe-history');
+        const label     = document.getElementById('sim-hist-label');
+        const btnPrev   = document.getElementById('sim-hist-prev');
+        const btnNext   = document.getElementById('sim-hist-next');
+        if (!container || !_simResults.length) return;
+
+        const shoe = _simResults[_simHistIdx];
+        const total = _simResults.length;
+        if (label) label.textContent = `Shoe ${_simHistIdx + 1} / ${total}`;
+        if (btnPrev) btnPrev.disabled = _simHistIdx === 0;
+        if (btnNext) btnNext.disabled = _simHistIdx === total - 1;
+
+        const fm = v => v===1?'A':v===11?'J':v===12?'Q':v===13?'K':String(v);
+        const hands = shoe.handLog || [];
+
+        if (!hands.length) { container.innerHTML = '<div style="color:rgba(255,255,255,0.3);font-size:0.65rem;text-align:center;padding:8px;">No hands recorded</div>'; return; }
+
+        container.innerHTML = hands.map((h, i) => {
+            const outcome = h.outcome;
+            let rowCls, badge, accentColor;
+            if (outcome === 'dragon')      { rowCls='hr-dragon'; badge='🐉 D7';  accentColor='#e67e22'; }
+            else if (outcome === 'panda')  { rowCls='hr-panda';  badge='🐼 P8';  accentColor='#9b59b6'; }
+            else if (outcome === 'banker') { rowCls='hr-banker'; badge='BANK';   accentColor='#c0392b'; }
+            else if (outcome === 'player') { rowCls='hr-player'; badge='PLAY';   accentColor='#2980b9'; }
+            else if (outcome === 'tie')    { rowCls='hr-tie';    badge='TIE';    accentColor='#27ae60'; }
+            else                           { rowCls='hr-push';   badge='?';      accentColor='#888'; }
+
+            const p = h.p || [], b = h.b || [];
+            const pCardsHtml = p.map((v,ci) => `<div class="hcard hcard-p${ci===2?' hcard-third':''}">${fm(v)}</div>`).join('');
+            const bCardsHtml = b.map((v,ci) => `<div class="hcard hcard-b${ci===2?' hcard-third':''}">${fm(v)}</div>`).join('');
+            const cardsHtml = `<div style="display:flex;align-items:center;flex:1;gap:3px;">
+                <div style="display:flex;gap:1px;align-items:center;">${pCardsHtml}</div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0;margin:0 3px;flex-shrink:0;">
+                    <span class="hr-ps" style="font-size:0.7rem;font-weight:bold;">${h.pS}</span>
+                    <span class="hr-sep" style="font-size:0.45rem;line-height:1;">vs</span>
+                    <span class="hr-bs" style="font-size:0.7rem;font-weight:bold;">${h.bS}</span>
+                </div>
+                <div style="display:flex;gap:1px;align-items:center;">${bCardsHtml}</div>
+            </div>`;
+
+            // Bet indicator: show which side was bet and the P&L
+            const betSideColor = h.side === 'banker' ? '#ff9e9e' : '#9ec2ff';
+            const betLabel = `<span style="font-size:0.55rem;color:${betSideColor};flex-shrink:0;min-width:22px;text-align:center;">${h.side==='banker'?'B':'P'}</span>`;
+            const plColor  = h.pl > 0 ? '#7dff7d' : h.pl < 0 ? '#ff9e9e' : 'rgba(255,255,255,0.35)';
+            const plSign   = h.pl > 0 ? '+' : h.pl < 0 ? '−' : '';
+            const plHtml   = `<span class="hr-pl" style="color:${plColor};">${plSign}$${Math.abs(h.pl).toFixed(0)}</span>`;
+
+            return `<div class="hr-row ${rowCls}">
+                <span class="hr-num">${i + 1}</span>
+                <span class="hr-badge" style="border-left:2px solid ${accentColor};color:${accentColor};">${badge}</span>
+                ${cardsHtml}
+                ${betLabel}
+                ${plHtml}
+            </div>`;
+        }).join('');
     }
 
     function drawSimChart(results, startBR) {
@@ -3988,8 +4079,7 @@
     // ══════════════════════════════════════════════════════════
     //  INSPECTOR TABS
     // ══════════════════════════════════════════════════════════
-    let activeInspectorTab = 'shoe';
-
+let activeInspectorTab = 'history';
     // ── Betting Mode ──────────────────────────────────────────
     function setBetMode(mode) {
         betMode = mode;
@@ -4778,6 +4868,18 @@
           <div style="color:var(--gold);font-size:0.65rem;letter-spacing:1px;font-weight:bold;margin-bottom:8px;">SHOE P&L DISTRIBUTION</div>
           <canvas id="sim-dist-chart" style="width:100%;height:80px;"></canvas>
           <div id="sim-dist-labels" style="display:flex;justify-content:space-between;font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:2px;"></div>
+        </div>
+        <!-- Shoe-by-shoe hand history -->
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:12px;margin-top:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="color:var(--gold);font-size:0.65rem;letter-spacing:1px;font-weight:bold;">SHOE HAND HISTORY</div>
+            <div style="display:flex;gap:3px;">
+              <button id="sim-hist-prev" onclick="simHistNav(-1)" style="background:rgba(255,255,255,0.08);border:1px solid rgba(212,175,55,0.3);color:var(--gold);border-radius:4px;padding:2px 8px;font-size:0.65rem;cursor:pointer;">◀</button>
+              <span id="sim-hist-label" style="font-size:0.65rem;color:rgba(255,255,255,0.5);align-self:center;min-width:60px;text-align:center;"></span>
+              <button id="sim-hist-next" onclick="simHistNav(+1)" style="background:rgba(255,255,255,0.08);border:1px solid rgba(212,175,55,0.3);color:var(--gold);border-radius:4px;padding:2px 8px;font-size:0.65rem;cursor:pointer;">▶</button>
+            </div>
+          </div>
+          <div id="sim-shoe-history" class="history-list"></div>
         </div>
       </div>
 
