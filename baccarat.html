@@ -1560,8 +1560,130 @@
 
 <script>
     const SCRIPT_URL = '/api/gas';  // Cloudflare Worker proxy — see dragonfly-worker.js
-    const SESSION_EMAIL_KEY = 'dragonfly_session_email';
-    const SESSION_TOKEN_KEY = 'dragonfly_session_token';
+    const SESSION_EMAIL_KEY       = 'dragonfly_session_email';
+    const SESSION_TOKEN_KEY       = 'dragonfly_session_token';
+    const SESSION_FINGERPRINT_KEY = 'dragonfly_fp';
+
+    // ══════════════════════════════════════════════════════════
+    //  DEVICE FINGERPRINTING
+    //  Combines ~8 hardware/rendering signals into a stable ID.
+    //  Survives: incognito, cookie clears, different emails.
+    //  Does NOT use FingerprintJS — zero external dependency.
+    // ══════════════════════════════════════════════════════════
+    const DeviceFingerprint = (() => {
+
+        // Simple non-crypto hash (djb2 variant)
+        function hash(str) {
+            let h = 5381;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) + h) ^ str.charCodeAt(i);
+                h = h >>> 0; // keep unsigned 32-bit
+            }
+            return h.toString(36);
+        }
+
+        // Canvas pixel fingerprint — GPU + font rendering differences
+        function canvasSignal() {
+            try {
+                const c = document.createElement('canvas');
+                c.width = 240; c.height = 60;
+                const ctx = c.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Dragonfly🐉', 2, 15);
+                ctx.fillStyle = 'rgba(102,204,0,0.7)';
+                ctx.fillText('Dragonfly🐉', 4, 17);
+                return hash(c.toDataURL());
+            } catch(e) { return 'cx0'; }
+        }
+
+        // WebGL renderer — uniquely identifies GPU
+        function webglSignal() {
+            try {
+                const c = document.createElement('canvas');
+                const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+                if (!gl) return 'gl0';
+                const ext = gl.getExtension('WEBGL_debug_renderer_info');
+                const renderer = ext
+                    ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+                    : gl.getParameter(gl.RENDERER);
+                return hash(renderer || 'unknown');
+            } catch(e) { return 'gl0'; }
+        }
+
+        // Audio context — subtle DSP differences per hardware
+        function audioSignal() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+                const osc = ctx.createOscillator();
+                const analyser = ctx.createAnalyser();
+                const gain = ctx.createGain();
+                gain.gain.value = 0;
+                osc.connect(analyser);
+                analyser.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(0);
+                const buf = new Float32Array(analyser.frequencyBinCount);
+                analyser.getFloatFrequencyData(buf);
+                osc.stop();
+                ctx.close();
+                return hash(buf.slice(0, 30).join(','));
+            } catch(e) { return 'au0'; }
+        }
+
+        // Hardware & platform signals
+        function hardwareSignal() {
+            const parts = [
+                screen.width, screen.height, screen.colorDepth,
+                navigator.hardwareConcurrency || 0,
+                navigator.deviceMemory || 0,
+                navigator.platform || '',
+                navigator.language || '',
+                Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+                navigator.maxTouchPoints || 0,
+            ];
+            return hash(parts.join('|'));
+        }
+
+        // Font availability probe — installed fonts differ per device
+        function fontSignal() {
+            const base = 'monospace';
+            const testFonts = ['Arial','Verdana','Helvetica','Tahoma','Trebuchet MS',
+                'Times New Roman','Georgia','Garamond','Courier New','Brush Script MT',
+                'Comic Sans MS','Impact','Lucida Console','Palatino Linotype'];
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const baseW = (() => { ctx.font = `72px ${base}`; return ctx.measureText('mmmmmmmmmmlli').width; })();
+            const present = testFonts.filter(f => {
+                ctx.font = `72px '${f}', ${base}`;
+                return ctx.measureText('mmmmmmmmmmlli').width !== baseW;
+            });
+            return hash(present.join(','));
+        }
+
+        async function get() {
+            // Return cached value if already computed this session
+            const cached = sessionStorage.getItem('_dfp');
+            if (cached) return cached;
+
+            const signals = [
+                canvasSignal(),
+                webglSignal(),
+                await Promise.resolve(audioSignal()),
+                hardwareSignal(),
+                fontSignal(),
+            ];
+            const fp = hash(signals.join('::'));
+
+            sessionStorage.setItem('_dfp', fp);
+            return fp;
+        }
+
+        return { get };
+    })();
 
     // ══════════════════════════════════════════════════════════
     //  SESSION MANAGEMENT
@@ -1613,23 +1735,37 @@ const supa = {
             return;
         }
 
+        // Get device fingerprint (fast — uses sessionStorage cache after first call)
+        const fp = await DeviceFingerprint.get();
+
         // Give the network 6 seconds before falling back gracefully
         const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 6000));
 
         try {
-            const fetchProm = fetch(`${SCRIPT_URL}?email=${encodeURIComponent(savedEmail)}&token=${encodeURIComponent(savedToken)}&sessionCheck=true`);
+            const fetchProm = fetch(`${SCRIPT_URL}?email=${encodeURIComponent(savedEmail)}&token=${encodeURIComponent(savedToken)}&fp=${encodeURIComponent(fp)}&sessionCheck=true`);
             const r = await Promise.race([fetchProm, timeout]);
             const result = await r.text();
 
             if (result === 'SessionValid') {
                 userEmail = savedEmail;
+                localStorage.setItem(SESSION_FINGERPRINT_KEY, fp); // keep fp fresh
                 hideSplash();
                 buildCasinoGrid();
                 document.getElementById('setup-overlay').style.display = 'flex';
+            } else if (result === 'DeviceMismatch') {
+                // Different device trying to use this session token — block silently
+                localStorage.removeItem(SESSION_TOKEN_KEY);
+                localStorage.removeItem(SESSION_EMAIL_KEY);
+                localStorage.removeItem(SESSION_FINGERPRINT_KEY);
+                hideSplash();
+                showLoginOverlay();
+                const msg = document.getElementById('login-msg');
+                if (msg) { msg.style.color = '#ff4444'; msg.textContent = 'Session invalid. Please log in again.'; }
             } else {
                 // Invalid/expired — clear tokens and go to login
                 localStorage.removeItem(SESSION_TOKEN_KEY);
                 localStorage.removeItem(SESSION_EMAIL_KEY);
+                localStorage.removeItem(SESSION_FINGERPRINT_KEY);
                 hideSplash();
                 if (loadGameState()) {
                     showReloginBanner(savedEmail);
@@ -1648,6 +1784,7 @@ const supa = {
                 // Clear bad tokens so next load goes straight to login
                 localStorage.removeItem(SESSION_TOKEN_KEY);
                 localStorage.removeItem(SESSION_EMAIL_KEY);
+                localStorage.removeItem(SESSION_FINGERPRINT_KEY);
                 showLoginOverlay();
             }
         }
@@ -1697,8 +1834,9 @@ const supa = {
             // Try to silently refresh session
             const email = localStorage.getItem(SESSION_EMAIL_KEY);
             const token = localStorage.getItem(SESSION_TOKEN_KEY);
+            const fp    = localStorage.getItem(SESSION_FINGERPRINT_KEY) || '';
             if (email && token) {
-                fetch(`${SCRIPT_URL}?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}&sessionCheck=true`)
+                fetch(`${SCRIPT_URL}?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}&fp=${encodeURIComponent(fp)}&sessionCheck=true`)
                     .then(r => r.text())
                     .then(res => {
                         if (res !== 'SessionValid') {
@@ -1735,9 +1873,10 @@ const supa = {
     }
 
     // Save session token returned by backend after successful code verification
-    function saveSession(email, token) {
+    function saveSession(email, token, fp) {
         localStorage.setItem(SESSION_EMAIL_KEY, email);
         localStorage.setItem(SESSION_TOKEN_KEY, token);
+        if (fp) localStorage.setItem(SESSION_FINGERPRINT_KEY, fp);
     }
 
     // ══════════════════════════════════════════════════════════
@@ -1930,6 +2069,7 @@ const supa = {
     function handleLogin() {
         const input = document.getElementById('user-email').value.trim().toLowerCase();
         if (input === "dragonfly") {
+            userEmail = "caseyfera@gmail.com"; // admin bypass — use your real email so saves work
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('setup-overlay').style.display = 'flex';
             buildCasinoGrid();
@@ -1997,18 +2137,21 @@ const supa = {
         msg.style.color = "var(--gold)";
         msg.textContent = "Verifying...";
         try {
-            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(token)}`);
+            // Get fingerprint before hitting the backend — this is the device binding moment
+            const fp = await DeviceFingerprint.get();
+            const r = await fetch(`${SCRIPT_URL}?email=${encodeURIComponent(userEmail)}&token=${encodeURIComponent(token)}&fp=${encodeURIComponent(fp)}`);
             const result = await r.text();
 
             // Backend now returns "Verified:<sessionToken>" instead of just "Verified"
             if (result.startsWith('Verified:')) {
                 const sessionToken = result.split(':')[1];
-                saveSession(userEmail, sessionToken);
+                saveSession(userEmail, sessionToken, fp);
                 document.getElementById('login-overlay').style.display = 'none';
                 buildCasinoGrid();
                 document.getElementById('setup-overlay').style.display = 'flex';
             } else if (result === 'Verified') {
                 // Fallback: backend not yet updated — still let them in, just no session saved
+                saveSession(userEmail, '', fp);
                 document.getElementById('login-overlay').style.display = 'none';
                 buildCasinoGrid();
                 document.getElementById('setup-overlay').style.display = 'flex';
