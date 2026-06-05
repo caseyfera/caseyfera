@@ -931,7 +931,7 @@
             </div>
             <div id="code-step" style="display:none;">
                 <p>Verification Code:</p>
-                <input type="text" id="access-code" placeholder="000000" onkeydown="if(event.key==='Enter') verifyCode()">
+                <input type="text" id="access-code" placeholder="000000" autocomplete="one-time-code" inputmode="numeric" onkeydown="if(event.key==='Enter') verifyCode()">
                 <br><br>
                 <button class="login-btn" onclick="verifyCode()" style="width:100%;font-size:1.1rem;padding:10px 0;">VERIFY CODE →</button>
             </div>
@@ -1604,14 +1604,15 @@ const supa = {
         const savedEmail = localStorage.getItem(SESSION_EMAIL_KEY);
         const savedToken = localStorage.getItem(SESSION_TOKEN_KEY);
 
+        // No saved session at all — go straight to login
         if (!savedEmail || !savedToken) {
             hideSplash();
             showLoginOverlay();
             return;
         }
 
-        // Give the network 4 seconds before falling back gracefully
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 4000));
+        // Give the network 6 seconds before falling back gracefully
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 6000));
 
         try {
             const fetchProm = fetch(`${SCRIPT_URL}?email=${encodeURIComponent(savedEmail)}&token=${encodeURIComponent(savedToken)}&sessionCheck=true`);
@@ -1624,10 +1625,10 @@ const supa = {
                 buildCasinoGrid();
                 document.getElementById('setup-overlay').style.display = 'flex';
             } else {
-                // Invalid/expired — clear token but check for saved game first
+                // Invalid/expired — clear tokens and go to login
                 localStorage.removeItem(SESSION_TOKEN_KEY);
+                localStorage.removeItem(SESSION_EMAIL_KEY);
                 hideSplash();
-                // If they have a game in progress, let them back in with re-auth notice
                 if (loadGameState()) {
                     showReloginBanner(savedEmail);
                     restoreGameToScreen();
@@ -1636,12 +1637,15 @@ const supa = {
                 }
             }
         } catch (e) {
-            // Network error or timeout — if game exists show it offline, else show login
+            // Network error or timeout — always resolve, never loop
             hideSplash();
             if (loadGameState()) {
                 restoreGameToScreen();
                 showToast('⚠️ Offline mode — session unverified', '#b86200');
             } else {
+                // Clear bad tokens so next load goes straight to login
+                localStorage.removeItem(SESSION_TOKEN_KEY);
+                localStorage.removeItem(SESSION_EMAIL_KEY);
                 showLoginOverlay();
             }
         }
@@ -6209,393 +6213,4 @@ let activeInspectorTab = 'history';
         <div class="hist-card-top">
           <div>
             <div class="hist-card-label">🎴 ${r.name || 'Played Shoe'}</div>
-            <div class="hist-card-date">${fmtDate(r.created_at)}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <div class="hist-card-pl" style="color:${plCol};">${fmt$(pl)}</div>
-            <button class="hist-card-del" onclick="deleteHistItem('${r.id}','played')" title="Delete">🗑</button>
-          </div>
-        </div>
-        <div class="hist-stats">
-          <div class="hist-stat">Hands <b>${r.num_hands}</b></div>
-          <div class="hist-stat">Decks <b>${r.num_decks}</b></div>
-          <div class="hist-stat">Start <b>$${r.start_bankroll}</b></div>
-          <div class="hist-stat">End <b>$${(r.end_bankroll||0).toFixed(0)}</b></div>
-          <div class="hist-stat">B/P/T <b style="color:#ff9e9e">${r.banker_wins}</b>/<b style="color:#9ec2ff">${r.player_wins}</b>/<b style="color:#7dff7d">${r.ties}</b></div>
-        </div>
-      </div>`;
-    }
-
-    function buildSimCard(r) {
-      const pl    = r.total_pl;
-      const plCol = pl >= 0 ? '#7dff7d' : '#ff9e9e';
-      const winPct = r.num_shoes ? ((r.winning_shoes / r.num_shoes) * 100).toFixed(1) : '0';
-      return `<div class="hist-card">
-        <div class="hist-card-top">
-          <div>
-            <div class="hist-card-label">🧪 ${r.name || r.strategy}</div>
-            <div class="hist-card-date">${fmtDate(r.created_at)}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <div class="hist-card-pl" style="color:${plCol};">${fmt$(pl)}</div>
-            <button class="hist-card-del" onclick="deleteHistItem('${r.id}','sim')" title="Delete">🗑</button>
-          </div>
-        </div>
-        <div class="hist-stats">
-          <div class="hist-stat">Shoes <b>${r.num_shoes}</b></div>
-          <div class="hist-stat">ROI <b style="color:${(r.roi_pct||0)>=0?'#7dff7d':'#ff9e9e'}">${(r.roi_pct||0).toFixed(2)}%</b></div>
-          <div class="hist-stat">Avg/Shoe <b>${fmt$(r.avg_pl_per_shoe)}</b></div>
-          <div class="hist-stat">Win Rate <b>${winPct}%</b></div>
-          <div class="hist-stat">Max DD <b>$${(r.max_drawdown||0).toFixed(0)}</b></div>
-          <div class="hist-stat">Base Bet <b>$${r.base_bet}</b></div>
-          <div class="hist-stat">Sizing <b>${r.sizing}</b></div>
-          <div class="hist-stat">Best <b>${fmt$(r.best_shoe)}</b></div>
-          <div class="hist-stat">Worst <b>${fmt$(r.worst_shoe)}</b></div>
-        </div>
-      </div>`;
-    }
-
-    async function deleteHistItem(id, type) {
-      if (!confirm('Delete this entry from your history?')) return;
-      const ok = type === 'played'
-        ? await supa.deletePlayedShoe(id)
-        : await supa.deleteSimRun(id);
-      if (ok) loadHistory();
-    }
-
-  </script>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       FREE-DRAG WINDOW SYSTEM  v5
-       Lock toggle in the top toolbar — drag bars only active
-       when unlocked. Order persists to localStorage.
-  ════════════════════════════════════════════════════════════ -->
-  <style>
-    /* ── Lock toggle button (lives in header-btns) ── */
-    #fd-lock-btn {
-      background: none;
-      border: 1px solid rgba(212,175,55,0.4);
-      color: rgba(212,175,55,0.45);
-      border-radius: 50%;
-      width: 26px; height: 26px;
-      cursor: pointer; font-size: 0.82rem;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.18s, color 0.18s, border-color 0.18s;
-    }
-    #fd-lock-btn.unlocked {
-      background: rgba(212,175,55,0.15);
-      border-color: var(--gold);
-      color: var(--gold);
-      box-shadow: 0 0 6px rgba(212,175,55,0.35);
-    }
-
-    /* ── Drag bar on every layout-slot ── */
-    .fd-bar {
-      display: flex; align-items: center; gap: 5px;
-      padding: 4px 6px;
-      background: rgba(0,0,0,0.4);
-      border-bottom: 1px solid rgba(212,175,55,0.2);
-      border-radius: 5px 5px 0 0;
-      user-select: none; touch-action: none;
-      box-sizing: border-box; width: 100%; flex-shrink: 0;
-      /* locked by default */
-      cursor: default;
-      pointer-events: none;
-      opacity: 0;
-      height: 0; padding: 0; overflow: hidden;
-      transition: opacity 0.2s, height 0.2s;
-    }
-    /* When layout is unlocked, bars become visible & grabbable */
-    body.fd-unlocked .fd-bar {
-      opacity: 1;
-      height: auto;
-      padding: 4px 6px;
-      cursor: grab;
-      pointer-events: auto;
-    }
-    body.fd-unlocked .fd-bar:active { cursor: grabbing; }
-
-    .fd-bar-icon  { font-size: 0.82rem; flex-shrink: 0; }
-    .fd-bar-label { flex: 1; font-size: 0.58rem; font-weight: bold;
-                    letter-spacing: 1px; color: rgba(212,175,55,0.75);
-                    text-transform: uppercase; }
-    .fd-bar-grip  { font-size: 1rem; color: rgba(212,175,55,0.5);
-                    flex-shrink: 0; line-height: 1; }
-
-    /* ── Ghost clone that follows cursor while dragging ── */
-    .fd-ghost-clone {
-      position: fixed;
-      pointer-events: none;
-      z-index: 2000;
-      opacity: 0.82;
-      box-shadow: 0 12px 50px rgba(0,0,0,0.9), 0 0 0 2px rgba(212,175,55,0.7);
-      border-radius: 7px;
-      border: 1.5px solid rgba(212,175,55,0.6);
-      background: #061a0d;
-      overflow: hidden;
-    }
-
-    /* ── Source slot dims while dragging ── */
-    .layout-slot.fd-dragging-src {
-      opacity: 0.28;
-      border: 2px dashed rgba(212,175,55,0.35) !important;
-      border-radius: 6px;
-      background: rgba(212,175,55,0.03);
-      pointer-events: none;
-    }
-    .layout-slot.fd-dragging-src > *:not(.fd-bar) { visibility: hidden; }
-
-    /* ── Drop-target highlight ── */
-    .layout-slot.fd-drop-target {
-      outline: 2px solid rgba(212,175,55,0.9) !important;
-      outline-offset: -2px;
-      background: rgba(212,175,55,0.08) !important;
-      border-radius: 6px;
-    }
-
-    /* ── Insert line (before/after indicator) ── */
-    .fd-insert-line {
-      position: fixed;
-      height: 3px;
-      background: rgba(212,175,55,0.95);
-      border-radius: 2px;
-      pointer-events: none;
-      z-index: 1900;
-      box-shadow: 0 0 10px rgba(212,175,55,0.7);
-    }
-
-    /* ── Subtle "drag enabled" shimmer on bars ── */
-    body.fd-unlocked .fd-bar {
-      border-bottom-color: rgba(212,175,55,0.35);
-    }
-  </style>
-
-  <script>
-  (function () {
-    'use strict';
-
-    /* ─── Slot metadata ──────────────────────────────────────── */
-    var SLOT_META = {
-      'road-bead':    { icon: '🔵', label: 'Bead Plate'      },
-      'road-big':     { icon: '🔴', label: 'Big Road'         },
-      'road-betting': { icon: '💰', label: 'Betting Road'     },
-      'road-beb':     { icon: '👁', label: 'Big Eye Boy'      },
-      'road-small':   { icon: '📍', label: 'Small Road'       },
-      'road-cock':    { icon: '🪳', label: 'Cockroach Pig'    },
-      'table':        { icon: '🎰', label: 'Table + Controls' },
-      'financials':   { icon: '💵', label: 'Financials'       },
-      'inspector':    { icon: '🔍', label: 'Shoe Inspector'   },
-      'coffee':       { icon: '☕', label: 'Support'           },
-    };
-
-    var LAYOUT_KEY = 'df_layout_order';
-
-    /* ─── Lock state ─────────────────────────────────────────── */
-    var locked = true;  // start locked
-
-    function setLocked(val) {
-      locked = val;
-      document.body.classList.toggle('fd-unlocked', !locked);
-      var btn = document.getElementById('fd-lock-btn');
-      if (btn) {
-        btn.textContent = locked ? '🔒' : '🔓';
-        btn.title       = locked ? 'Layout locked — click to enable drag' : 'Layout unlocked — click to lock';
-        btn.classList.toggle('unlocked', !locked);
-      }
-    }
-
-    window.fdToggleLock = function () { setLocked(!locked); };
-
-    /* ─── Drag state ─────────────────────────────────────────── */
-    var drag = null;
-
-    function pt(e) {
-      var t = e.touches || e.changedTouches;
-      return t && t.length ? { x: t[0].clientX, y: t[0].clientY }
-                           : { x: e.clientX,    y: e.clientY };
-    }
-
-    function getAllSlots() {
-      return Array.prototype.slice.call(
-        document.querySelectorAll('.layout-slot[data-slot]'));
-    }
-
-    function slotAtPoint(x, y, exclude) {
-      if (drag && drag.clone) drag.clone.style.display = 'none';
-      var el = document.elementFromPoint(x, y);
-      if (drag && drag.clone) drag.clone.style.display = '';
-      if (!el) return null;
-      var slot = el.closest('.layout-slot[data-slot]');
-      if (!slot || slot === exclude) return null;
-      return slot;
-    }
-
-    function insertPos(slot, y) {
-      var r = slot.getBoundingClientRect();
-      return y < r.top + r.height / 2 ? 'before' : 'after';
-    }
-
-    /* ─── Start drag ─────────────────────────────────────────── */
-    function startDrag(src, cx, cy) {
-      if (locked) return;
-
-      var rect  = src.getBoundingClientRect();
-      var clone = src.cloneNode(true);
-      clone.className   = 'fd-ghost-clone';
-      clone.style.width  = rect.width  + 'px';
-      clone.style.height = rect.height + 'px';
-      clone.style.left   = rect.left   + 'px';
-      clone.style.top    = rect.top    + 'px';
-      document.body.appendChild(clone);
-
-      src.classList.add('fd-dragging-src');
-
-      var line = document.createElement('div');
-      line.className = 'fd-insert-line';
-      line.style.display = 'none';
-      document.body.appendChild(line);
-
-      drag = {
-        src: src, clone: clone,
-        ox: cx - rect.left, oy: cy - rect.top,
-        target: null, pos: 'after', line: line
-      };
-    }
-
-    /* ─── Move ───────────────────────────────────────────────── */
-    function onMove(e) {
-      if (!drag) return;
-      if (e.cancelable) e.preventDefault();
-      var p = pt(e);
-
-      drag.clone.style.left = (p.x - drag.ox) + 'px';
-      drag.clone.style.top  = (p.y - drag.oy) + 'px';
-
-      var hovered = slotAtPoint(p.x, p.y, drag.src);
-
-      if (drag.target && drag.target !== hovered)
-        drag.target.classList.remove('fd-drop-target');
-
-      if (hovered) {
-        hovered.classList.add('fd-drop-target');
-        drag.target = hovered;
-        drag.pos    = insertPos(hovered, p.y);
-
-        var hr = hovered.getBoundingClientRect();
-        drag.line.style.display = 'block';
-        drag.line.style.left    = hr.left + 'px';
-        drag.line.style.width   = hr.width + 'px';
-        drag.line.style.top     = (drag.pos === 'before' ? hr.top : hr.bottom) - 1.5 + 'px';
-      } else {
-        drag.target = null;
-        drag.line.style.display = 'none';
-      }
-    }
-
-    /* ─── End drag ───────────────────────────────────────────── */
-    function onEnd(e) {
-      if (!drag) return;
-      var src = drag.src, target = drag.target, pos = drag.pos;
-
-      drag.clone.parentNode && drag.clone.parentNode.removeChild(drag.clone);
-      drag.line.parentNode  && drag.line.parentNode.removeChild(drag.line);
-      src.classList.remove('fd-dragging-src');
-      if (target) target.classList.remove('fd-drop-target');
-      drag = null;
-
-      if (target && target !== src) {
-        if (pos === 'before') {
-          target.parentNode.insertBefore(src, target);
-        } else {
-          var next = target.nextSibling;
-          if (next) target.parentNode.insertBefore(src, next);
-          else      target.parentNode.appendChild(src);
-        }
-        saveOrder();
-      }
-    }
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('mouseup',   onEnd);
-    window.addEventListener('touchend',  onEnd);
-
-    /* ─── Persist order ──────────────────────────────────────── */
-    function saveOrder() {
-      try {
-        localStorage.setItem(LAYOUT_KEY, JSON.stringify(
-          getAllSlots().map(function(s) { return s.getAttribute('data-slot'); })
-        ));
-      } catch(e) {}
-    }
-
-    /* ─── Wire one slot ──────────────────────────────────────── */
-    function wire(slot) {
-      if (slot._fdWired) return;
-      slot._fdWired = true;
-
-      var meta = SLOT_META[slot.getAttribute('data-slot')] || { icon: '⠿', label: '' };
-
-      var bar = document.createElement('div');
-      bar.className = 'fd-bar';
-      bar.innerHTML =
-        '<span class="fd-bar-icon">'  + meta.icon  + '</span>' +
-        '<span class="fd-bar-label">' + meta.label + '</span>' +
-        '<span class="fd-bar-grip">⠿</span>';
-
-      slot.insertBefore(bar, slot.firstChild);
-
-      bar.addEventListener('mousedown', function(e) {
-        if (locked) return;
-        e.preventDefault(); e.stopPropagation();
-        startDrag(slot, e.clientX, e.clientY);
-      });
-      bar.addEventListener('touchstart', function(e) {
-        if (locked) return;
-        e.stopPropagation();
-        if (e.touches.length === 1)
-          startDrag(slot, e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-    }
-
-    /* ─── Inject the lock button into the header ─────────────── */
-    function injectLockBtn() {
-      if (document.getElementById('fd-lock-btn')) return;
-      var headerBtns = document.querySelector('.header-btns');
-      if (!headerBtns) return;
-
-      var btn = document.createElement('button');
-      btn.id        = 'fd-lock-btn';
-      btn.className = 'settings-btn';
-      btn.onclick   = window.fdToggleLock;
-      // Insert just before the layout button
-      var layoutBtn = document.getElementById('btn-layout');
-      if (layoutBtn) headerBtns.insertBefore(btn, layoutBtn);
-      else           headerBtns.appendChild(btn);
-
-      setLocked(true);  // initialise display
-    }
-
-    /* ─── Init ───────────────────────────────────────────────── */
-    function applyAll() {
-      injectLockBtn();
-      document.querySelectorAll('.layout-slot[data-slot]').forEach(wire);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function () {
-        applyAll();
-        new MutationObserver(applyAll).observe(document.body,
-          { childList: true, subtree: true });
-      });
-    } else {
-      applyAll();
-      new MutationObserver(applyAll).observe(document.body,
-        { childList: true, subtree: true });
-    }
-
-  }());
-  </script>
-</body>
-</html>
+            <div class="hist-card-date">${fmtDate(r.created_at)}
