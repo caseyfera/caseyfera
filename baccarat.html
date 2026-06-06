@@ -4768,7 +4768,7 @@ const supa = {
             const { side, patternIdx: nextIdx } = simGetBet(strategy, lastOutcome, betSize, patternIdx, skipTies);
             patternIdx = nextIdx;
             const outcome = hand.outcome;
-            if (actualBet <= 0 && side !== 'none') break;
+            if (betSize <= 0 && side !== 'none') break;
             if (stopLoss > 0 && bankroll <= stopLoss) break;
 
             // Observer mode — just log the hand, no money changes
@@ -4780,7 +4780,7 @@ const supa = {
 
             betsPlaced++;
             consecBets++;
-            let pl = -actualBet;
+            let pl = -betSize;
 
             const won = (side === 'banker' && (outcome === 'banker' || outcome === 'dragon')) ||
                         (side === 'player' && (outcome === 'player' || outcome === 'panda')) ||
@@ -4791,7 +4791,7 @@ const supa = {
                 pl = 0;
             } else if (won) {
                 const odds = side === 'banker' ? bankerOdds : side === 'tie' ? 8.0 : 1.0;
-                pl = actualBet * odds;
+                pl = betSize * odds;
                 if (outcome === 'dragon' && side === 'banker') pl = 0;
             }
 
@@ -4813,10 +4813,10 @@ const supa = {
             const dd = peak - bankroll;
             if (dd > maxDrawdown) maxDrawdown = dd;
 
-            betSize = simNextBetSize(sizing, baseBet, maxBet, actualBet, lastWon, consecutiveWins);
+            betSize = simNextBetSize(sizing, baseBet, maxBet, betSize, lastWon, consecutiveWins);
             lastOutcome = outcome;
 
-            handLog.push({ p: hand.p, b: hand.b, pS: hand.pS, bS: hand.bS, outcome, side, bet: actualBet, pl });
+            handLog.push({ p: hand.p, b: hand.b, pS: hand.pS, bS: hand.bS, outcome, side, bet: betSize, pl });
         }
 
         return { netPL, bankroll, handsPlayed, betsPlaced, maxDrawdown, maxWinStreak, maxLossStreak, handLog };
