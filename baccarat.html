@@ -1862,7 +1862,11 @@ const supa = {
         const display = adminMode
             ? '<span style="color:var(--gold);font-weight:bold;letter-spacing:1px;">DRAGONFLY</span>'
             : '<span style="color:rgba(212,175,55,0.8);">⬤</span> ' + userEmail.split('@')[0];
-        badge.innerHTML = display;
+        let html = display;
+        if (_currentSessionLabel) {
+            html += '<div style="color:rgba(255,255,255,0.6);font-size:0.62rem;margin-top:1px;letter-spacing:0.5px;font-weight:normal;">🎮 ' + escAttr(_currentSessionLabel) + '</div>';
+        }
+        badge.innerHTML = html;
         badge.style.display = 'block';
     }
 
@@ -2492,6 +2496,7 @@ const supa = {
         if (initialBankroll === 0) initialBankroll = val;
         bankroll = val;
         _gameSessionName = (document.getElementById('session-name').value || '').trim() || null;
+        _currentSessionLabel = _gameSessionName || (selectedCasino && selectedCasino.name) || 'Classic';
         shoeSize = parseInt(document.getElementById('shoe-size').value);
         initBetKeys();
         buildSideBetZones();
@@ -2524,6 +2529,7 @@ const supa = {
         if (!confirm('Start a new game? Current progress will be lost.')) return;
         closeGameSession().catch(()=>{});
         clearGameState();
+        _currentSessionLabel = null; _gameSessionName = null;
         bankroll = 0; initialBankroll = 0; totalDeposits = 0;
         currentBets = {}; lastBets = {};
         stats = { banker:0, player:0, tie:0, hands:0, betsWon:0, betsLost:0, volWon:0, volLost:0 };
@@ -2947,7 +2953,10 @@ const supa = {
             _gameSessionShoes = _preReviewSession.shoes;
             _gameSessionStart = _preReviewSession.start;
             _gameSessionName  = _preReviewSession.name;
+            _currentSessionLabel = _preReviewSession.label || null;
             _preReviewSession = null;
+        } else {
+            _currentSessionLabel = null;
         }
         document.getElementById('review-banner').style.display = 'none';
         document.getElementById('shoe-end-overlay').style.display = 'none';
@@ -2960,7 +2969,7 @@ const supa = {
         if (loadGameState()) {
             hideSplash();
             initBetKeys(); buildSideBetZones(); applyCasinoTheme();
-            renderAllRoads(); updateUI(); updateAuxButtons();
+            renderAllRoads(); updateUI(); updateAuxButtons(); updateHeaderUser();
         } else {
             document.getElementById('game-container').style.display = 'none';
             buildCasinoGrid();
@@ -2975,7 +2984,15 @@ const supa = {
     let _gameSessionShoes    = [];   // completed shoe summaries
     let _gameSessionStart    = 0;    // initial bankroll for this session
     let _gameSessionName     = null; // user-supplied session name
+    let _currentSessionLabel = null; // name shown in the in-game header
     let _gsDebounceTimer     = null;
+
+    // Minimal HTML escape for user-supplied session names shown in the header.
+    function escAttr(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
     let _reviewingSession    = false; // true while viewing an ended session read-only
     let _preReviewSession    = null;  // live-session handle stashed during review
 
@@ -2991,6 +3008,7 @@ const supa = {
             casinoId: selectedCasino.id,
             lastBetSummary,
             soundEnabled,
+            sessionName: _gameSessionName,
             ts: Date.now()
         };
     }
@@ -3121,6 +3139,8 @@ const supa = {
             _gameSessionId    = id;
             _gameSessionShoes = sess.shoes_played || [];
             _gameSessionStart = sess.start_bankroll || sess.current_bankroll;
+            _gameSessionName  = sess.name || null;
+            _currentSessionLabel = sess.name || sess.casino_id || 'Classic';
             bankroll          = sess.current_bankroll || sess.start_bankroll;
             initialBankroll   = sess.start_bankroll;
             const ov = document.getElementById('game-resume-overlay');
@@ -3137,6 +3157,8 @@ const supa = {
         _gameSessionId    = id;
         _gameSessionShoes = sess.shoes_played || [];
         _gameSessionStart = sess.start_bankroll || state.initialBankroll;
+        _gameSessionName  = sess.name || null;
+        _currentSessionLabel = sess.name || sess.casino_id || 'Classic';
         const ov = document.getElementById('game-resume-overlay');
         if (ov) ov.remove();
         if (loadGameState()) {
@@ -3229,6 +3251,7 @@ const supa = {
             shoes: _gameSessionShoes,
             start: _gameSessionStart,
             name:  _gameSessionName,
+            label: _currentSessionLabel,
         };
         _gameSessionId    = null;
         _reviewingSession = true;
@@ -3238,6 +3261,8 @@ const supa = {
             showToast('Could not open this session', '#8b1e1e');
             return;
         }
+
+        _currentSessionLabel = (sess.name || sess.casino_id || 'Session') + ' · review';
 
         hideSplash();
         document.getElementById('setup-overlay').style.display = 'none';
@@ -3386,6 +3411,11 @@ const supa = {
             // Restore casino
             const casino = CASINO_MODES.find(c => c.id === s.casinoId);
             if (casino) selectedCasino = casino;
+            // Restore the session name so the in-game header label survives refresh
+            if (s.sessionName !== undefined) _gameSessionName = s.sessionName;
+            if (!_reviewingSession) {
+                _currentSessionLabel = _gameSessionName || (selectedCasino && selectedCasino.name) || 'Classic';
+            }
             return true;
         } catch(e) { return false; }
     }
