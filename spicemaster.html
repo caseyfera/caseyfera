@@ -1,0 +1,721 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spice Blend Master - Interactive Flashcards & Quizzes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        spice: {
+                            50: '#fdf8f6',
+                            100: '#fbeeeb',
+                            200: '#f7dcd5',
+                            300: '#f0beaf',
+                            500: '#d96b43',
+                            600: '#c2532c',
+                            700: '#a34120',
+                            800: '#84351d',
+                            900: '#6d2e1b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d96b43;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a34120;
+        }
+    </style>
+</head>
+<body class="bg-spice-50 text-gray-800 h-full flex flex-col font-sans antialiased selection:bg-spice-500 selection:text-white">
+
+    <header class="bg-white border-b border-spice-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('flashcards')">
+                <div class="w-11 h-11 bg-gradient-to-br from-spice-500 to-spice-700 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-spice-500/30 transform hover:scale-105 transition">
+                    <i class="fa-solid fa-mortar-pestle text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-spice-700 to-spice-900 bg-clip-text text-transparent">SpiceBlend Master</h1>
+                    <p class="text-xs text-gray-500 font-medium">Learn iconic seasonings by heart</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="hidden md:flex space-x-2 bg-spice-100 p-1.5 rounded-2xl border border-spice-200">
+                <button onclick="switchTab('flashcards')" id="nav-flashcards" class="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center space-x-2 bg-white text-spice-700 shadow-sm">
+                    <i class="fa-solid fa-clone"></i>
+                    <span>Flashcards</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center space-x-2 text-gray-600 hover:text-spice-700">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>Quiz Arena</span>
+                </button>
+                <button onclick="switchTab('library')" id="nav-library" class="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center space-x-2 text-gray-600 hover:text-spice-700">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Library</span>
+                </button>
+            </nav>
+
+            <!-- Stats Badge -->
+            <div class="hidden sm:flex items-center space-x-3 bg-spice-100 px-4 py-2 rounded-2xl border border-spice-200">
+                <div class="flex items-center space-x-2 text-spice-700">
+                    <i class="fa-solid fa-fire text-orange-500"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider">Quiz Best:</span>
+                    <span id="header-high-score" class="font-extrabold text-sm">0 pts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Bar -->
+        <div class="md:hidden flex border-t border-spice-200 bg-white px-2 py-2 justify-around">
+            <button onclick="switchTab('flashcards')" id="mob-nav-flashcards" class="flex flex-col items-center py-1 px-4 text-spice-700 font-bold text-xs">
+                <i class="fa-solid fa-clone text-lg mb-1"></i>
+                Flashcards
+            </button>
+            <button onclick="switchTab('quiz')" id="mob-nav-quiz" class="flex flex-col items-center py-1 px-4 text-gray-500 hover:text-spice-700 font-medium text-xs">
+                <i class="fa-solid fa-brain text-lg mb-1"></i>
+                Quiz
+            </button>
+            <button onclick="switchTab('library')" id="mob-nav-library" class="flex flex-col items-center py-1 px-4 text-gray-500 hover:text-spice-700 font-medium text-xs">
+                <i class="fa-solid fa-book-open text-lg mb-1"></i>
+                Library
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+
+        <!-- VIEW 1: FLASHCARDS -->
+        <div id="view-flashcards" class="flex-1 flex flex-col max-w-3xl mx-auto w-full">
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-900">Study Flashcards</h2>
+                    <p class="text-sm text-gray-500">Flip card to inspect ingredients. Use arrow keys or buttons to navigate.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="shuffleFlashcards()" class="px-4 py-2 bg-white border border-spice-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-spice-50 hover:border-spice-300 transition flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-shuffle text-spice-500"></i>
+                        <span>Shuffle Deck</span>
+                    </button>
+                    <button onclick="resetFlashcards()" class="px-4 py-2 bg-white border border-spice-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-spice-50 hover:border-spice-300 transition flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-rotate-right text-spice-500"></i>
+                        <span>Restart</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-spice-200 h-2.5 rounded-full mb-6 overflow-hidden">
+                <div id="flashcard-progress" class="bg-gradient-to-r from-spice-500 to-spice-700 h-2.5 rounded-full transition-all duration-300" style="width: 7.7%;"></div>
+            </div>
+
+            <!-- Flashcard 3D Container -->
+            <div class="relative w-full aspect-[4/3] sm:aspect-[16/10] cursor-pointer perspective-1000 mb-6 group" onclick="toggleFlip()">
+                <div id="flashcard-inner" class="w-full h-full relative duration-500 transform-style-3d shadow-xl rounded-3xl transition-transform">
+                    
+                    <!-- FRONT OF CARD -->
+                    <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white via-spice-50 to-spice-100 border-2 border-spice-200 rounded-3xl p-8 flex flex-col justify-between backface-hidden shadow-sm">
+                        <div class="flex justify-between items-center">
+                            <span id="card-counter" class="bg-spice-200 text-spice-800 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">Card 1 of 13</span>
+                            <span class="text-xs text-spice-600 font-semibold flex items-center space-x-1 bg-white px-3 py-1 rounded-full border border-spice-200 shadow-xs">
+                                <i class="fa-solid fa-hand-pointer animate-pulse mr-1"></i> Click to Flip
+                            </span>
+                        </div>
+                        <div class="text-center my-auto">
+                            <div class="w-20 h-20 bg-spice-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-spice-600 group-hover:scale-110 transition duration-300">
+                                <i class="fa-solid fa-jar text-3xl"></i>
+                            </div>
+                            <h3 id="card-title" class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight mb-2">JERK</h3>
+                            <p class="text-sm text-gray-500 font-medium">Spice Blend Formulation</p>
+                        </div>
+                        <div class="text-center text-xs text-gray-400 font-medium">
+                            Press <kbd class="px-2 py-1 bg-white border border-gray-300 rounded shadow-xs text-gray-700">Space</kbd> or click to reveal ingredients
+                        </div>
+                    </div>
+
+                    <!-- BACK OF CARD -->
+                    <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-spice-800 to-spice-900 border-2 border-spice-700 rounded-3xl p-8 flex flex-col justify-between backface-hidden rotate-y-180 text-white shadow-xl">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-spice-700 text-spice-100 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">Ingredients List</span>
+                            <span class="text-xs text-spice-200 font-medium flex items-center space-x-1 bg-spice-700/50 px-3 py-1 rounded-full border border-spice-600">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Flip back
+                            </span>
+                        </div>
+                        <div class="my-auto">
+                            <h4 id="card-back-title" class="text-2xl font-bold mb-4 text-spice-100 border-b border-spice-700 pb-2">JERK Blend</h4>
+                            <div id="card-ingredients-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="text-center text-xs text-spice-300 font-medium">
+                            Use <kbd class="px-2 py-1 bg-spice-700 border border-spice-600 rounded text-spice-100">←</kbd> <kbd class="px-2 py-1 bg-spice-700 border border-spice-600 rounded text-spice-100">→</kbd> to navigate cards
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-between gap-4">
+                <button onclick="prevCard()" class="flex-1 bg-white hover:bg-spice-50 text-gray-800 border border-spice-200 font-bold py-3.5 px-6 rounded-2xl shadow-sm transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Previous</span>
+                </button>
+                <button onclick="nextCard()" class="flex-1 bg-spice-600 hover:bg-spice-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-spice-600/30 transition flex items-center justify-center space-x-2">
+                    <span>Next Card</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: QUIZ ARENA -->
+        <div id="view-quiz" class="flex-1 flex flex-col max-w-2xl mx-auto w-full hidden">
+            <div id="quiz-start-screen" class="bg-white border border-spice-200 rounded-3xl p-8 sm:p-12 text-center shadow-xl my-auto">
+                <div class="w-20 h-20 bg-spice-100 text-spice-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h2 class="text-3xl font-black text-gray-900 mb-3">Spice Blend Master Quiz</h2>
+                <p class="text-gray-600 mb-8 max-w-md mx-auto text-sm sm:text-base">Test your knowledge on ingredient formulas for all 13 spice blends. Earn points and beat your personal best score!</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-left">
+                    <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
+                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-circle-question mr-2"></i>Question Types</div>
+                        <p class="text-xs text-gray-600">Identify blends from ingredients & ingredients from blends.</p>
+                    </div>
+                    <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
+                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-trophy mr-2"></i>High Score</div>
+                        <p class="text-xs text-gray-600" id="quiz-high-score-display">0 Points Saved</p>
+                    </div>
+                </div>
+
+                <button onclick="startQuiz()" class="w-full bg-spice-600 hover:bg-spice-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-xl shadow-spice-600/30 transition text-lg flex items-center justify-center space-x-3">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Start Quiz Now</span>
+                </button>
+            </div>
+
+            <div id="quiz-active-screen" class="hidden flex-col flex-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="quiz-progress-text" class="text-xs font-bold uppercase tracking-wider text-spice-700 bg-spice-100 px-3 py-1.5 rounded-full">Question 1 of 10</span>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-xs font-bold text-gray-500">Score: <span id="quiz-current-score" class="text-spice-700 font-extrabold text-sm">0</span></span>
+                        <span class="text-xs font-bold text-gray-500">Streak: <span id="quiz-current-streak" class="text-orange-600 font-extrabold text-sm">0 🔥</span></span>
+                    </div>
+                </div>
+
+                <div class="w-full bg-spice-200 h-2.5 rounded-full mb-6 overflow-hidden">
+                    <div id="quiz-progress-bar" class="bg-gradient-to-r from-spice-500 to-spice-700 h-2.5 rounded-full transition-all duration-300" style="width: 10%;"></div>
+                </div>
+
+                <div class="bg-white border border-spice-200 rounded-3xl p-6 sm:p-8 shadow-lg mb-6 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-spice-600 uppercase tracking-widest mb-2" id="quiz-category-tag">Ingredient Test</div>
+                        <h3 id="quiz-question-title" class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">What spice blend contains these ingredients?</h3>
+                    </div>
+
+                    <div id="quiz-options-container" class="grid grid-cols-1 gap-3 my-auto">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div id="quiz-feedback-box" class="mt-6 hidden p-4 rounded-2xl text-sm font-semibold flex items-center justify-between">
+                        <span id="quiz-feedback-text">Correct!</span>
+                        <button onclick="nextQuizQuestion()" class="bg-gray-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-spice-700 transition">Next Question <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="quiz-results-screen" class="hidden bg-white border border-spice-200 rounded-3xl p-8 sm:p-12 text-center shadow-xl my-auto">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="text-3xl font-black text-gray-900 mb-2">Quiz Completed!</h2>
+                <p class="text-gray-600 mb-6 text-sm">Here is how well you know your spice blends.</p>
+
+                <div class="bg-spice-50 border border-spice-200 rounded-2xl p-6 mb-8 max-w-sm mx-auto">
+                    <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Final Score</div>
+                    <div id="results-final-score" class="text-4xl font-black text-spice-700 mb-2">8 / 10</div>
+                    <div id="results-badge-text" class="text-sm font-semibold text-gray-700">Master Spice Chef 👨‍🍳</div>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button onclick="startQuiz()" class="flex-1 bg-spice-600 hover:bg-spice-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-spice-600/30 transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Try Again</span>
+                    </button>
+                    <button onclick="switchTab('flashcards')" class="flex-1 bg-white hover:bg-spice-50 text-gray-800 border border-spice-200 font-bold py-3.5 px-6 rounded-2xl shadow-sm transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-clone"></i>
+                        <span>Study Cards</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: LIBRARY / REFERENCE VIEW -->
+        <div id="view-library" class="flex-1 flex flex-col hidden w-full">
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-900">Spice Blend Reference Library</h2>
+                    <p class="text-sm text-gray-500">Browse all 13 spice blend formulations and ingredients.</p>
+                </div>
+                <div class="relative w-full sm:w-72">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-search"></i>
+                    </span>
+                    <input type="text" id="library-search" oninput="filterLibrary()" placeholder="Search blends or ingredients..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-spice-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-spice-500 shadow-sm">
+                </div>
+            </div>
+
+            <div id="library-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Complete spice dataset with all 13 blends
+        const spiceData = [
+            {
+                name: "JERK",
+                category: "Caribbean",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cayenne", "brown sugar", "thyme", "allspice", "ginger", "cinnamon"]
+            },
+            {
+                name: "RANCH",
+                category: "American",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "dill", "parsley"]
+            },
+            {
+                name: "POULTRY",
+                category: "Classic Herbs",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "thyme", "parsley", "sage"]
+            },
+            {
+                name: "ITALIAN",
+                category: "Mediterranean",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "thyme", "oregano", "basil", "rosemary"]
+            },
+            {
+                name: "CAJUN",
+                category: "Southern",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "thyme", "oregano", "paprika", "cayenne"]
+            },
+            {
+                name: "TACO",
+                category: "Tex-Mex",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cumin", "oregano", "paprika", "chili powder"]
+            },
+            {
+                name: "ADOBO",
+                category: "Latin American",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cumin", "oregano", "turmeric"]
+            },
+            {
+                name: "CURRY",
+                category: "South Asian",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cumin", "coriander", "turmeric", "ginger"]
+            },
+            {
+                name: "BBQ RUB",
+                category: "Grilling",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cayenne", "brown sugar", "paprika"]
+            },
+            {
+                name: "KEBAB",
+                category: "Middle Eastern",
+                ingredients: ["salt", "black pepper", "garlic powder", "onion powder", "cumin", "coriander", "paprika", "sumac"]
+            },
+            {
+                name: "GARAM MASALA",
+                category: "Indian",
+                ingredients: ["cumin", "coriander", "black pepper", "cinnamon", "nutmeg", "cardamom", "clove"]
+            },
+            {
+                name: "FIVE SPICE",
+                category: "Asian",
+                ingredients: ["clove", "cinnamon", "sichuan peppercorn", "star anise", "fennel seed"]
+            },
+            {
+                name: "ZA'ATAR",
+                category: "Middle Eastern",
+                ingredients: ["thyme", "oregano", "sumac", "sesame seed"]
+            }
+        ];
+
+        // Application State
+        let currentDeck = [...spiceData];
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+
+        // Quiz State
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let quizStreak = 0;
+        let highScore = localStorage.getItem('spice_quiz_highscore') || 0;
+
+        // Initialize App
+        window.onload = function() {
+            updateHighScoreDisplay();
+            renderFlashcard();
+            renderLibrary(spiceData);
+            
+            // Keyboard event listener for flashcards and navigation
+            document.addEventListener('keydown', handleKeyPress);
+        };
+
+        function switchTab(tabId) {
+            document.getElementById('view-flashcards').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-library').classList.add('hidden');
+
+            // Reset nav button styles
+            ['flashcards', 'quiz', 'library'].forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                const mobBtn = document.getElementById(`mob-nav-${t}`);
+                if(btn) {
+                    btn.className = "px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center space-x-2 text-gray-600 hover:text-spice-700";
+                }
+                if(mobBtn) {
+                    mobBtn.className = "flex flex-col items-center py-1 px-4 text-gray-500 hover:text-spice-700 font-medium text-xs";
+                }
+            });
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            const activeMobBtn = document.getElementById(`mob-nav-${tabId}`);
+            if(activeBtn) {
+                activeBtn.className = "px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center space-x-2 bg-white text-spice-700 shadow-sm";
+            }
+            if(activeMobBtn) {
+                activeMobBtn.className = "flex flex-col items-center py-1 px-4 text-spice-700 font-bold text-xs";
+            }
+
+            if(tabId === 'library') {
+                renderLibrary(spiceData);
+            }
+        }
+
+        // ==================== FLASHCARD LOGIC ====================
+        function renderFlashcard() {
+            const card = currentDeck[currentCardIndex];
+            document.getElementById('card-title').innerText = card.name;
+            document.getElementById('card-back-title').innerText = `${card.name} Blend`;
+            document.getElementById('card-counter').innerText = `Card ${currentCardIndex + 1} of ${currentDeck.length}`;
+            
+            // Update progress bar
+            const progressPct = ((currentCardIndex + 1) / currentDeck.length) * 100;
+            document.getElementById('flashcard-progress').style.width = `${progressPct}%`;
+
+            // Render ingredients list
+            const ingContainer = document.getElementById('card-ingredients-list');
+            ingContainer.innerHTML = '';
+            card.ingredients.forEach(ing => {
+                const tag = document.createElement('span');
+                tag.className = 'bg-spice-700/80 border border-spice-600 text-spice-100 text-xs font-semibold px-3 py-1.5 rounded-xl shadow-xs capitalize';
+                tag.innerText = ing;
+                ingContainer.appendChild(tag);
+            });
+
+            // Ensure card is unflipped on index change
+            if(isCardFlipped) {
+                toggleFlip();
+            }
+        }
+
+        function toggleFlip() {
+            const inner = document.getElementById('flashcard-inner');
+            isCardFlipped = !isCardFlipped;
+            if(isCardFlipped) {
+                inner.classList.add('rotate-y-180');
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % currentDeck.length;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + currentDeck.length) % currentDeck.length;
+            renderFlashcard();
+        }
+
+        function shuffleFlashcards() {
+            currentDeck.sort(() => Math.random() - 0.5);
+            currentCardIndex = 0;
+            renderFlashcard();
+        }
+
+        function resetFlashcards() {
+            currentDeck = [...spiceData];
+            currentCardIndex = 0;
+            renderFlashcard();
+        }
+
+        function handleKeyPress(e) {
+            // Only trigger if flashcard tab is active
+            if(!document.getElementById('view-flashcards').classList.contains('hidden')) {
+                if(e.code === 'Space') {
+                    e.preventDefault();
+                    toggleFlip();
+                } else if(e.code === 'ArrowRight') {
+                    nextCard();
+                } else if(e.code === 'ArrowLeft') {
+                    prevCard();
+                }
+            }
+        }
+
+        // ==================== QUIZ LOGIC ====================
+        function updateHighScoreDisplay() {
+            document.getElementById('header-high-score').innerText = `${highScore} pts`;
+            document.getElementById('quiz-high-score-display').innerText = `${highScore} Points Saved`;
+        }
+
+        function startQuiz() {
+            quizScore = 0;
+            quizStreak = 0;
+            currentQuizIndex = 0;
+            
+            // Generate 10 randomized quiz questions
+            quizQuestions = [];
+            const shuffledDeck = [...spiceData].sort(() => Math.random() - 0.5);
+            
+            for(let i = 0; i < Math.min(10, shuffledDeck.length); i++) {
+                const target = shuffledDeck[i];
+                const type = Math.random() > 0.5 ? 'blend_from_ingredients' : 'ingredients_from_blend';
+                
+                // Get 3 incorrect distractors
+                const distractors = spiceData.filter(s => s.name !== target.name).sort(() => Math.random() - 0.5).slice(0, 3);
+                const options = [...distractors, target].sort(() => Math.random() - 0.5);
+
+                quizQuestions.push({
+                    type: type,
+                    target: target,
+                    options: options
+                });
+            }
+
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-results-screen').classList.add('hidden');
+            document.getElementById('quiz-active-screen').classList.remove('hidden');
+            document.getElementById('quiz-active-screen').classList.add('flex');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-progress-text').innerText = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+            document.getElementById('quiz-current-score').innerText = quizScore;
+            document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
+            
+            const progressPct = ((currentQuizIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPct}%`;
+
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+
+            const titleEl = document.getElementById('quiz-question-title');
+            const categoryTag = document.getElementById('quiz-category-tag');
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            if(q.type === 'blend_from_ingredients') {
+                categoryTag.innerText = "Blend Identification";
+                titleEl.innerText = "Which spice blend uses this exact ingredient profile?";
+                
+                // Show ingredients box
+                const ingBox = document.createElement('div');
+                ingBox.className = 'bg-spice-50 border border-spice-200 p-4 rounded-2xl mb-4 flex flex-wrap gap-2';
+                q.target.ingredients.forEach(ing => {
+                    const pill = document.createElement('span');
+                    pill.className = 'bg-white border border-spice-200 text-spice-800 text-xs font-semibold px-3 py-1 rounded-xl shadow-xs capitalize';
+                    pill.innerText = ing;
+                    ingBox.appendChild(pill);
+                });
+                optionsContainer.appendChild(ingBox);
+
+                // Render options
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-bold text-gray-800 transition flex items-center justify-between shadow-xs group';
+                    btn.innerHTML = `<span>${opt.name}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition"></i>`;
+                    btn.onclick = () => selectQuizAnswer(opt.name === q.target.name, btn, q.target.name);
+                    optionsContainer.appendChild(btn);
+                });
+            } else {
+                categoryTag.innerText = "Ingredient Verification";
+                titleEl.innerText = `Which ingredients belong to the "${q.target.name}" blend?`;
+
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-medium text-gray-800 transition flex flex-col space-y-2 shadow-xs group';
+                    
+                    const titleRow = document.createElement('div');
+                    titleRow.className = 'font-bold text-gray-900 flex justify-between items-center';
+                    titleRow.innerHTML = `<span>${opt.name}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition text-xs"></i>`;
+                    btn.appendChild(titleRow);
+
+                    const ingRow = document.createElement('div');
+                    ingRow.className = 'flex flex-wrap gap-1';
+                    opt.ingredients.forEach(ing => {
+                        const span = document.createElement('span');
+                        span.className = 'bg-spice-50 border border-spice-200 text-gray-600 text-[10px] px-2 py-0.5 rounded-lg capitalize';
+                        span.innerText = ing;
+                        ingRow.appendChild(span);
+                    });
+                    btn.appendChild(ingRow);
+
+                    btn.onclick = () => selectQuizAnswer(opt.name === q.target.name, btn, q.target.name);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        function selectQuizAnswer(isCorrect, selectedBtn, correctName) {
+            // Disable all option buttons
+            const buttons = document.getElementById('quiz-options-container').querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if(isCorrect) {
+                selectedBtn.className = selectedBtn.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-emerald-50 border-emerald-500 text-emerald-900');
+                quizScore += 10;
+                quizStreak += 1;
+                document.getElementById('quiz-feedback-text').innerText = "Correct! Great job! 🎉";
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between bg-emerald-100 text-emerald-800 border border-emerald-200";
+            } else {
+                selectedBtn.className = selectedBtn.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-rose-50 border-rose-500 text-rose-900');
+                quizStreak = 0;
+                // Highlight correct answer
+                buttons.forEach(b => {
+                    if(b.innerText.includes(correctName)) {
+                        b.className = b.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-emerald-50 border-emerald-500 text-emerald-900');
+                    }
+                });
+                document.getElementById('quiz-feedback-text').innerText = `Incorrect. The correct answer was "${correctName}".`;
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between bg-rose-100 text-rose-800 border border-rose-200";
+            }
+
+            document.getElementById('quiz-current-score').innerText = quizScore;
+            document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
+            document.getElementById('quiz-feedback-box').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if(currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-active-screen').classList.add('hidden');
+            document.getElementById('quiz-active-screen').classList.remove('flex');
+            document.getElementById('quiz-results-screen').classList.remove('hidden');
+
+            document.getElementById('results-final-score').innerText = `${quizScore} / ${quizQuestions.length * 10}`;
+            
+            let badge = "Master Spice Chef 👨‍🍳";
+            if(quizScore === quizQuestions.length * 10) badge = "Master Herbologist ⭐⭐⭐";
+            else if(quizScore >= 70) badge = "Culinary Apprentice 🍳";
+            else badge = "Kitchen Novice 🌱";
+            document.getElementById('results-badge-text').innerText = badge;
+
+            if(quizScore > highScore) {
+                highScore = quizScore;
+                localStorage.setItem('spice_quiz_highscore', highScore);
+                updateHighScoreDisplay();
+            }
+        }
+
+        // ==================== LIBRARY LOGIC ====================
+        function renderLibrary(data) {
+            const grid = document.getElementById('library-grid');
+            grid.innerHTML = '';
+
+            data.forEach(blend => {
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-spice-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between';
+                
+                let html = `
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-spice-100 text-spice-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">${blend.category}</span>
+                            <span class="text-xs font-bold text-gray-400">${blend.ingredients.length} ingredients</span>
+                        </div>
+                        <h3 class="text-xl font-black text-gray-900 mb-4">${blend.name}</h3>
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                `;
+
+                blend.ingredients.forEach(ing => {
+                    html += `<span class="bg-spice-50 border border-spice-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-xl capitalize">${ing}</span>`;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-spice-100 flex items-center justify-between text-xs text-spice-700 font-bold">
+                        <span>Verified Formulation</span>
+                        <i class="fa-solid fa-check-circle text-emerald-500"></i>
+                    </div>
+                `;
+
+                card.innerHTML = html;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterLibrary() {
+            const query = document.getElementById('library-search').value.toLowerCase();
+            const filtered = spiceData.filter(blend => 
+                blend.name.toLowerCase().includes(query) || 
+                blend.category.toLowerCase().includes(query) ||
+                blend.ingredients.some(ing => ing.toLowerCase().includes(query))
+            );
+            renderLibrary(filtered);
+        }
+    </script>
+</body>
+</html>
+```
