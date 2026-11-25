@@ -79,6 +79,34 @@
       background: linear-gradient(180deg, #fffdf9 0%, #faf6ee 100%);
       box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.65), inset 0 0 0 1px rgba(214, 204, 188, 0.7);
     }
+
+    .staff-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+    .staff-scroll::-webkit-scrollbar-track {
+      background: #e7e2d8;
+      border-radius: 9999px;
+    }
+    .staff-scroll::-webkit-scrollbar-thumb {
+      background: #a8a29e;
+      border-radius: 9999px;
+    }
+    .staff-scroll::-webkit-scrollbar-thumb:hover {
+      background: #78716c;
+    }
+
+    .staff-note-group {
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .staff-note-group:hover {
+      opacity: 0.75;
+    }
+
+    /* Tuner Gauge Needle Smooth Transition */
+    .tuner-needle {
+      transition: transform 0.08s cubic-bezier(0.22, 1, 0.36, 1);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-amber-500/30">
@@ -96,28 +124,39 @@
             Concert Clef &amp; Piano Studio
           </h1>
           <p class="text-xs text-zinc-400">
-            Concert Pitch Grand Staff • Real-Time B♭ Trumpet Reference
+            Concert Pitch Grand Staff • B♭ Trumpet &amp; Mic Chromatic Tuner
           </p>
         </div>
       </div>
 
       <!-- Mode & Utility Controls -->
       <div class="flex flex-wrap items-center gap-2">
-        <!-- Mode Switcher -->
+        <!-- Prominent Mic Tuner Toggle Button -->
+        <button
+          id="toggleTunerPanelBtn"
+          type="button"
+          class="px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/50 text-xs sm:text-sm font-semibold text-emerald-300 transition flex items-center gap-1.5 shadow-sm"
+          title="Open or close the Microphone Chromatic Tuner for Guitar & B♭ Trumpet"
+        >
+          <span id="headerTunerDot" class="w-2 h-2 rounded-full bg-zinc-500"></span>
+          <span>🎙️ Mic Tuner</span>
+        </button>
+
+        <!-- Mode Switcher (Compose is Default) -->
         <div class="inline-flex rounded-xl bg-zinc-900 p-1 border border-zinc-800">
-          <button
-            id="modeLiveBtn"
-            type="button"
-            class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-500 text-zinc-950 shadow-sm"
-          >
-            Live Clef
-          </button>
           <button
             id="modeSeqBtn"
             type="button"
+            class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-500 text-zinc-950 shadow-sm"
+          >
+            Compose (Remember)
+          </button>
+          <button
+            id="modeLiveBtn"
+            type="button"
             class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-zinc-400 hover:text-zinc-100"
           >
-            Melody Builder
+            Live Monitor
           </button>
         </div>
 
@@ -155,6 +194,210 @@
 
   <!-- Main Workspace -->
   <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col gap-4 sm:gap-5">
+
+    <!-- Real-Time Microphone Chromatic Tuner Studio Panel -->
+    <section id="tunerPanel" class="bg-zinc-900/95 border border-zinc-800 rounded-2xl p-3.5 sm:p-5 shadow-2xl transition-all">
+      <!-- Top Tuner Bar: Title, Instrument Selector, Start/Stop Mic -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-base">
+            🎙️
+          </div>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-zinc-100 leading-tight">
+              Chromatic Microphone Tuner
+            </h2>
+            <p class="text-[11px] text-zinc-400">
+              Sub-cent autocorrelation pitch detection (E2 82.4 Hz – C6 1046.5 Hz)
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Instrument Mode Switcher -->
+          <div class="inline-flex rounded-xl bg-zinc-950 p-1 border border-zinc-800" role="group" aria-label="Tuner Instrument Mode">
+            <button
+              id="tunerInstGuitarBtn"
+              type="button"
+              class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-zinc-950 shadow-sm flex items-center gap-1.5"
+            >
+              <span>🎸 Guitar (Concert C)</span>
+            </button>
+            <button
+              id="tunerInstTrumpetBtn"
+              type="button"
+              class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5"
+            >
+              <span>🎺 B♭ Trumpet (+2)</span>
+            </button>
+          </div>
+
+          <!-- Start / Stop Microphone Button -->
+          <button
+            id="tunerMicToggleBtn"
+            type="button"
+            class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-900/30 transition flex items-center gap-1.5"
+          >
+            <span id="tunerMicBtnIcon">🎙️</span>
+            <span id="tunerMicBtnText">Start Mic Tuner</span>
+          </button>
+
+          <!-- Collapse Tuner Button -->
+          <button
+            id="collapseTunerBtn"
+            type="button"
+            class="px-2.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition"
+            title="Minimize tuner panel"
+          >
+            Hide
+          </button>
+        </div>
+      </div>
+
+      <!-- Microphone Permission / Error Message Banner -->
+      <div id="tunerErrorBanner" class="hidden mt-3 px-3.5 py-2.5 rounded-xl bg-rose-950/70 border border-rose-500/40 text-rose-200 text-xs flex items-center justify-between gap-2">
+        <span id="tunerErrorText">Microphone access was denied or unavailable. Please allow microphone permissions in your browser settings.</span>
+        <button id="dismissTunerErrorBtn" type="button" class="text-rose-300 hover:text-white font-bold px-1.5">✕</button>
+      </div>
+
+      <!-- Main Tuner Display Grid -->
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+        <!-- Left: Detected Pitch, Transposition & Valves (5 cols) -->
+        <div class="lg:col-span-5 bg-zinc-950/80 border border-zinc-800/90 rounded-2xl p-4 flex flex-col justify-between gap-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span id="tunerPrimaryLabel" class="text-[11px] uppercase tracking-wider font-semibold text-amber-400">
+                Concert Pitch (Guitar)
+              </span>
+              <div class="flex items-baseline gap-2.5 mt-0.5">
+                <span id="tunerDetectedNote" class="text-4xl sm:text-5xl font-bold font-mono-code text-zinc-100 tracking-tight">
+                  --
+                </span>
+                <span id="tunerDetectedFreq" class="text-sm sm:text-base font-mono-code font-semibold text-zinc-400">
+                  -- Hz
+                </span>
+              </div>
+              <p id="tunerSecondaryInfo" class="text-xs text-zinc-400 mt-1 font-mono-code">
+                Press "Start Mic Tuner" and play a note
+              </p>
+            </div>
+
+            <!-- Tuning Status Badge -->
+            <span
+              id="tunerStatusBadge"
+              class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700"
+            >
+              Idle
+            </span>
+          </div>
+
+          <!-- B♭ Trumpet Valve Diagram inside Tuner (Visible in Trumpet mode or always informative) -->
+          <div id="tunerTrumpetValveBox" class="hidden items-center justify-between bg-sky-950/40 border border-sky-500/30 rounded-xl px-3 py-2">
+            <div>
+              <span class="text-[10px] uppercase tracking-wider font-bold text-sky-300 block">B♭ Trumpet Valves</span>
+              <span id="tunerValveText" class="text-base font-mono-code font-bold text-sky-200">--</span>
+            </div>
+            <div class="flex items-center gap-2" aria-label="Trumpet Valve Visual">
+              <div class="flex flex-col items-center gap-0.5">
+                <span id="tunerV1" class="w-4 h-4 rounded-full border border-sky-400/50 bg-zinc-900 transition-all"></span>
+                <span class="text-[9px] font-mono-code text-zinc-400">1</span>
+              </div>
+              <div class="flex flex-col items-center gap-0.5">
+                <span id="tunerV2" class="w-4 h-4 rounded-full border border-sky-400/50 bg-zinc-900 transition-all"></span>
+                <span class="text-[9px] font-mono-code text-zinc-400">2</span>
+              </div>
+              <div class="flex flex-col items-center gap-0.5">
+                <span id="tunerV3" class="w-4 h-4 rounded-full border border-sky-400/50 bg-zinc-900 transition-all"></span>
+                <span class="text-[9px] font-mono-code text-zinc-400">3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Capture Detected Pitch Directly onto Staff -->
+          <div class="flex items-center justify-between gap-2 pt-1 border-t border-zinc-800/80">
+            <button
+              id="captureMicNoteBtn"
+              type="button"
+              disabled
+              class="w-full py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:pointer-events-none text-zinc-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+              title="Add the currently detected microphone pitch onto your staff composition"
+            >
+              <span>➕ Add Detected Note to Staff</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Center/Right: Precision Cents Arc Gauge + Instrument String/Note Targets (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-3">
+          <!-- Cents Arc Needle Gauge -->
+          <div class="bg-zinc-950/80 border border-zinc-800/90 rounded-2xl p-3 sm:p-4 flex flex-col items-center">
+            <div class="w-full flex items-center justify-between text-[11px] font-mono-code text-zinc-400 px-2">
+              <span class="text-rose-400 font-semibold">♭ -50¢ (Flat)</span>
+              <span id="tunerCentsReadout" class="text-sm font-bold text-zinc-200">0 cents</span>
+              <span class="text-amber-400 font-semibold">+50¢ (Sharp) ♯</span>
+            </div>
+
+            <!-- Precision SVG Cent Meter -->
+            <svg viewBox="0 0 360 125" class="w-full max-w-md h-28 overflow-visible" role="img" aria-label="Chromatic Tuner Cents Gauge">
+              <!-- Colored Accuracy Zones along Arc (center 180, 115, radius 92) -->
+              <!-- Flat Zone (-50 to -15 cents) -->
+              <path d="M 98 73 A 92 92 0 0 1 156 26" fill="none" stroke="#f43f5e" stroke-width="8" stroke-linecap="round" opacity="0.35" />
+              <!-- Near Flat (-15 to -5 cents) -->
+              <path d="M 156 26 A 92 92 0 0 1 172 23.5" fill="none" stroke="#f59e0b" stroke-width="8" opacity="0.55" />
+              <!-- In-Tune Sweet Spot (-5 to +5 cents) -->
+              <path d="M 172 23.5 A 92 92 0 0 1 188 23.5" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" />
+              <!-- Near Sharp (+5 to +15 cents) -->
+              <path d="M 188 23.5 A 92 92 0 0 1 204 26" fill="none" stroke="#f59e0b" stroke-width="8" opacity="0.55" />
+              <!-- Sharp Zone (+15 to +50 cents) -->
+              <path d="M 204 26 A 92 92 0 0 1 262 73" fill="none" stroke="#f43f5e" stroke-width="8" stroke-linecap="round" opacity="0.35" />
+
+              <!-- Tick Marks every 10 cents -->
+              <g id="tunerScaleTicks" stroke="#71717a" stroke-width="1.5">
+                <line x1="180" y1="14" x2="180" y2="28" stroke="#10b981" stroke-width="2.5" />
+                <line x1="154" y1="18" x2="158" y2="30" />
+                <line x1="206" y1="18" x2="202" y2="30" />
+                <line x1="129" y1="29" x2="136" y2="40" />
+                <line x1="231" y1="29" x2="224" y2="40" />
+                <line x1="107" y1="47" x2="116" y2="56" />
+                <line x1="253" y1="47" x2="244" y2="56" />
+                <line x1="91" y1="70" x2="102" y2="76" />
+                <line x1="269" y1="70" x2="258" y2="76" />
+              </g>
+
+              <!-- Rotating Needle Group -->
+              <g id="tunerNeedleGroup" class="tuner-needle" transform="rotate(0 180 115)">
+                <line id="tunerNeedleLine" x1="180" y1="115" x2="180" y2="22" stroke="#e4e4e7" stroke-width="3" stroke-linecap="round" />
+                <circle id="tunerNeedleTip" cx="180" cy="22" r="4" fill="#e4e4e7" />
+              </g>
+
+              <!-- Pivot Cap -->
+              <circle cx="180" cy="115" r="8" fill="#27272a" stroke="#71717a" stroke-width="2" />
+            </svg>
+
+            <!-- Input Level Meter Bar -->
+            <div class="w-full max-w-md flex items-center gap-2 mt-1">
+              <span class="text-[10px] font-mono-code uppercase text-zinc-500">Mic Level</span>
+              <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div id="tunerInputLevelBar" class="h-full w-0 bg-emerald-400 transition-all duration-75 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instrument Quick-Reference Tuning Targets (Click to hear reference pitch!) -->
+          <div class="bg-zinc-950/80 border border-zinc-800/90 rounded-2xl p-3">
+            <div class="flex items-center justify-between mb-2">
+              <span id="tunerTargetsTitle" class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                Guitar Standard Tuning (Click string for reference tone)
+              </span>
+              <span class="text-[10px] text-zinc-500">Auto-highlights closest pitch</span>
+            </div>
+            <div id="tunerTargetButtons" class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+              <!-- Populated dynamically for Guitar or B♭ Trumpet -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Real-Time Telemetry & B♭ Trumpet Reference Bar -->
     <section class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
@@ -205,54 +448,203 @@
 
     <!-- Concert Pitch Grand Staff Display -->
     <section class="staff-sheet rounded-2xl p-3 sm:p-5 text-zinc-900 relative overflow-hidden">
-      <!-- Staff Top Header Bar -->
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-stone-300/80">
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-800 text-amber-300">
-            CONCERT PITCH (C)
+      <!-- Notation View Switcher Tabs (Concert Pitch vs. B♭ Trumpet) -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-stone-300/80">
+        <div class="inline-flex rounded-xl bg-stone-200/90 p-1 border border-stone-300 shadow-inner" role="tablist" aria-label="Notation View">
+          <button
+            id="tabConcertBtn"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-stone-900 text-amber-300 shadow-sm flex items-center gap-1.5"
+          >
+            <span>🎹 Concert Pitch (C)</span>
+          </button>
+          <button
+            id="tabTrumpetBtn"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-stone-700 hover:text-stone-950 flex items-center gap-1.5"
+          >
+            <span>🎺 B♭ Trumpet (Written +2)</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="noteCountBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono-code font-bold bg-amber-100 text-amber-900 border border-amber-300">
+            0 Notes
+          </span>
+          <span class="hidden md:inline-flex items-center gap-1 text-[11px] text-stone-500 font-medium">
+            Press <kbd class="px-1.5 py-0.5 bg-stone-200 border border-stone-300 rounded text-stone-700 font-mono-code">Tab</kbd> to switch notation
+          </span>
+        </div>
+      </div>
+
+      <!-- Staff Sub-Header & Composition Playback Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2.5 border-b border-stone-300/80">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="staffClefPill" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-800 text-amber-300">
+            CONCERT GRAND STAFF
           </span>
           <span id="staffStatusText" class="text-xs sm:text-sm font-medium text-stone-600">
-            Press any piano key to render on the Grand Staff
+            Every key you press is remembered on the staff
           </span>
         </div>
 
-        <!-- Sequence Playback Controls (Visible in Melody Builder Mode or when notes exist) -->
-        <div id="seqControls" class="flex items-center gap-2">
+        <!-- Composition Playback, Loop, Tempo & Clear Controls -->
+        <div id="seqControls" class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <!-- Tempo Control -->
+          <div class="flex items-center gap-1.5 bg-stone-200/80 px-2.5 py-1 rounded-lg border border-stone-300 text-xs text-stone-800">
+            <label for="tempoInput" class="font-semibold">BPM:</label>
+            <input
+              id="tempoInput"
+              type="number"
+              min="40"
+              max="240"
+              value="120"
+              class="w-12 bg-white border border-stone-300 rounded px-1 py-0.5 text-center font-mono-code font-bold text-stone-900 focus:outline-none focus:border-amber-500"
+            />
+          </div>
+
           <button
             id="playSeqBtn"
             type="button"
-            class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-semibold shadow-sm transition flex items-center gap-1"
+            class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-semibold shadow-sm transition flex items-center gap-1"
+            title="Play or Stop composition (Space)"
             disabled
           >
-            <span>▶ Play</span>
+            <span id="playBtnIcon">▶</span>
+            <span id="playBtnText">Play</span>
           </button>
+
+          <button
+            id="loopSeqBtn"
+            type="button"
+            class="px-2.5 py-1.5 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-700 border border-stone-300 text-xs font-semibold shadow-sm transition flex items-center gap-1"
+            title="Toggle continuous loop playback"
+          >
+            <span>🔁</span>
+            <span>Loop</span>
+          </button>
+
+          <button
+            id="copySeqBtn"
+            type="button"
+            class="px-2.5 py-1.5 rounded-lg bg-sky-700 hover:bg-sky-800 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-semibold shadow-sm transition"
+            title="Copy Concert Pitch and B♭ Trumpet notes to clipboard"
+            disabled
+          >
+            Copy Notes
+          </button>
+
           <button
             id="undoSeqBtn"
             type="button"
-            class="px-2.5 py-1 rounded-lg bg-stone-200 hover:bg-stone-300 disabled:opacity-40 disabled:pointer-events-none text-stone-800 text-xs font-semibold transition"
+            class="px-2.5 py-1.5 rounded-lg bg-stone-200 hover:bg-stone-300 disabled:opacity-40 disabled:pointer-events-none text-stone-800 text-xs font-semibold border border-stone-300 transition"
             disabled
           >
             Undo
           </button>
+
           <button
             id="clearSeqBtn"
             type="button"
-            class="px-2.5 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 disabled:opacity-40 disabled:pointer-events-none text-rose-800 text-xs font-semibold transition"
+            class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-bold shadow-sm transition"
             disabled
           >
-            Clear
+            ✕ Clear
           </button>
         </div>
       </div>
 
-      <!-- Responsive SVG Grand Staff Canvas -->
-      <div class="w-full overflow-x-auto">
+      <!-- Note Duration Selector Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-stone-300/70">
+        <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Note Duration Selector">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-600 mr-1">Duration:</span>
+          <button
+            type="button"
+            data-duration="whole"
+            class="duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 border-stone-300"
+            title="Whole Note (4 beats) — Shortcut: 1"
+          >
+            <span class="text-base leading-none">𝅝</span>
+            <span>Whole</span>
+            <span class="text-[10px] opacity-65 font-mono-code">[1]</span>
+          </button>
+          <button
+            type="button"
+            data-duration="half"
+            class="duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 border-stone-300"
+            title="Half Note (2 beats) — Shortcut: 2"
+          >
+            <span class="text-base leading-none">𝅗𝅥</span>
+            <span>Half</span>
+            <span class="text-[10px] opacity-65 font-mono-code">[2]</span>
+          </button>
+          <button
+            type="button"
+            data-duration="quarter"
+            class="duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-amber-500 text-zinc-950 border-amber-600 shadow-sm"
+            title="Quarter Note (1 beat) — Shortcut: 3"
+          >
+            <span class="text-base leading-none">𝅘𝅥</span>
+            <span>Quarter</span>
+            <span class="text-[10px] opacity-75 font-mono-code">[3]</span>
+          </button>
+          <button
+            type="button"
+            data-duration="eighth"
+            class="duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 border-stone-300"
+            title="Eighth Note (1/2 beat) — Shortcut: 4"
+          >
+            <span class="text-base leading-none">𝅘𝅥𝅮</span>
+            <span>Eighth</span>
+            <span class="text-[10px] opacity-65 font-mono-code">[4]</span>
+          </button>
+          <button
+            type="button"
+            data-duration="sixteenth"
+            class="duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 border-stone-300"
+            title="Sixteenth Note (1/4 beat) — Shortcut: 5"
+          >
+            <span class="text-base leading-none">𝅘𝅥𝅯</span>
+            <span>16th</span>
+            <span class="text-[10px] opacity-65 font-mono-code">[5]</span>
+          </button>
+        </div>
+
+        <!-- Selected Note Context Banner -->
+        <div id="selectedNoteBanner" class="hidden items-center gap-2 bg-amber-100/90 border border-amber-300 px-2.5 py-1 rounded-lg text-xs text-amber-950">
+          <span id="selectedNoteLabel" class="font-semibold">Editing Note #1</span>
+          <span class="text-amber-800/80 hidden sm:inline">• Click a duration to change it</span>
+          <button
+            id="deleteSelectedNoteBtn"
+            type="button"
+            class="px-1.5 py-0.5 rounded bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px]"
+            title="Remove this note from the staff"
+          >
+            Delete
+          </button>
+          <button
+            id="deselectNoteBtn"
+            type="button"
+            class="px-1.5 py-0.5 rounded bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-[10px]"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+
+      <!-- Horizontal Scrollable SVG Grand Staff Canvas -->
+      <div id="staffScrollContainer" class="staff-scroll w-full overflow-x-auto pb-1">
         <svg
           id="grandStaffSvg"
           viewBox="0 0 960 270"
-          class="w-full h-auto min-w-[600px] max-h-[300px] block mx-auto"
+          style="width: 960px; height: 270px;"
+          class="block"
           role="img"
-          aria-label="Concert Pitch Grand Staff with Treble and Bass Clefs"
+          aria-label="Concert Pitch Grand Staff and B-flat Trumpet Treble Staff"
         >
           <!-- Static Staff Background Layer -->
           <g id="staffStaticLayer"></g>
@@ -261,14 +653,20 @@
         </svg>
       </div>
 
-      <!-- Bottom Legend -->
-      <div class="mt-2 pt-2 border-t border-stone-300/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-stone-600">
-        <div class="flex items-center gap-4">
-          <span><strong>Treble Clef:</strong> C4 (Middle C) &amp; above</span>
-          <span><strong>Bass Clef:</strong> Below C4 (includes E3 ≈ 164.8 Hz)</span>
+      <!-- Composed Sequence Live Text Strip (Concert + B♭ Trumpet) -->
+      <div class="mt-2 pt-2 border-t border-stone-300/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+        <div class="flex flex-col gap-0.5 overflow-x-auto">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-stone-700 uppercase text-[10px] tracking-wider w-20 shrink-0">Concert (C):</span>
+            <span id="concertSequenceText" class="font-mono-code text-stone-800 font-semibold whitespace-nowrap">—</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-sky-800 uppercase text-[10px] tracking-wider w-20 shrink-0">B♭ Trumpet:</span>
+            <span id="trumpetSequenceText" class="font-mono-code text-sky-900 font-semibold whitespace-nowrap">—</span>
+          </div>
         </div>
-        <div class="hidden sm:block font-mono-code text-stone-500">
-          Keyboard: [A S D F G H J K] White • [W E T Y U] Black
+        <div class="text-[11px] text-stone-500 shrink-0">
+          Click a note on staff to audition &amp; edit duration • Keys <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">1-5</kbd> duration • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">Space</kbd> play
         </div>
       </div>
     </section>
@@ -312,7 +710,7 @@
 
   <!-- Subtle Footer -->
   <footer class="text-center text-xs text-zinc-500 py-3 px-4 border-t border-zinc-900">
-    Click, tap, or use your computer keyboard to play • Switch to <strong class="text-zinc-400">Melody Builder</strong> to chain notes on the Grand Staff.
+    Every key pressed is saved to your composition • Use <strong class="text-zinc-400">Undo</strong> or <strong class="text-rose-400">Clear</strong> anytime to reset the staff.
   </footer>
 
   <script>
@@ -323,17 +721,35 @@
      * Features:
      * 1. Web Audio API polyphonic warm piano synthesizer with natural envelope.
      * 2. 3-Octave interactive piano (C3 to C6, covering E3 ~164.81 Hz up to C6).
-     * 3. Dynamic SVG Grand Staff (Treble & Bass Clef) with accurate diatonic
-     *    vertical positioning, automatic ledger lines, and sharp accidentals.
+     * 3. Default Compose Mode that remembers every note pressed, persists to
+     *    localStorage, draws barlines every 4 notes, and scrolls horizontally.
      * 4. Real-time B♭ Trumpet transposition (+2 semitones) and valve fingerings.
-     * 5. Live Clef mode (real-time chord/note display) & Melody Builder mode.
+     * 5. Clear, Undo, Play/Stop with BPM tempo control, and Copy Notes export.
      */
 
     // -------------------------------------------------------------------------
     // 1. MUSICAL DATA & THEORY CONSTANTS
     // -------------------------------------------------------------------------
+    const STORAGE_KEY = 'concert_clef_studio_composition_v2';
     const NOTE_NAMES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     const DIATONIC_STEP_MAP = { 'C': 0, 'D': 1, 'E': 2, 'F': 3, 'G': 4, 'A': 5, 'B': 6 };
+
+    // Supported Note Durations
+    const DURATIONS = {
+      whole:     { id: 'whole',     name: 'Whole',     beats: 4,    symbol: '𝅝', shortLabel: '1/1',  hollow: true,  hasStem: false, flags: 0 },
+      half:      { id: 'half',      name: 'Half',      beats: 2,    symbol: '𝅗𝅥', shortLabel: '1/2',  hollow: true,  hasStem: true,  flags: 0 },
+      quarter:   { id: 'quarter',   name: 'Quarter',   beats: 1,    symbol: '𝅘𝅥', shortLabel: '1/4',  hollow: false, hasStem: true,  flags: 0 },
+      eighth:    { id: 'eighth',    name: 'Eighth',    beats: 0.5,  symbol: '𝅘𝅥𝅮', shortLabel: '1/8',  hollow: false, hasStem: true,  flags: 1 },
+      sixteenth: { id: 'sixteenth', name: 'Sixteenth', beats: 0.25, symbol: '𝅘𝅥𝅯', shortLabel: '1/16', hollow: false, hasStem: true,  flags: 2 }
+    };
+
+    const DURATION_SHORTCUTS = {
+      '1': 'whole',
+      '2': 'half',
+      '3': 'quarter',
+      '4': 'eighth',
+      '5': 'sixteenth'
+    };
 
     // B♭ Trumpet standard fingerings indexed by written MIDI pitch (54 = F#3 up to 96 = C7)
     const TRUMPET_FINGERINGS = {
@@ -415,18 +831,48 @@
     // 2. APPLICATION STATE
     // -------------------------------------------------------------------------
     const state = {
-      mode: 'live',            // 'live' | 'sequence'
-      activeMidis: new Set(),  // Currently held MIDI notes
-      lastPlayedMidi: null,    // Most recent note for readout bar
-      sequence: [],            // Array of MIDI numbers in Melody Builder mode (max 14)
-      maxSequenceLength: 14,
+      mode: 'sequence',            // 'sequence' (Compose default) | 'live'
+      notationTab: 'concert',      // 'concert' (Grand Staff C) | 'trumpet' (B♭ Trumpet Treble +2)
+      activeMidis: new Set(),      // Currently held MIDI notes
+      lastPlayedMidi: null,        // Most recent note for readout bar
+      sequence: [],                // Array of { midi, duration, highlight } objects
+      selectedDuration: 'quarter', // Currently active note duration tool
+      selectedNoteIndex: null,     // Index of note clicked on staff for duration editing
+      isLooping: false,            // Continuous loop toggle for playback
       showLabels: true,
-      keyboardBaseOctave: 4,   // Computer keyboard home row starts on C4
-      isPlayingSequence: false
+      keyboardBaseOctave: 4,       // Computer keyboard home row starts on C4
+      isPlayingSequence: false,
+      tempoBpm: 120,
+      // Microphone Chromatic Tuner State
+      tunerOpen: true,
+      tunerActive: false,
+      tunerInstrument: 'guitar',   // 'guitar' (Concert C) | 'trumpet' (Written +2)
+      tunerDetectedMidi: null,     // Nearest concert MIDI note detected by mic
+      tunerDetectedFreq: null,
+      tunerCents: 0
     };
 
+    // Standard Reference Targets for Guitar (Concert) and B♭ Trumpet (Written)
+    const GUITAR_TUNING_TARGETS = [
+      { label: 'E2', sub: '82.4 Hz',  concertMidi: 40, playMidi: 40 },
+      { label: 'A2', sub: '110.0 Hz', concertMidi: 45, playMidi: 45 },
+      { label: 'D3', sub: '146.8 Hz', concertMidi: 50, playMidi: 50 },
+      { label: 'G3', sub: '196.0 Hz', concertMidi: 55, playMidi: 55 },
+      { label: 'B3', sub: '246.9 Hz', concertMidi: 59, playMidi: 59 },
+      { label: 'E4', sub: '329.6 Hz', concertMidi: 64, playMidi: 64 }
+    ];
+
+    const TRUMPET_TUNING_TARGETS = [
+      { label: 'C4 (Low)',  sub: 'Concert B♭3', concertMidi: 58, playMidi: 58, valves: '0' },
+      { label: 'G4',        sub: 'Concert F4',  concertMidi: 65, playMidi: 65, valves: '0' },
+      { label: 'C5 (Tune)', sub: 'Concert B♭4', concertMidi: 70, playMidi: 70, valves: '0' },
+      { label: 'E5',        sub: 'Concert D5',  concertMidi: 74, playMidi: 74, valves: '0' },
+      { label: 'G5',        sub: 'Concert F5',  concertMidi: 77, playMidi: 77, valves: '0' },
+      { label: 'A4 (440)',  sub: 'Concert G4',  concertMidi: 67, playMidi: 67, valves: '1-2' }
+    ];
+
     // -------------------------------------------------------------------------
-    // 3. WEB AUDIO API PIANO SYNTHESIZER
+    // 3. WEB AUDIO API POLYPHONIC PIANO SYNTHESIZER
     // -------------------------------------------------------------------------
     let audioCtx = null;
     const activeVoices = new Map();
@@ -441,113 +887,196 @@
       }
     }
 
-    function playPianoNote(midi) {
+    function playPianoTone(midi, durationSeconds = null) {
       try {
         ensureAudioContext();
-        // Stop existing voice on same key if re-triggered rapidly
-        if (activeVoices.has(midi)) {
-          stopPianoNote(midi, true);
-        }
+        stopPianoTone(midi);
 
         const info = midiToInfo(midi);
         const now = audioCtx.currentTime;
 
-        // Master note gain with natural piano ADSR envelope
-        const noteGain = audioCtx.createGain();
-        noteGain.gain.setValueAtTime(0.0001, now);
-        noteGain.gain.exponentialRampToValueAtTime(0.32, now + 0.015); // Crisp hammer attack
-        noteGain.gain.exponentialRampToValueAtTime(0.14, now + 0.45);  // Initial decay
-        noteGain.gain.exponentialRampToValueAtTime(0.0008, now + 3.2); // Long warm sustain tail
+        const masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.0001, now);
+        masterGain.gain.exponentialRampToValueAtTime(0.26, now + 0.015);
+        masterGain.gain.exponentialRampToValueAtTime(0.14, now + 0.35);
 
-        // Warm low-pass filter that darkens slightly as note decays
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(Math.min(info.freq * 7, 5200), now);
-        filter.frequency.exponentialRampToValueAtTime(Math.max(info.freq * 2.2, 420), now + 1.8);
+        filter.frequency.setValueAtTime(Math.min(4800, info.freq * 6), now);
+        filter.frequency.exponentialRampToValueAtTime(Math.max(500, info.freq * 2.2), now + 1.4);
 
-        // Fundamental (Triangle for warmth)
         const osc1 = audioCtx.createOscillator();
         osc1.type = 'triangle';
         osc1.frequency.setValueAtTime(info.freq, now);
 
-        // 2nd Harmonic (Sine for body)
         const osc2 = audioCtx.createOscillator();
         osc2.type = 'sine';
         osc2.frequency.setValueAtTime(info.freq * 2, now);
-        const osc2Gain = audioCtx.createGain();
-        osc2Gain.gain.setValueAtTime(0.28, now);
+        const harm2Gain = audioCtx.createGain();
+        harm2Gain.gain.setValueAtTime(0.22, now);
 
-        // 3rd Harmonic (Subtle brightness)
         const osc3 = audioCtx.createOscillator();
         osc3.type = 'sine';
         osc3.frequency.setValueAtTime(info.freq * 3, now);
-        const osc3Gain = audioCtx.createGain();
-        osc3Gain.gain.setValueAtTime(0.09, now);
+        const harm3Gain = audioCtx.createGain();
+        harm3Gain.gain.setValueAtTime(0.08, now);
 
         osc1.connect(filter);
-        osc2.connect(osc2Gain);
-        osc2Gain.connect(filter);
-        osc3.connect(osc3Gain);
-        osc3Gain.connect(filter);
+        osc2.connect(harm2Gain);
+        harm2Gain.connect(filter);
+        osc3.connect(harm3Gain);
+        harm3Gain.connect(filter);
 
-        filter.connect(noteGain);
-        noteGain.connect(audioCtx.destination);
+        filter.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
 
         osc1.start(now);
         osc2.start(now);
         osc3.start(now);
 
-        activeVoices.set(midi, { osc1, osc2, osc3, noteGain });
-      } catch (err) {
-        console.warn('Audio playback skipped:', err);
-      }
+        activeVoices.set(midi, { oscs: [osc1, osc2, osc3], masterGain });
+
+        if (durationSeconds !== null) {
+          setTimeout(() => stopPianoTone(midi), durationSeconds * 1000);
+        }
+      } catch (_) {}
     }
 
-    function stopPianoNote(midi, immediate = false) {
+    function stopPianoTone(midi) {
       const voice = activeVoices.get(midi);
       if (!voice || !audioCtx) return;
-
-      const now = audioCtx.currentTime;
-      const releaseTime = immediate ? 0.04 : 0.28;
-
       try {
-        voice.noteGain.gain.cancelScheduledValues(now);
-        voice.noteGain.gain.setValueAtTime(Math.max(voice.noteGain.gain.value, 0.001), now);
-        voice.noteGain.gain.exponentialRampToValueAtTime(0.0001, now + releaseTime);
-
-        setTimeout(() => {
-          try {
-            voice.osc1.stop();
-            voice.osc2.stop();
-            voice.osc3.stop();
-            voice.osc1.disconnect();
-            voice.osc2.disconnect();
-            voice.osc3.disconnect();
-            voice.noteGain.disconnect();
-          } catch (_) {}
-        }, releaseTime * 1000 + 30);
+        const now = audioCtx.currentTime;
+        voice.masterGain.gain.cancelScheduledValues(now);
+        voice.masterGain.gain.setValueAtTime(Math.max(0.0001, voice.masterGain.gain.value), now);
+        voice.masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+        voice.oscs.forEach((osc) => {
+          try { osc.stop(now + 0.2); } catch (_) {}
+        });
       } catch (_) {}
-
       activeVoices.delete(midi);
     }
 
     // -------------------------------------------------------------------------
-    // 4. SVG GRAND STAFF RENDERER (CONCERT PITCH)
+    // 4. LOCAL STORAGE PERSISTENCE & TELEMETRY READOUTS
+    // -------------------------------------------------------------------------
+    function saveCompositionToStorage() {
+      try {
+        const cleanSeq = state.sequence.map((n) => ({
+          midi: n.midi,
+          duration: n.duration || 'quarter'
+        }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanSeq));
+      } catch (_) {}
+    }
+
+    function loadCompositionFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          state.sequence = parsed
+            .filter((item) => item && typeof item.midi === 'number' && item.midi >= START_MIDI && item.midi <= END_MIDI)
+            .map((item) => ({
+              midi: item.midi,
+              duration: DURATIONS[item.duration] ? item.duration : 'quarter',
+              highlight: false
+            }));
+        }
+      } catch (_) {}
+    }
+
+    function updateReadoutBar(midi) {
+      if (midi === null || midi === undefined) return;
+      const info = midiToInfo(midi);
+      document.getElementById('readoutConcertNote').textContent = info.label;
+      document.getElementById('readoutClef').textContent = midi >= 60 ? 'Treble Clef' : 'Bass Clef';
+      document.getElementById('readoutFreq').textContent = `${info.freq.toFixed(1)} Hz`;
+      document.getElementById('readoutTrumpetNote').textContent = info.trumpetLabel;
+      document.getElementById('readoutValves').textContent = info.valves;
+      document.getElementById('readoutValveHint').textContent = info.valveHint;
+
+      const vOn = 'w-3 h-3 rounded-full border border-emerald-300 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.85)] transition-colors';
+      const vOff = 'w-3 h-3 rounded-full border border-zinc-500 bg-zinc-800 transition-colors';
+      document.getElementById('valve1Dot').className = info.valves.includes('1') ? vOn : vOff;
+      document.getElementById('valve2Dot').className = info.valves.includes('2') ? vOn : vOff;
+      document.getElementById('valve3Dot').className = info.valves.includes('3') ? vOn : vOff;
+    }
+
+    function updateSequenceButtons() {
+      const hasNotes = state.sequence.length > 0;
+      document.getElementById('playSeqBtn').disabled = !hasNotes;
+      document.getElementById('copySeqBtn').disabled = !hasNotes;
+      document.getElementById('undoSeqBtn').disabled = !hasNotes || state.isPlayingSequence;
+      document.getElementById('clearSeqBtn').disabled = !hasNotes || state.isPlayingSequence;
+      document.getElementById('noteCountBadge').textContent = `${state.sequence.length} Note${state.sequence.length === 1 ? '' : 's'}`;
+
+      const concertStr = hasNotes
+        ? state.sequence.map((n) => `${midiToInfo(n.midi).label}(${DURATIONS[n.duration].shortLabel})`).join(' ')
+        : '—';
+      const trumpetStr = hasNotes
+        ? state.sequence.map((n) => `${midiToInfo(n.midi).trumpetLabel}[${midiToInfo(n.midi).valves}]`).join(' ')
+        : '—';
+
+      document.getElementById('concertSequenceText').textContent = concertStr;
+      document.getElementById('trumpetSequenceText').textContent = trumpetStr;
+    }
+
+    function updateSelectedNoteBanner() {
+      const banner = document.getElementById('selectedNoteBanner');
+      const label = document.getElementById('selectedNoteLabel');
+      if (state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
+        const noteObj = state.sequence[state.selectedNoteIndex];
+        const info = midiToInfo(noteObj.midi);
+        const name = state.notationTab === 'trumpet' ? info.trumpetLabel : info.label;
+        label.textContent = `Editing #${state.selectedNoteIndex + 1} (${name})`;
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+      } else {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+      }
+    }
+
+    function setSelectedDuration(durId, applyToSelectedNote = false) {
+      if (!DURATIONS[durId]) return;
+      state.selectedDuration = durId;
+
+      document.querySelectorAll('.duration-btn').forEach((btn) => {
+        if (btn.dataset.duration === durId) {
+          btn.className = 'duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-amber-500 text-zinc-950 border-amber-600 shadow-sm';
+        } else {
+          btn.className = 'duration-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 border-stone-300';
+        }
+      });
+
+      if (applyToSelectedNote && state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
+        state.sequence[state.selectedNoteIndex].duration = durId;
+        saveCompositionToStorage();
+        updateSequenceButtons();
+        renderStaff(false);
+      }
+    }
+
+    function updateLoopButton() {
+      const loopBtn = document.getElementById('loopSeqBtn');
+      if (state.isLooping) {
+        loopBtn.className = 'px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 border border-amber-600 text-xs font-bold shadow-sm transition flex items-center gap-1';
+      } else {
+        loopBtn.className = 'px-2.5 py-1.5 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-700 border border-stone-300 text-xs font-semibold shadow-sm transition flex items-center gap-1';
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // 5. SVG GRAND STAFF & B♭ TRUMPET NOTATION ENGINE
     // -------------------------------------------------------------------------
     const SVG_NS = 'http://www.w3.org/2000/svg';
-
-    // Staff Geometry Constants
-    // Step spacing = 6px (each line-to-line distance = 12px)
-    const STEP_PX = 6;
-    // Treble Staff Lines (top to bottom): F5 (y=48), D5 (60), B4 (72), G4 (84), E4 (96)
-    // Middle C (C4) sits one step below E4 at y = 108 (with its own ledger line)
-    const TREBLE_BOTTOM_Y = 96; // E4 (diatonic step index = 4*7 + 2 = 30)
-    const TREBLE_E4_STEP = 30;
-
-    // Bass Staff Lines (top to bottom): A3 (y=156), F3 (168), D3 (180), B2 (192), G2 (204)
-    // Middle C (C4) sits one step above A3 at y = 144 (with its own ledger line)
-    const BASS_TOP_Y = 156;     // A3 (diatonic step index = 3*7 + 5 = 26)
-    const BASS_A3_STEP = 26;
+    const LINE_SPACING = 11;
+    const HALF_STEP_Y = LINE_SPACING / 2; // 5.5px per diatonic step
+    const TREBLE_TOP_Y = 48;              // F5 line
+    const BASS_TOP_Y = 148;               // A3 line
+    const TRUMPET_TOP_Y = 76;             // F5 line on single Trumpet staff
 
     function createSvgEl(tag, attrs = {}) {
       const el = document.createElementNS(SVG_NS, tag);
@@ -557,671 +1086,1179 @@
       return el;
     }
 
-    function drawStaticGrandStaff() {
-      const layer = document.getElementById('staffStaticLayer');
-      layer.innerHTML = '';
+    function getDiatonicIndex(info) {
+      return info.octave * 7 + DIATONIC_STEP_MAP[info.letter];
+    }
 
-      const leftX = 36;
-      const rightX = 936;
+    function drawStaticGrandStaff(width) {
+      const staticLayer = document.getElementById('staffStaticLayer');
+      staticLayer.innerHTML = '';
 
-      // Left vertical connecting bar
-      layer.appendChild(createSvgEl('line', {
-        x1: leftX, y1: 48, x2: leftX, y2: 204,
-        stroke: '#1c1917', 'stroke-width': 2.5
-      }));
-
-      // Right double barline
-      layer.appendChild(createSvgEl('line', {
-        x1: rightX - 6, y1: 48, x2: rightX - 6, y2: 204,
-        stroke: '#1c1917', 'stroke-width': 1.5
-      }));
-      layer.appendChild(createSvgEl('line', {
-        x1: rightX, y1: 48, x2: rightX, y2: 204,
-        stroke: '#1c1917', 'stroke-width': 3.5
-      }));
-
-      // Curly Grand Staff Brace on far left
-      const brace = createSvgEl('path', {
-        d: 'M 30 48 C 16 68, 28 106, 14 126 C 28 146, 16 184, 30 204 C 21 182, 31 146, 19 126 C 31 106, 21 70, 30 48 Z',
-        fill: '#1c1917'
-      });
-      layer.appendChild(brace);
-
-      // 5 Treble Clef Lines (y = 48, 60, 72, 84, 96)
-      for (let i = 0; i < 5; i++) {
-        const y = 48 + i * 12;
-        layer.appendChild(createSvgEl('line', {
-          x1: leftX, y1: y, x2: rightX, y2: y,
-          stroke: '#44403c', 'stroke-width': 1.25
+      if (state.notationTab === 'trumpet') {
+        // Single Treble Clef Staff for B♭ Trumpet
+        for (let i = 0; i < 5; i++) {
+          const y = TRUMPET_TOP_Y + i * LINE_SPACING;
+          staticLayer.appendChild(createSvgEl('line', {
+            x1: 24, y1: y, x2: width - 20, y2: y,
+            stroke: '#44403c', 'stroke-width': '1.25'
+          }));
+        }
+        // Left & Right Barlines
+        staticLayer.appendChild(createSvgEl('line', {
+          x1: 24, y1: TRUMPET_TOP_Y, x2: 24, y2: TRUMPET_TOP_Y + 4 * LINE_SPACING,
+          stroke: '#1c1917', 'stroke-width': '2.5'
         }));
-      }
-
-      // 5 Bass Clef Lines (y = 156, 168, 180, 192, 204)
-      for (let i = 0; i < 5; i++) {
-        const y = 156 + i * 12;
-        layer.appendChild(createSvgEl('line', {
-          x1: leftX, y1: y, x2: rightX, y2: y,
-          stroke: '#44403c', 'stroke-width': 1.25
+        staticLayer.appendChild(createSvgEl('line', {
+          x1: width - 20, y1: TRUMPET_TOP_Y, x2: width - 20, y2: TRUMPET_TOP_Y + 4 * LINE_SPACING,
+          stroke: '#1c1917', 'stroke-width': '2.5'
         }));
-      }
 
-      // Treble Clef Symbol (Unicode Musical Symbol G Clef 𝄞 styled cleanly)
-      const trebleText = createSvgEl('text', {
-        x: 46,
-        y: 95,
-        'font-size': '74',
-        'font-family': 'serif',
-        fill: '#1c1917'
-      });
-      trebleText.textContent = '𝄞';
-      layer.appendChild(trebleText);
-
-      // Bass Clef Symbol (Unicode Musical Symbol F Clef 𝄢)
-      const bassText = createSvgEl('text', {
-        x: 48,
-        y: 196,
-        'font-size': '56',
-        'font-family': 'serif',
-        fill: '#1c1917'
-      });
-      bassText.textContent = '𝄢';
-      layer.appendChild(bassText);
-
-      // Clef Labels ("TREBLE" & "BASS")
-      const tTag = createSvgEl('text', {
-        x: 102, y: 38, 'font-size': '10', 'font-weight': '700',
-        'letter-spacing': '1.2', fill: '#78716c'
-      });
-      tTag.textContent = 'TREBLE CLEF';
-      layer.appendChild(tTag);
-
-      const bTag = createSvgEl('text', {
-        x: 102, y: 224, 'font-size': '10', 'font-weight': '700',
-        'letter-spacing': '1.2', fill: '#78716c'
-      });
-      bTag.textContent = 'BASS CLEF';
-      layer.appendChild(bTag);
-    }
-
-    /**
-     * Computes Y coordinate and ledger lines for any MIDI note on the Grand Staff.
-     * C4 (MIDI 60) and above -> Treble Clef
-     * Below C4 (MIDI < 60)   -> Bass Clef
-     */
-    function getStaffPlacement(info) {
-      const diatonicIndex = info.octave * 7 + DIATONIC_STEP_MAP[info.letter];
-      const isTreble = info.midi >= 60;
-      const ledgerYs = [];
-
-      let y;
-      if (isTreble) {
-        // E4 is step 30 -> y = 96. Each step up decreases y by 6px.
-        const stepsFromE4 = diatonicIndex - TREBLE_E4_STEP;
-        y = TREBLE_BOTTOM_Y - stepsFromE4 * STEP_PX;
-
-        // Ledger lines below Treble staff (C4 is step 28 -> y = 108)
-        for (let step = 28; step >= diatonicIndex; step -= 2) {
-          ledgerYs.push(TREBLE_BOTTOM_Y - (step - TREBLE_E4_STEP) * STEP_PX);
-        }
-        // Ledger lines above Treble staff (F5 is step 38 -> y = 48; A5 is step 40 -> y = 36)
-        for (let step = 40; step <= diatonicIndex; step += 2) {
-          ledgerYs.push(TREBLE_BOTTOM_Y - (step - TREBLE_E4_STEP) * STEP_PX);
-        }
-      } else {
-        // A3 is step 26 -> y = 156. Each step down increases y by 6px.
-        const stepsFromA3 = diatonicIndex - BASS_A3_STEP;
-        y = BASS_TOP_Y - stepsFromA3 * STEP_PX;
-
-        // Ledger lines below Bass staff (G2 is step 18 -> y = 204; E2 is step 16 -> y = 216)
-        for (let step = 16; step >= diatonicIndex; step -= 2) {
-          ledgerYs.push(BASS_TOP_Y - (step - BASS_A3_STEP) * STEP_PX);
-        }
-      }
-
-      return { y, isTreble, ledgerYs };
-    }
-
-    /**
-     * Renders a single notehead, accidental, stem, ledger lines, and Concert/Trumpet captions.
-     */
-    function drawNoteOnStaff(container, info, x, highlight = false, showCaptions = true) {
-      const { y, isTreble, ledgerYs } = getStaffPlacement(info);
-      const noteColor = highlight ? '#d97706' : '#1c1917';
-
-      // Draw Ledger Lines
-      ledgerYs.forEach((ly) => {
-        container.appendChild(createSvgEl('line', {
-          x1: x - 15, y1: ly, x2: x + 15, y2: ly,
-          stroke: '#1c1917', 'stroke-width': 1.5
-        }));
-      });
-
-      // Draw Sharp Accidental (#)
-      if (info.isSharp) {
-        const sharpEl = createSvgEl('text', {
-          x: x - 21,
-          y: y + 5,
-          'font-size': '18',
-          'font-weight': '700',
-          fill: noteColor
+        // Treble Clef Glyph
+        const clef = createSvgEl('text', {
+          x: 32, y: TRUMPET_TOP_Y + 38,
+          'font-size': '56', 'font-family': 'serif', fill: '#1c1917'
         });
-        sharpEl.textContent = '♯';
-        container.appendChild(sharpEl);
-      }
+        clef.textContent = '𝄞';
+        staticLayer.appendChild(clef);
 
-      // Draw Notehead (tilted musical oval)
-      const head = createSvgEl('ellipse', {
-        cx: x,
-        cy: y,
-        rx: 7.5,
-        ry: 5.3,
-        transform: `rotate(-18 ${x} ${y})`,
-        fill: noteColor
-      });
-      container.appendChild(head);
-
-      // Draw Note Stem (up if below middle line of clef, down if on/above middle line)
-      const middleY = isTreble ? 72 : 180;
-      const stemUp = y > middleY;
-      const stemX = stemUp ? x + 6.8 : x - 6.8;
-      const stemY2 = stemUp ? y - 32 : y + 32;
-
-      container.appendChild(createSvgEl('line', {
-        x1: stemX, y1: y, x2: stemX, y2: stemY2,
-        stroke: noteColor, 'stroke-width': 1.6
-      }));
-
-      // Optional Concert Pitch & B♭ Trumpet Fingerings Caption under Bass Clef
-      if (showCaptions) {
-        const concertCaption = createSvgEl('text', {
-          x: x,
-          y: 242,
-          'text-anchor': 'middle',
-          'font-size': '11.5',
-          'font-weight': '700',
-          'font-family': 'JetBrains Mono, monospace',
-          fill: highlight ? '#b45309' : '#1c1917'
+        const label = createSvgEl('text', {
+          x: 74, y: TRUMPET_TOP_Y - 16,
+          'font-size': '11', 'font-weight': '700', fill: '#0369a1'
         });
-        concertCaption.textContent = info.label;
-        container.appendChild(concertCaption);
-
-        const trumpetCaption = createSvgEl('text', {
-          x: x,
-          y: 257,
-          'text-anchor': 'middle',
-          'font-size': '10',
-          'font-weight': '600',
-          'font-family': 'JetBrains Mono, monospace',
-          fill: '#0369a1'
-        });
-        trumpetCaption.textContent = `Tpt:${info.trumpetNoteName || info.trumpetLabel.replace(/[0-9]/g, '')}(${info.valves})`;
-        container.appendChild(trumpetCaption);
-      }
-    }
-
-    function renderStaff() {
-      const notesLayer = document.getElementById('staffNotesLayer');
-      notesLayer.innerHTML = '';
-
-      if (state.mode === 'live') {
-        const activeArray = Array.from(state.activeMidis).sort((a, b) => a - b);
-
-        if (activeArray.length === 0) {
-          // Subtle ghost hint at Middle C
-          const hintGroup = createSvgEl('g', { opacity: '0.32' });
-          drawNoteOnStaff(hintGroup, midiToInfo(60), 210, false, false);
-          const hintLabel = createSvgEl('text', {
-            x: 235, y: 112, 'font-size': '12', 'font-weight': '600', fill: '#57534e'
-          });
-          hintLabel.textContent = '← Middle C (C4) Reference • Press any key to plot live';
-          hintGroup.appendChild(hintLabel);
-          notesLayer.appendChild(hintGroup);
-          return;
-        }
-
-        // Plot currently pressed note(s) cleanly spaced
-        const startX = 220;
-        const spacing = activeArray.length > 1 ? 68 : 0;
-
-        activeArray.forEach((midi, idx) => {
-          const info = midiToInfo(midi);
-          // Slight horizontal offset for seconds (adjacent notes) if played simultaneously
-          const x = startX + idx * spacing;
-          drawNoteOnStaff(notesLayer, info, x, true, true);
-
-          // Also display frequency badge next to single live note
-          if (activeArray.length === 1) {
-            const { y } = getStaffPlacement(info);
-            const badge = createSvgEl('text', {
-              x: x + 26,
-              y: y + 4,
-              'font-size': '13',
-              'font-weight': '700',
-              'font-family': 'JetBrains Mono, monospace',
-              fill: '#b45309'
-            });
-            badge.textContent = `${info.label} • ${info.freq.toFixed(1)} Hz`;
-            notesLayer.appendChild(badge);
-          }
-        });
-      } else {
-        // Melody Builder Mode
-        if (state.sequence.length === 0) {
-          const emptyMsg = createSvgEl('text', {
-            x: 500, y: 132, 'text-anchor': 'middle',
-            'font-size': '14', 'font-weight': '600', fill: '#78716c'
-          });
-          emptyMsg.textContent = 'Melody Builder Empty — Click piano keys or click "Load Riff" to build a Concert Clef sequence';
-          notesLayer.appendChild(emptyMsg);
-          return;
-        }
-
-        const startX = 155;
-        const availableWidth = 755;
-        const stepX = Math.min(54, availableWidth / Math.max(state.sequence.length, 1));
-
-        state.sequence.forEach((item, idx) => {
-          const info = midiToInfo(item.midi);
-          const x = startX + idx * stepX;
-          drawNoteOnStaff(notesLayer, info, x, Boolean(item.highlight), true);
-        });
-      }
-    }
-
-    // -------------------------------------------------------------------------
-    // 5. READOUT BAR & UI UPDATES
-    // -------------------------------------------------------------------------
-    function updateReadoutBar(midi) {
-      const concertEl = document.getElementById('readoutConcertNote');
-      const clefEl = document.getElementById('readoutClef');
-      const freqEl = document.getElementById('readoutFreq');
-      const rangeTagEl = document.getElementById('readoutRangeTag');
-      const tptNoteEl = document.getElementById('readoutTrumpetNote');
-      const valvesEl = document.getElementById('readoutValves');
-      const valveHintEl = document.getElementById('readoutValveHint');
-
-      const v1Dot = document.getElementById('valve1Dot');
-      const v2Dot = document.getElementById('valve2Dot');
-      const v3Dot = document.getElementById('valve3Dot');
-
-      if (midi === null || midi === undefined) {
-        concertEl.textContent = '--';
-        clefEl.textContent = 'Grand Staff';
-        freqEl.textContent = '-- Hz';
-        rangeTagEl.textContent = 'A4 = 440Hz';
-        tptNoteEl.textContent = '--';
-        valvesEl.textContent = '--';
-        valveHintEl.textContent = 'Open = 0';
-        [v1Dot, v2Dot, v3Dot].forEach((d) => {
-          d.className = 'w-3 h-3 rounded-full border border-zinc-500 bg-zinc-800 transition-colors';
-        });
+        label.textContent = 'B♭ Trumpet Written Pitch (Treble Clef • +2 Semitones)';
+        staticLayer.appendChild(label);
         return;
       }
 
-      const info = midiToInfo(midi);
-      concertEl.textContent = info.label;
-      clefEl.textContent = info.midi >= 60 ? 'Treble Clef' : 'Bass Clef';
-      freqEl.textContent = `${info.freq.toFixed(2)} Hz`;
+      // Grand Staff (Treble + Bass)
+      for (let i = 0; i < 5; i++) {
+        const ty = TREBLE_TOP_Y + i * LINE_SPACING;
+        staticLayer.appendChild(createSvgEl('line', {
+          x1: 28, y1: ty, x2: width - 20, y2: ty,
+          stroke: '#44403c', 'stroke-width': '1.2'
+        }));
 
-      if (info.midi === 52) {
-        rangeTagEl.textContent = 'Low E3 (~164.8 Hz)';
-      } else if (info.midi === 60) {
-        rangeTagEl.textContent = 'Middle C4';
-      } else if (info.midi === 69) {
-        rangeTagEl.textContent = 'Concert A4 Standard';
-      } else {
-        rangeTagEl.textContent = info.midi < 60 ? 'Lower Register' : 'Upper Register';
+        const by = BASS_TOP_Y + i * LINE_SPACING;
+        staticLayer.appendChild(createSvgEl('line', {
+          x1: 28, y1: by, x2: width - 20, y2: by,
+          stroke: '#44403c', 'stroke-width': '1.2'
+        }));
       }
 
-      tptNoteEl.textContent = info.trumpetLabel;
-      valvesEl.textContent = info.valves;
-      valveHintEl.textContent = info.valveHint;
+      // Grand Staff Left Brace & Barline
+      staticLayer.appendChild(createSvgEl('line', {
+        x1: 28, y1: TREBLE_TOP_Y, x2: 28, y2: BASS_TOP_Y + 4 * LINE_SPACING,
+        stroke: '#1c1917', 'stroke-width': '2.5'
+      }));
+      staticLayer.appendChild(createSvgEl('line', {
+        x1: width - 20, y1: TREBLE_TOP_Y, x2: width - 20, y2: BASS_TOP_Y + 4 * LINE_SPACING,
+        stroke: '#1c1917', 'stroke-width': '2.5'
+      }));
 
-      // Light up pressed trumpet valves (1, 2, 3)
-      const activeValveStyle = 'w-3 h-3 rounded-full border border-emerald-300 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] transition-colors';
-      const idleValveStyle = 'w-3 h-3 rounded-full border border-zinc-500 bg-zinc-800 transition-colors';
+      const brace = createSvgEl('text', {
+        x: 8, y: 158, 'font-size': '136', 'font-family': 'serif', fill: '#292524'
+      });
+      brace.textContent = '{';
+      staticLayer.appendChild(brace);
 
-      v1Dot.className = info.valves.includes('1') ? activeValveStyle : idleValveStyle;
-      v2Dot.className = info.valves.includes('2') ? activeValveStyle : idleValveStyle;
-      v3Dot.className = info.valves.includes('3') ? activeValveStyle : idleValveStyle;
+      // Treble & Bass Clef Glyphs
+      const trebleGlyph = createSvgEl('text', {
+        x: 34, y: TREBLE_TOP_Y + 37, 'font-size': '54', 'font-family': 'serif', fill: '#1c1917'
+      });
+      trebleGlyph.textContent = '𝄞';
+      staticLayer.appendChild(trebleGlyph);
+
+      const bassGlyph = createSvgEl('text', {
+        x: 35, y: BASS_TOP_Y + 33, 'font-size': '44', 'font-family': 'serif', fill: '#1c1917'
+      });
+      bassGlyph.textContent = '𝄢';
+      staticLayer.appendChild(bassGlyph);
     }
 
-    function updateSequenceButtons() {
-      const hasNotes = state.sequence.length > 0;
-      document.getElementById('playSeqBtn').disabled = !hasNotes || state.isPlayingSequence;
-      document.getElementById('undoSeqBtn').disabled = !hasNotes || state.isPlayingSequence;
-      document.getElementById('clearSeqBtn').disabled = !hasNotes || state.isPlayingSequence;
+    function drawSingleEngravedNote(layer, { x, y, isSharp, durObj, color, isSelected, isActive, ledgerYs, subTop, subBottom, noteIndex }) {
+      const g = createSvgEl('g', { class: 'staff-note-group' });
+
+      if (isSelected || isActive) {
+        g.appendChild(createSvgEl('rect', {
+          x: x - 18, y: 18, width: 36, height: 235, rx: 8,
+          fill: isActive ? 'rgba(245, 158, 11, 0.22)' : 'rgba(2, 132, 199, 0.14)',
+          stroke: isActive ? '#d97706' : '#0284c7',
+          'stroke-width': '1.2'
+        }));
+      }
+
+      // Ledger lines
+      ledgerYs.forEach((ly) => {
+        g.appendChild(createSvgEl('line', {
+          x1: x - 12, y1: ly, x2: x + 12, y2: ly,
+          stroke: '#292524', 'stroke-width': '1.3'
+        }));
+      });
+
+      // Sharp accidental
+      if (isSharp) {
+        const sharpEl = createSvgEl('text', {
+          x: x - 17, y: y + 4.5,
+          'font-size': '15', 'font-weight': 'bold', fill: color
+        });
+        sharpEl.textContent = '♯';
+        g.appendChild(sharpEl);
+      }
+
+      // Notehead
+      g.appendChild(createSvgEl('ellipse', {
+        cx: x, cy: y, rx: 6.4, ry: 4.5,
+        transform: `rotate(-18 ${x} ${y})`,
+        fill: durObj.hollow ? '#fffdf9' : color,
+        stroke: color,
+        'stroke-width': durObj.hollow ? '2.1' : '1.4'
+      }));
+
+      // Stem & Flags
+      if (durObj.hasStem) {
+        const stemUp = y >= 92;
+        const stemX = stemUp ? x + 5.6 : x - 5.6;
+        const stemY2 = stemUp ? y - 30 : y + 30;
+        g.appendChild(createSvgEl('line', {
+          x1: stemX, y1: y, x2: stemX, y2: stemY2,
+          stroke: color, 'stroke-width': '1.6'
+        }));
+
+        for (let f = 0; f < durObj.flags; f++) {
+          const offset = f * 6;
+          const fy = stemUp ? stemY2 + offset : stemY2 - offset;
+          const d = stemUp
+            ? `M ${stemX} ${fy} Q ${stemX + 10} ${fy + 6} ${stemX + 6} ${fy + 15}`
+            : `M ${stemX} ${fy} Q ${stemX + 10} ${fy - 6} ${stemX + 6} ${fy - 15}`;
+          g.appendChild(createSvgEl('path', {
+            d, fill: 'none', stroke: color, 'stroke-width': '1.8', 'stroke-linecap': 'round'
+          }));
+        }
+      }
+
+      // Labels underneath note
+      if (subTop) {
+        const t1 = createSvgEl('text', {
+          x, y: 224, 'text-anchor': 'middle',
+          'font-size': '10.5', 'font-weight': '700', 'font-family': 'JetBrains Mono, monospace',
+          fill: color
+        });
+        t1.textContent = subTop;
+        g.appendChild(t1);
+      }
+      if (subBottom) {
+        const t2 = createSvgEl('text', {
+          x, y: 239, 'text-anchor': 'middle',
+          'font-size': '9.5', 'font-weight': '600', 'font-family': 'JetBrains Mono, monospace',
+          fill: '#57534e'
+        });
+        t2.textContent = subBottom;
+        g.appendChild(t2);
+      }
+
+      if (typeof noteIndex === 'number') {
+        g.addEventListener('click', (e) => {
+          e.stopPropagation();
+          state.selectedNoteIndex = noteIndex;
+          const item = state.sequence[noteIndex];
+          setSelectedDuration(item.duration, false);
+          updateSelectedNoteBanner();
+          updateReadoutBar(item.midi);
+          playPianoTone(item.midi, 0.45);
+          renderStaff(false);
+        });
+      }
+
+      layer.appendChild(g);
+    }
+
+    function computeNotePosition(midi, isTrumpetTab) {
+      const info = midiToInfo(midi);
+      if (isTrumpetTab) {
+        // Written pitch (+2 semitones). Fold octave up if lower than F#3 (written MIDI 54)
+        let writtenMidi = info.trumpetMidi;
+        let octaveShifted = false;
+        while (writtenMidi < 54) {
+          writtenMidi += 12;
+          octaveShifted = true;
+        }
+        const wPitch = writtenMidi % 12;
+        const wOct = Math.floor(writtenMidi / 12) - 1;
+        const wName = NOTE_NAMES_SHARP[wPitch];
+        const wLetter = wName[0];
+        const wIsSharp = wName.includes('#');
+        const diat = wOct * 7 + DIATONIC_STEP_MAP[wLetter];
+        // F5 is octave 5, letter F -> diat = 5*7 + 3 = 38 -> TRUMPET_TOP_Y
+        const y = TRUMPET_TOP_Y + (38 - diat) * HALF_STEP_Y;
+
+        const ledgerYs = [];
+        // Bottom line E4 = diat 30 -> y = TRUMPET_TOP_Y + 44
+        for (let d = 28; d >= diat; d -= 2) {
+          ledgerYs.push(TRUMPET_TOP_Y + (38 - d) * HALF_STEP_Y);
+        }
+        // Top line F5 = diat 38 -> above A5 (diat 40)
+        for (let d = 40; d <= diat; d += 2) {
+          ledgerYs.push(TRUMPET_TOP_Y + (38 - d) * HALF_STEP_Y);
+        }
+
+        return {
+          y,
+          isSharp: wIsSharp,
+          ledgerYs,
+          subTop: `${wName}${wOct}${octaveShifted ? '↑' : ''}`,
+          subBottom: `[${info.valves}]`
+        };
+      }
+
+      // Concert Pitch Grand Staff: >= C4 (MIDI 60) on Treble, < C4 on Bass
+      const diat = getDiatonicIndex(info);
+      const ledgerYs = [];
+
+      if (midi >= 60) {
+        // Treble top line F5 = diat 38 -> TREBLE_TOP_Y
+        const y = TREBLE_TOP_Y + (38 - diat) * HALF_STEP_Y;
+        // Middle C4 (diat 28) and below
+        for (let d = 28; d >= diat; d -= 2) {
+          ledgerYs.push(TREBLE_TOP_Y + (38 - d) * HALF_STEP_Y);
+        }
+        // Above F5 (A5 = diat 40 and up)
+        for (let d = 40; d <= diat; d += 2) {
+          ledgerYs.push(TREBLE_TOP_Y + (38 - d) * HALF_STEP_Y);
+        }
+        return {
+          y,
+          isSharp: info.isSharp,
+          ledgerYs,
+          subTop: info.label,
+          subBottom: `Trp:${info.trumpetLabel}`
+        };
+      } else {
+        // Bass top line A3 = diat (3*7 + 5 = 26) -> BASS_TOP_Y
+        const y = BASS_TOP_Y + (26 - diat) * HALF_STEP_Y;
+        // Above A3 (Middle C4 = diat 28)
+        for (let d = 28; d <= diat; d += 2) {
+          ledgerYs.push(BASS_TOP_Y + (26 - d) * HALF_STEP_Y);
+        }
+        // Below G2 (diat 18 -> E2 = 16 and down)
+        for (let d = 16; d >= diat; d -= 2) {
+          ledgerYs.push(BASS_TOP_Y + (26 - d) * HALF_STEP_Y);
+        }
+        return {
+          y,
+          isSharp: info.isSharp,
+          ledgerYs,
+          subTop: info.label,
+          subBottom: `Trp:${info.trumpetLabel}`
+        };
+      }
+    }
+
+    function renderStaff(scrollToEnd = false) {
+      const svg = document.getElementById('grandStaffSvg');
+      const notesLayer = document.getElementById('staffNotesLayer');
+      notesLayer.innerHTML = '';
+
+      const isTrumpetTab = state.notationTab === 'trumpet';
+      const items = state.mode === 'live'
+        ? Array.from(state.activeMidis).sort((a, b) => a - b).map((m) => ({ midi: m, duration: state.selectedDuration, highlight: true }))
+        : state.sequence;
+
+      const stepX = 56;
+      const startX = 108;
+      const minWidth = 960;
+      const computedWidth = Math.max(minWidth, startX + items.length * stepX + 80);
+
+      svg.setAttribute('viewBox', `0 0 ${computedWidth} 270`);
+      svg.style.width = `${computedWidth}px`;
+      drawStaticGrandStaff(computedWidth);
+
+      if (items.length === 0) {
+        const hint = createSvgEl('text', {
+          x: 115, y: 125, 'font-size': '14', 'font-weight': '500', fill: '#78716c'
+        });
+        hint.textContent = state.mode === 'live'
+          ? 'Press any piano key or computer key (A–K) to see live concert & trumpet notes...'
+          : 'Press piano keys, computer keys (A–K), or capture from Mic Tuner to compose...';
+        notesLayer.appendChild(hint);
+        return;
+      }
+
+      let beatCounter = 0;
+      items.forEach((item, idx) => {
+        const durObj = DURATIONS[item.duration] || DURATIONS.quarter;
+        const x = state.mode === 'live' ? 140 + idx * 38 : startX + idx * stepX;
+        const pos = computeNotePosition(item.midi, isTrumpetTab);
+
+        const isSelected = state.mode === 'sequence' && state.selectedNoteIndex === idx;
+        const isActive = Boolean(item.highlight);
+        const color = isActive ? '#b45309' : (isSelected ? '#0369a1' : (isTrumpetTab ? '#0c4a6e' : '#1c1917'));
+
+        drawSingleEngravedNote(notesLayer, {
+          x,
+          y: pos.y,
+          isSharp: pos.isSharp,
+          durObj,
+          color,
+          isSelected,
+          isActive,
+          ledgerYs: pos.ledgerYs,
+          subTop: pos.subTop,
+          subBottom: pos.subBottom,
+          noteIndex: state.mode === 'sequence' ? idx : null
+        });
+
+        // Draw 4/4 measure barlines every 4 beats in Compose mode
+        if (state.mode === 'sequence') {
+          beatCounter += durObj.beats;
+          if (beatCounter >= 4 - 1e-6 && idx < items.length - 1) {
+            const barX = x + stepX * 0.5;
+            const topY = isTrumpetTab ? TRUMPET_TOP_Y : TREBLE_TOP_Y;
+            const botY = isTrumpetTab ? TRUMPET_TOP_Y + 4 * LINE_SPACING : BASS_TOP_Y + 4 * LINE_SPACING;
+            notesLayer.appendChild(createSvgEl('line', {
+              x1: barX, y1: topY, x2: barX, y2: botY,
+              stroke: '#a8a29e', 'stroke-width': '1.4', 'stroke-dasharray': '3,3'
+            }));
+            beatCounter = 0;
+          }
+        }
+      });
+
+      if (scrollToEnd && state.mode === 'sequence') {
+        const scroller = document.getElementById('staffScrollContainer');
+        scroller.scrollTo({ left: scroller.scrollWidth, behavior: 'smooth' });
+      }
     }
 
     // -------------------------------------------------------------------------
-    // 6. INTERACTIVE PIANO KEYBOARD BUILDER & EVENT HANDLERS
+    // 6. INTERACTIVE 3-OCTAVE PIANO KEYBOARD & INPUT HANDLERS
     // -------------------------------------------------------------------------
-    const keyElementsByMidi = new Map();
+    const KEYBOARD_MAP = {
+      'a': 0,  'w': 1,  's': 2,  'e': 3,  'd': 4,
+      'f': 5,  't': 6,  'g': 7,  'y': 8,  'h': 9,
+      'u': 10, 'j': 11, 'k': 12, 'o': 13, 'l': 14
+    };
 
     function buildPianoKeyboard() {
       const container = document.getElementById('pianoContainer');
       container.innerHTML = '';
-      keyElementsByMidi.clear();
 
       const whiteKeys = ALL_KEYS.filter((k) => !k.isSharp);
-      const totalWhite = whiteKeys.length; // 22 white keys (C3 through C6)
-      const whiteWidthPercent = 100 / totalWhite;
-
+      const whiteWidthPct = 100 / whiteKeys.length;
       let whiteIndex = 0;
-      const whiteIndexByMidi = new Map();
 
-      // 1. Render White Keys
-      whiteKeys.forEach((info) => {
-        whiteIndexByMidi.set(info.midi, whiteIndex);
+      ALL_KEYS.forEach((keyInfo) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.midi = keyInfo.midi;
+        btn.setAttribute('aria-label', `${keyInfo.label} (${keyInfo.freq.toFixed(1)} Hz)`);
 
-        const keyBtn = document.createElement('button');
-        keyBtn.type = 'button';
-        keyBtn.dataset.midi = info.midi;
-        keyBtn.className = 'white-key absolute top-0 h-full flex flex-col justify-end items-center pb-2.5 focus:outline-none';
-        keyBtn.style.left = `${whiteIndex * whiteWidthPercent}%`;
-        keyBtn.style.width = `${whiteWidthPercent}%`;
-        keyBtn.setAttribute('aria-label', `${info.label} (${info.freq.toFixed(1)} Hz)`);
+        if (!keyInfo.isSharp) {
+          btn.className = 'white-key absolute top-0 bottom-0 flex flex-col justify-end items-center pb-2.5 focus:outline-none';
+          btn.style.left = `${whiteIndex * whiteWidthPct}%`;
+          btn.style.width = `${whiteWidthPct}%`;
+          btn.innerHTML = `
+            <span class="key-label text-[11px] font-bold text-zinc-700 font-mono-code">${keyInfo.label}</span>
+            <span class="key-label text-[9px] text-sky-700 font-mono-code">${keyInfo.trumpetLabel}</span>
+          `;
+          whiteIndex++;
+        } else {
+          const blackWidthPct = whiteWidthPct * 0.62;
+          btn.className = 'black-key absolute top-0 h-[62%] flex flex-col justify-end items-center pb-2 focus:outline-none';
+          btn.style.left = `${whiteIndex * whiteWidthPct - blackWidthPct / 2}%`;
+          btn.style.width = `${blackWidthPct}%`;
+          btn.innerHTML = `
+            <span class="key-label text-[9px] font-bold text-zinc-200 font-mono-code">${keyInfo.noteName}</span>
+          `;
+        }
 
-        // Highlight Middle C (C4) and Low E3 (164.8 Hz) subtly on the key label
-        const isMiddleC = info.midi === 60;
-        const isLowE3 = info.midi === 52;
-
-        const labelSpan = document.createElement('span');
-        labelSpan.className = `key-label text-[11px] font-mono-code font-bold pointer-events-none ${
-          isMiddleC
-            ? 'px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 border border-amber-500/40'
-            : isLowE3
-            ? 'px-1 py-0.5 rounded bg-sky-500/15 text-sky-800'
-            : 'text-zinc-600'
-        }`;
-        labelSpan.textContent = info.label;
-        keyBtn.appendChild(labelSpan);
-
-        container.appendChild(keyBtn);
-        keyElementsByMidi.set(info.midi, keyBtn);
-        whiteIndex++;
-      });
-
-      // 2. Render Black Keys positioned over boundaries
-      ALL_KEYS.filter((k) => k.isSharp).forEach((info) => {
-        const prevWhiteIdx = whiteIndexByMidi.get(info.midi - 1);
-        if (prevWhiteIdx === undefined) return;
-
-        const blackWidthPercent = whiteWidthPercent * 0.62;
-        const leftPercent = (prevWhiteIdx + 1) * whiteWidthPercent - blackWidthPercent / 2;
-
-        const keyBtn = document.createElement('button');
-        keyBtn.type = 'button';
-        keyBtn.dataset.midi = info.midi;
-        keyBtn.className = 'black-key absolute top-0 h-[62%] flex flex-col justify-end items-center pb-2 focus:outline-none';
-        keyBtn.style.left = `${leftPercent}%`;
-        keyBtn.style.width = `${blackWidthPercent}%`;
-        keyBtn.setAttribute('aria-label', `${info.label} (${info.freq.toFixed(1)} Hz)`);
-
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'key-label text-[9.5px] font-mono-code font-semibold text-zinc-300 pointer-events-none';
-        labelSpan.textContent = info.noteName;
-        keyBtn.appendChild(labelSpan);
-
-        container.appendChild(keyBtn);
-        keyElementsByMidi.set(info.midi, keyBtn);
+        container.appendChild(btn);
       });
 
       applyLabelVisibility();
     }
 
     function applyLabelVisibility() {
-      const labels = document.querySelectorAll('.key-label');
-      labels.forEach((el) => {
-        el.style.display = state.showLabels ? 'block' : 'none';
-      });
       const dot = document.getElementById('labelDot');
-      dot.className = state.showLabels
-        ? 'w-2 h-2 rounded-full bg-emerald-400'
-        : 'w-2 h-2 rounded-full bg-zinc-600';
+      dot.className = state.showLabels ? 'w-2 h-2 rounded-full bg-emerald-400' : 'w-2 h-2 rounded-full bg-zinc-600';
+      document.querySelectorAll('.key-label').forEach((el) => {
+        el.style.display = state.showLabels ? '' : 'none';
+      });
     }
 
-    function triggerNoteOn(midi) {
+    function pressNote(midi) {
       if (midi < START_MIDI || midi > END_MIDI) return;
+      if (state.activeMidis.has(midi)) return;
 
-      const keyEl = keyElementsByMidi.get(midi);
+      state.activeMidis.add(midi);
+      state.lastPlayedMidi = midi;
+
+      const keyEl = document.querySelector(`[data-midi="${midi}"]`);
       if (keyEl) keyEl.classList.add('active');
 
-      if (!state.activeMidis.has(midi)) {
-        state.activeMidis.add(midi);
-        playPianoNote(midi);
-
-        if (state.mode === 'sequence') {
-          if (state.sequence.length >= state.maxSequenceLength) {
-            state.sequence.shift();
-          }
-          state.sequence.push({ midi, highlight: false });
-          updateSequenceButtons();
-        }
-      }
-
-      state.lastPlayedMidi = midi;
+      playPianoTone(midi);
       updateReadoutBar(midi);
-      renderStaff();
+
+      if (state.mode === 'sequence' && !state.isPlayingSequence) {
+        state.selectedNoteIndex = null;
+        updateSelectedNoteBanner();
+        state.sequence.push({
+          midi,
+          duration: state.selectedDuration,
+          highlight: false
+        });
+        saveCompositionToStorage();
+        updateSequenceButtons();
+        renderStaff(true);
+      } else {
+        renderStaff(false);
+      }
     }
 
-    function triggerNoteOff(midi) {
-      const keyEl = keyElementsByMidi.get(midi);
+    function releaseNote(midi) {
+      if (!state.activeMidis.has(midi)) return;
+      state.activeMidis.delete(midi);
+
+      const keyEl = document.querySelector(`[data-midi="${midi}"]`);
       if (keyEl) keyEl.classList.remove('active');
 
-      if (state.activeMidis.has(midi)) {
-        state.activeMidis.delete(midi);
-        stopPianoNote(midi);
-      }
-
+      stopPianoTone(midi);
       if (state.mode === 'live') {
-        renderStaff();
-        // If another key is still held down, show its info in the readout bar
-        if (state.activeMidis.size > 0) {
-          const remaining = Array.from(state.activeMidis);
-          updateReadoutBar(remaining[remaining.length - 1]);
-        }
+        renderStaff(false);
       }
-    }
-
-    // Pointer / Mouse / Touch Interaction with smooth glissando support
-    let isPointerDown = false;
-    let currentPointerMidi = null;
-
-    function getMidiFromPoint(clientX, clientY) {
-      const el = document.elementFromPoint(clientX, clientY);
-      if (!el) return null;
-      const keyBtn = el.closest('[data-midi]');
-      return keyBtn ? Number(keyBtn.dataset.midi) : null;
     }
 
     function initPianoPointerEvents() {
       const container = document.getElementById('pianoContainer');
+      let isPointerDown = false;
+      let currentPointerMidi = null;
 
       container.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0 && e.pointerType === 'mouse') return;
-        const midi = getMidiFromPoint(e.clientX, e.clientY);
-        if (midi !== null) {
-          isPointerDown = true;
-          currentPointerMidi = midi;
-          triggerNoteOn(midi);
-        }
+        const keyBtn = e.target.closest('[data-midi]');
+        if (!keyBtn) return;
+        e.preventDefault();
+        isPointerDown = true;
+        const midi = parseInt(keyBtn.dataset.midi, 10);
+        currentPointerMidi = midi;
+        pressNote(midi);
       });
 
       container.addEventListener('pointermove', (e) => {
         if (!isPointerDown) return;
-        const midi = getMidiFromPoint(e.clientX, e.clientY);
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        const keyBtn = el ? el.closest('[data-midi]') : null;
+        const midi = keyBtn ? parseInt(keyBtn.dataset.midi, 10) : null;
         if (midi !== currentPointerMidi) {
-          if (currentPointerMidi !== null) {
-            triggerNoteOff(currentPointerMidi);
-          }
+          if (currentPointerMidi !== null) releaseNote(currentPointerMidi);
           currentPointerMidi = midi;
-          if (midi !== null) {
-            triggerNoteOn(midi);
-          }
+          if (midi !== null) pressNote(midi);
         }
       });
 
-      const releasePointer = () => {
-        if (isPointerDown) {
-          isPointerDown = false;
-          if (currentPointerMidi !== null) {
-            triggerNoteOff(currentPointerMidi);
-            currentPointerMidi = null;
-          }
+      const endPointer = () => {
+        if (!isPointerDown) return;
+        isPointerDown = false;
+        if (currentPointerMidi !== null) {
+          releaseNote(currentPointerMidi);
+          currentPointerMidi = null;
         }
       };
 
-      window.addEventListener('pointerup', releasePointer);
-      window.addEventListener('pointercancel', releasePointer);
+      window.addEventListener('pointerup', endPointer);
+      window.addEventListener('pointercancel', endPointer);
+
+      // Computer Keyboard Bindings
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          setNotationTab(state.notationTab === 'concert' ? 'trumpet' : 'concert');
+          return;
+        }
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (state.sequence.length > 0) togglePlaySequence();
+          return;
+        }
+
+        if (DURATION_SHORTCUTS[e.key]) {
+          e.preventDefault();
+          setSelectedDuration(DURATION_SHORTCUTS[e.key], true);
+          return;
+        }
+
+        if (e.repeat) return;
+        const offset = KEYBOARD_MAP[e.key.toLowerCase()];
+        if (offset !== undefined) {
+          const midi = (state.keyboardBaseOctave + 1) * 12 + offset;
+          pressNote(midi);
+        }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        const offset = KEYBOARD_MAP[e.key.toLowerCase()];
+        if (offset !== undefined) {
+          const midi = (state.keyboardBaseOctave + 1) * 12 + offset;
+          releaseNote(midi);
+        }
+      });
     }
 
-    // -------------------------------------------------------------------------
-    // 7. COMPUTER KEYBOARD MAPPING
-    // -------------------------------------------------------------------------
-    // Maps standard home-row piano layout relative to keyboardBaseOctave (default C4 = 60)
-    const KEY_OFFSET_MAP = {
-      'a': 0,  // C
-      'w': 1,  // C#
-      's': 2,  // D
-      'e': 3,  // D#
-      'd': 4,  // E
-      'f': 5,  // F
-      't': 6,  // F#
-      'g': 7,  // G
-      'y': 8,  // G#
-      'h': 9,  // A
-      'u': 10, // A#
-      'j': 11, // B
-      'k': 12, // C (+1 oct)
-      'o': 13, // C#
-      'l': 14, // D
-      'p': 15, // D#
-      ';': 16  // E
-    };
-
-    const heldComputerKeys = new Map();
-
-    window.addEventListener('keydown', (e) => {
-      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
-      const key = e.key.toLowerCase();
-
-      if (key === 'z') {
-        shiftKeyboardOctave(-1);
-        return;
-      }
-      if (key === 'x') {
-        shiftKeyboardOctave(1);
-        return;
-      }
-
-      if (Object.prototype.hasOwnProperty.call(KEY_OFFSET_MAP, key)) {
-        e.preventDefault();
-        const baseMidi = (state.keyboardBaseOctave + 1) * 12;
-        const targetMidi = baseMidi + KEY_OFFSET_MAP[key];
-        if (!heldComputerKeys.has(key)) {
-          heldComputerKeys.set(key, targetMidi);
-          triggerNoteOn(targetMidi);
-        }
-      }
-    });
-
-    window.addEventListener('keyup', (e) => {
-      const key = e.key.toLowerCase();
-      if (heldComputerKeys.has(key)) {
-        const midi = heldComputerKeys.get(key);
-        heldComputerKeys.delete(key);
-        triggerNoteOff(midi);
-      }
-    });
-
     function shiftKeyboardOctave(delta) {
-      // Release any currently held keyboard notes before shifting
-      heldComputerKeys.forEach((midi) => triggerNoteOff(midi));
-      heldComputerKeys.clear();
-
       state.keyboardBaseOctave = Math.min(5, Math.max(3, state.keyboardBaseOctave + delta));
       document.getElementById('octLabel').textContent = `C${state.keyboardBaseOctave}`;
     }
 
     // -------------------------------------------------------------------------
-    // 8. MODE SWITCHING, PLAYBACK & PRESET RIFF
+    // 7. COMPOSITION PLAYBACK, CLEAR, COPY & PRESET RIFF
     // -------------------------------------------------------------------------
+    let playbackTimer = null;
+
+    function stopSequencePlayback() {
+      state.isPlayingSequence = false;
+      if (playbackTimer) {
+        clearTimeout(playbackTimer);
+        playbackTimer = null;
+      }
+      state.sequence.forEach((n) => { n.highlight = false; });
+      document.getElementById('playBtnIcon').textContent = '▶';
+      document.getElementById('playBtnText').textContent = 'Play';
+      updateSequenceButtons();
+      renderStaff(false);
+    }
+
+    function togglePlaySequence() {
+      if (state.isPlayingSequence) {
+        stopSequencePlayback();
+        return;
+      }
+      if (state.sequence.length === 0) return;
+
+      setMode('sequence');
+      state.isPlayingSequence = true;
+      document.getElementById('playBtnIcon').textContent = '■';
+      document.getElementById('playBtnText').textContent = 'Stop';
+      updateSequenceButtons();
+
+      let idx = 0;
+      const stepPlayback = () => {
+        if (!state.isPlayingSequence) return;
+        state.sequence.forEach((n) => { n.highlight = false; });
+
+        if (idx >= state.sequence.length) {
+          if (state.isLooping) {
+            idx = 0;
+          } else {
+            stopSequencePlayback();
+            return;
+          }
+        }
+
+        const noteObj = state.sequence[idx];
+        noteObj.highlight = true;
+        const durObj = DURATIONS[noteObj.duration] || DURATIONS.quarter;
+        const beatSeconds = 60 / state.tempoBpm;
+        const noteSeconds = durObj.beats * beatSeconds;
+
+        playPianoTone(noteObj.midi, Math.max(0.12, noteSeconds * 0.88));
+        updateReadoutBar(noteObj.midi);
+        renderStaff(false);
+
+        idx++;
+        playbackTimer = setTimeout(stepPlayback, noteSeconds * 1000);
+      };
+
+      stepPlayback();
+    }
+
+    function clearComposition() {
+      stopSequencePlayback();
+      state.sequence = [];
+      state.selectedNoteIndex = null;
+      saveCompositionToStorage();
+      updateSelectedNoteBanner();
+      updateSequenceButtons();
+      renderStaff(false);
+    }
+
+    function copyCompositionNotes() {
+      if (state.sequence.length === 0) return;
+      const concertLine = state.sequence.map((n) => `${midiToInfo(n.midi).label}(${DURATIONS[n.duration].shortLabel})`).join(' ');
+      const trumpetLine = state.sequence.map((n) => `${midiToInfo(n.midi).trumpetLabel}[${midiToInfo(n.midi).valves}]`).join(' ');
+      const payload = `Concert Pitch (C): ${concertLine}\nB♭ Trumpet (+2):   ${trumpetLine}`;
+
+      const textarea = document.createElement('textarea');
+      textarea.value = payload;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const btn = document.getElementById('copySeqBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy Notes'; }, 1400);
+      } catch (_) {}
+      document.body.removeChild(textarea);
+    }
+
     function setMode(newMode) {
+      if (newMode !== 'sequence' && newMode !== 'live') return;
+      if (state.isPlayingSequence) stopSequencePlayback();
       state.mode = newMode;
-      const liveBtn = document.getElementById('modeLiveBtn');
+
       const seqBtn = document.getElementById('modeSeqBtn');
+      const liveBtn = document.getElementById('modeLiveBtn');
       const statusText = document.getElementById('staffStatusText');
 
-      if (newMode === 'live') {
-        liveBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-500 text-zinc-950 shadow-sm';
-        seqBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-zinc-400 hover:text-zinc-100';
-        statusText.textContent = 'Live Clef: Press any piano key to render immediately';
-      } else {
+      if (newMode === 'sequence') {
         seqBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-500 text-zinc-950 shadow-sm';
         liveBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-zinc-400 hover:text-zinc-100';
-        statusText.textContent = 'Melody Builder: Click keys to append up to 14 notes onto the staff';
+        statusText.textContent = 'Every key you press is remembered on the staff';
+      } else {
+        liveBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-500 text-zinc-950 shadow-sm';
+        seqBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-zinc-400 hover:text-zinc-100';
+        statusText.textContent = 'Live monitor — displays held keys & chords in real time';
       }
 
-      updateSequenceButtons();
-      renderStaff();
+      renderStaff(false);
     }
 
-    async function playSequence() {
-      if (state.isPlayingSequence || state.sequence.length === 0) return;
-      state.isPlayingSequence = true;
+    function loadConcertRiffPreset() {
+      stopSequencePlayback();
+      setMode('sequence');
+      // A3 B3 C#4 D4 E4 D4 C#4 A3 B3 (Concert pitch riff)
+      const riffNotes = [
+        { midi: 57, duration: 'eighth' },
+        { midi: 59, duration: 'eighth' },
+        { midi: 61, duration: 'eighth' },
+        { midi: 62, duration: 'eighth' },
+        { midi: 64, duration: 'quarter' },
+        { midi: 62, duration: 'eighth' },
+        { midi: 61, duration: 'eighth' },
+        { midi: 57, duration: 'quarter' },
+        { midi: 59, duration: 'half' }
+      ];
+      state.sequence = riffNotes.map((n) => ({ midi: n.midi, duration: n.duration, highlight: false }));
+      saveCompositionToStorage();
       updateSequenceButtons();
+      updateReadoutBar(riffNotes[0].midi);
+      renderStaff(true);
+    }
 
-      for (let i = 0; i < state.sequence.length; i++) {
-        if (!state.isPlayingSequence) break;
+    // -------------------------------------------------------------------------
+    // 8. NOTATION TAB SWITCHING, MODE SWITCHING, PLAYBACK & PRESET RIFF
+    // -------------------------------------------------------------------------
+    function setNotationTab(tabName) {
+      if (tabName !== 'concert' && tabName !== 'trumpet') return;
+      state.notationTab = tabName;
 
-        state.sequence.forEach((item, idx) => {
-          item.highlight = idx === i;
+      const concertBtn = document.getElementById('tabConcertBtn');
+      const trumpetBtn = document.getElementById('tabTrumpetBtn');
+      const clefPill = document.getElementById('staffClefPill');
+
+      if (tabName === 'concert') {
+        concertBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-stone-900 text-amber-300 shadow-sm flex items-center gap-1.5';
+        concertBtn.setAttribute('aria-selected', 'true');
+        trumpetBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-stone-700 hover:text-stone-950 flex items-center gap-1.5';
+        trumpetBtn.setAttribute('aria-selected', 'false');
+        clefPill.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-800 text-amber-300';
+        clefPill.textContent = 'CONCERT GRAND STAFF';
+        setTunerInstrument('guitar');
+      } else {
+        trumpetBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-sky-900 text-sky-100 shadow-sm flex items-center gap-1.5';
+        trumpetBtn.setAttribute('aria-selected', 'true');
+        concertBtn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all text-stone-700 hover:text-stone-950 flex items-center gap-1.5';
+        concertBtn.setAttribute('aria-selected', 'false');
+        clefPill.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-900 text-sky-200';
+        clefPill.textContent = 'B♭ TRUMPET STAFF (+2)';
+        setTunerInstrument('trumpet');
+      }
+
+      renderStaff(false);
+    }
+    // -------------------------------------------------------------------------
+    // 9. REAL-TIME MICROPHONE CHROMATIC TUNER (AUTOCORRELATION + PARABOLIC FIT)
+    // -------------------------------------------------------------------------
+    let micStream = null;
+    let micSourceNode = null;
+    let micAnalyser = null;
+    let micTimeDomainBuffer = null;
+    let tunerRafId = null;
+    let smoothedCents = 0;
+    let lastValidPitchTime = 0;
+
+    function playReferenceTone(freq) {
+      try {
+        ensureAudioContext();
+        const now = audioCtx.currentTime;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.24, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4);
+
+        const osc1 = audioCtx.createOscillator();
+        osc1.type = 'triangle';
+        osc1.frequency.setValueAtTime(freq, now);
+
+        const osc2 = audioCtx.createOscillator();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(freq * 2, now);
+        const osc2Gain = audioCtx.createGain();
+        osc2Gain.gain.setValueAtTime(0.18, now);
+
+        osc1.connect(gain);
+        osc2.connect(osc2Gain);
+        osc2Gain.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 1.45);
+        osc2.stop(now + 1.45);
+      } catch (_) {}
+    }
+
+    function renderTunerTargetButtons() {
+      const container = document.getElementById('tunerTargetButtons');
+      const titleEl = document.getElementById('tunerTargetsTitle');
+      const isTrumpet = state.tunerInstrument === 'trumpet';
+
+      titleEl.textContent = isTrumpet
+        ? 'B♭ Trumpet Reference Notes (Click to hear concert reference pitch)'
+        : 'Guitar Standard Tuning E2–E4 (Click string to hear reference pitch)';
+
+      const targets = isTrumpet ? TRUMPET_TUNING_TARGETS : GUITAR_TUNING_TARGETS;
+      container.innerHTML = '';
+
+      targets.forEach((target) => {
+        const isMatched = state.tunerActive && state.tunerDetectedMidi === target.concertMidi;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.concertMidi = target.concertMidi;
+        btn.className = isMatched
+          ? 'px-2 py-1.5 rounded-xl border border-emerald-400 bg-emerald-500/20 text-emerald-200 text-left transition shadow-sm'
+          : 'px-2 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-left transition';
+
+        const freq = 440 * Math.pow(2, (target.playMidi - 69) / 12);
+        btn.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono-code font-bold ${isMatched ? 'text-emerald-300' : 'text-zinc-100'}">${target.label}</span>
+            ${target.valves ? `<span class="text-[9px] font-mono-code px-1 rounded bg-sky-900/70 text-sky-300">${target.valves}</span>` : ''}
+          </div>
+          <div class="text-[10px] font-mono-code text-zinc-400 truncate">${target.sub}</div>
+        `;
+
+        btn.addEventListener('click', () => {
+          playReferenceTone(freq);
         });
 
-        const midi = state.sequence[i].midi;
-        const keyEl = keyElementsByMidi.get(midi);
-        if (keyEl) keyEl.classList.add('active');
+        container.appendChild(btn);
+      });
+    }
 
-        playPianoNote(midi);
-        updateReadoutBar(midi);
-        renderStaff();
+    function setTunerInstrument(inst) {
+      if (inst !== 'guitar' && inst !== 'trumpet') return;
+      state.tunerInstrument = inst;
 
-        await new Promise((r) => setTimeout(r, 340));
+      const guitarBtn = document.getElementById('tunerInstGuitarBtn');
+      const trumpetBtn = document.getElementById('tunerInstTrumpetBtn');
+      const primaryLabel = document.getElementById('tunerPrimaryLabel');
+      const valveBox = document.getElementById('tunerTrumpetValveBox');
 
-        stopPianoNote(midi);
-        if (keyEl) keyEl.classList.remove('active');
-        await new Promise((r) => setTimeout(r, 60));
+      if (inst === 'guitar') {
+        guitarBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-500 text-zinc-950 shadow-sm flex items-center gap-1.5';
+        trumpetBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5';
+        primaryLabel.textContent = 'Concert Pitch (Guitar)';
+        primaryLabel.className = 'text-[11px] uppercase tracking-wider font-semibold text-amber-400';
+        valveBox.classList.add('hidden');
+        valveBox.classList.remove('flex');
+      } else {
+        trumpetBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-sky-500 text-zinc-950 shadow-sm flex items-center gap-1.5';
+        guitarBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5';
+        primaryLabel.textContent = 'B♭ Trumpet Written (+2)';
+        primaryLabel.className = 'text-[11px] uppercase tracking-wider font-semibold text-sky-400';
+        valveBox.classList.remove('hidden');
+        valveBox.classList.add('flex');
       }
 
-      state.sequence.forEach((item) => {
-        item.highlight = false;
-      });
-      state.isPlayingSequence = false;
-      updateSequenceButtons();
-      renderStaff();
+      renderTunerTargetButtons();
+      if (state.tunerDetectedFreq) {
+        updateTunerDisplay(state.tunerDetectedFreq);
+      }
     }
 
-    // Load the user's Concert Pitch melody (A3 B3 C#4 D4 E4 D4 C#4 A3 B3)
-    function loadConcertRiffPreset() {
+    function toggleTunerPanel(forceState) {
+      state.tunerOpen = typeof forceState === 'boolean' ? forceState : !state.tunerOpen;
+      const panel = document.getElementById('tunerPanel');
+      if (state.tunerOpen) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+
+    /**
+     * Normalized Autocorrelation Pitch Detection (YIN-inspired CMNDF + Parabolic Interpolation)
+     * Accurately resolves low guitar strings (E2 = 82.41 Hz) through high trumpet notes (~1200 Hz).
+     */
+    function detectPitchAutocorrelation(buffer, sampleRate) {
+      const SIZE = buffer.length;
+      let rms = 0;
+      for (let i = 0; i < SIZE; i++) {
+        rms += buffer[i] * buffer[i];
+      }
+      rms = Math.sqrt(rms / SIZE);
+
+      // Update live input level bar (0-100%)
+      const levelPercent = Math.min(100, Math.round(rms * 420));
+      const levelBar = document.getElementById('tunerInputLevelBar');
+      if (levelBar) levelBar.style.width = `${levelPercent}%`;
+
+      // Noise gate threshold to prevent room hiss from jumping needle
+      if (rms < 0.012) return null;
+
+      // Search lag range corresponding to ~65 Hz (below Low E2) up to ~1350 Hz
+      const minLag = Math.max(2, Math.floor(sampleRate / 1350));
+      const maxLag = Math.min(Math.floor(SIZE / 2), Math.floor(sampleRate / 65));
+
+      const diff = new Float32Array(maxLag + 1);
+      for (let tau = minLag; tau <= maxLag; tau++) {
+        let sum = 0;
+        for (let i = 0; i < maxLag; i++) {
+          const delta = buffer[i] - buffer[i + tau];
+          sum += delta * delta;
+        }
+        diff[tau] = sum;
+      }
+
+      // Cumulative Mean Normalized Difference Function (prevents octave-up errors on guitar)
+      const cmndf = new Float32Array(maxLag + 1);
+      cmndf[0] = 1;
+      let runningSum = 0;
+      for (let tau = 1; tau <= maxLag; tau++) {
+        runningSum += diff[tau];
+        cmndf[tau] = runningSum > 0 ? (diff[tau] * tau) / runningSum : 1;
+      }
+
+      // Find first dip below clarity threshold (0.18)
+      const threshold = 0.18;
+      let bestTau = -1;
+      for (let tau = minLag; tau <= maxLag; tau++) {
+        if (cmndf[tau] < threshold) {
+          while (tau + 1 <= maxLag && cmndf[tau + 1] < cmndf[tau]) {
+            tau++;
+          }
+          bestTau = tau;
+          break;
+        }
+      }
+
+      // Fallback to global minimum if clarity is moderate (e.g., soft acoustic pluck)
+      if (bestTau === -1) {
+        let minVal = 1;
+        for (let tau = minLag; tau <= maxLag; tau++) {
+          if (cmndf[tau] < minVal) {
+            minVal = cmndf[tau];
+            bestTau = tau;
+          }
+        }
+        if (minVal > 0.35 || bestTau === -1) return null;
+      }
+
+      // Parabolic interpolation around bestTau for sub-cent precision
+      let refinedTau = bestTau;
+      if (bestTau > minLag && bestTau < maxLag) {
+        const s0 = cmndf[bestTau - 1];
+        const s1 = cmndf[bestTau];
+        const s2 = cmndf[bestTau + 1];
+        const denom = 2 * (2 * s1 - s2 - s0);
+        if (Math.abs(denom) > 1e-6) {
+          refinedTau = bestTau + (s2 - s0) / denom;
+        }
+      }
+
+      return sampleRate / refinedTau;
+    }
+
+    function updateTunerDisplay(freq) {
+      const noteEl = document.getElementById('tunerDetectedNote');
+      const freqEl = document.getElementById('tunerDetectedFreq');
+      const secEl = document.getElementById('tunerSecondaryInfo');
+      const badgeEl = document.getElementById('tunerStatusBadge');
+      const centsEl = document.getElementById('tunerCentsReadout');
+      const needleGroup = document.getElementById('tunerNeedleGroup');
+      const needleLine = document.getElementById('tunerNeedleLine');
+      const needleTip = document.getElementById('tunerNeedleTip');
+      const captureBtn = document.getElementById('captureMicNoteBtn');
+
+      if (!freq) {
+        // Hold last reading briefly (450ms) so pluck decay feels smooth
+        if (performance.now() - lastValidPitchTime > 450) {
+          state.tunerDetectedMidi = null;
+          state.tunerDetectedFreq = null;
+          noteEl.textContent = '--';
+          noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-zinc-500 tracking-tight';
+          freqEl.textContent = '-- Hz';
+          secEl.textContent = 'Listening... Play a note on Guitar or B♭ Trumpet';
+          badgeEl.textContent = 'Listening';
+          badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950/70 text-emerald-300 border border-emerald-500/40';
+          centsEl.textContent = '0 cents';
+          needleGroup.setAttribute('transform', 'rotate(0 180 115)');
+          needleLine.setAttribute('stroke', '#71717a');
+          needleTip.setAttribute('fill', '#71717a');
+          captureBtn.disabled = true;
+          renderTunerTargetButtons();
+        }
+        return;
+      }
+
+      lastValidPitchTime = performance.now();
+
+      // Convert frequency to continuous MIDI float relative to A4 = 440 Hz
+      const midiFloat = 69 + 12 * Math.log2(freq / 440);
+      const nearestMidi = Math.round(midiFloat);
+      const rawCents = Math.max(-50, Math.min(50, Math.round((midiFloat - nearestMidi) * 100)));
+
+      // Exponential smoothing for silky needle response
+      smoothedCents = smoothedCents * 0.55 + rawCents * 0.45;
+      const displayCents = Math.round(smoothedCents);
+
+      state.tunerDetectedMidi = nearestMidi;
+      state.tunerDetectedFreq = freq;
+      state.tunerCents = displayCents;
+
+      const info = midiToInfo(nearestMidi);
+      const isTrumpet = state.tunerInstrument === 'trumpet';
+
+      if (isTrumpet) {
+        noteEl.textContent = info.trumpetLabel;
+        secEl.textContent = `Concert Pitch: ${info.label} • ${info.valveHint}`;
+      } else {
+        noteEl.textContent = info.label;
+        secEl.textContent = `B♭ Trumpet Written: ${info.trumpetLabel} (Valves: ${info.valves})`;
+      }
+
+      freqEl.textContent = `${freq.toFixed(1)} Hz`;
+
+      // Update Trumpet Valve Indicators in Tuner
+      const valveTextEl = document.getElementById('tunerValveText');
+      const tv1 = document.getElementById('tunerV1');
+      const tv2 = document.getElementById('tunerV2');
+      const tv3 = document.getElementById('tunerV3');
+      valveTextEl.textContent = `${info.valves} (${info.trumpetLabel})`;
+
+      const vOn = 'w-4 h-4 rounded-full border border-sky-300 bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.85)] transition-all';
+      const vOff = 'w-4 h-4 rounded-full border border-sky-400/40 bg-zinc-900 transition-all';
+      tv1.className = info.valves.includes('1') ? vOn : vOff;
+      tv2.className = info.valves.includes('2') ? vOn : vOff;
+      tv3.className = info.valves.includes('3') ? vOn : vOff;
+
+      // Accuracy color coding: ±5 cents = IN TUNE (Emerald), ±15 cents = CLOSE (Amber), >15 = FLAT/SHARP (Rose)
+      const absCents = Math.abs(displayCents);
+      let statusLabel = 'IN TUNE';
+      let colorHex = '#10b981';
+
+      if (absCents <= 5) {
+        statusLabel = '✓ IN TUNE';
+        colorHex = '#10b981';
+        noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-emerald-400 tracking-tight';
+        badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/50';
+      } else if (absCents <= 15) {
+        statusLabel = displayCents < 0 ? 'Slightly Flat ♭' : 'Slightly Sharp ♯';
+        colorHex = '#f59e0b';
+        noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-amber-400 tracking-tight';
+        badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/50';
+      } else {
+        statusLabel = displayCents < 0 ? 'Too Flat ♭' : 'Too Sharp ♯';
+        colorHex = '#f43f5e';
+        noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-rose-400 tracking-tight';
+        badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-400/50';
+      }
+
+      badgeEl.textContent = statusLabel;
+      const sign = displayCents > 0 ? '+' : '';
+      centsEl.textContent = `${sign}${displayCents} cents`;
+
+      // Map -50..+50 cents to -52..+52 degrees needle angle
+      const angle = (smoothedCents / 50) * 52;
+      needleGroup.setAttribute('transform', `rotate(${angle.toFixed(1)} 180 115)`);
+      needleLine.setAttribute('stroke', colorHex);
+      needleTip.setAttribute('fill', colorHex);
+
+      // Enable Capture to Staff if detected note fits within C3-C6 staff range (or octave-foldable)
+      captureBtn.disabled = false;
+      renderTunerTargetButtons();
+    }
+
+    function tunerLoop() {
+      if (!state.tunerActive || !micAnalyser || !micTimeDomainBuffer) return;
+      micAnalyser.getFloatTimeDomainData(micTimeDomainBuffer);
+      const freq = detectPitchAutocorrelation(micTimeDomainBuffer, audioCtx.sampleRate);
+      updateTunerDisplay(freq);
+      tunerRafId = requestAnimationFrame(tunerLoop);
+    }
+
+    async function toggleMicTuner() {
+      const btn = document.getElementById('tunerMicToggleBtn');
+      const btnText = document.getElementById('tunerMicBtnText');
+      const headerDot = document.getElementById('headerTunerDot');
+      const errorBanner = document.getElementById('tunerErrorBanner');
+
+      if (state.tunerActive) {
+        // Stop Microphone Stream
+        state.tunerActive = false;
+        if (tunerRafId) cancelAnimationFrame(tunerRafId);
+        if (micSourceNode) {
+          try { micSourceNode.disconnect(); } catch (_) {}
+          micSourceNode = null;
+        }
+        if (micStream) {
+          micStream.getTracks().forEach((t) => t.stop());
+          micStream = null;
+        }
+
+        btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-900/30 transition flex items-center gap-1.5';
+        btnText.textContent = 'Start Mic Tuner';
+        headerDot.className = 'w-2 h-2 rounded-full bg-zinc-500';
+        document.getElementById('tunerInputLevelBar').style.width = '0%';
+        lastValidPitchTime = 0;
+        updateTunerDisplay(null);
+        document.getElementById('tunerStatusBadge').textContent = 'Idle';
+        document.getElementById('tunerStatusBadge').className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700';
+        document.getElementById('tunerSecondaryInfo').textContent = 'Press "Start Mic Tuner" and play a note';
+        return;
+      }
+
+      // Request Microphone Access
+      errorBanner.classList.add('hidden');
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error('Microphone API is not supported in this browser or context.');
+        }
+
+        ensureAudioContext();
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false
+          }
+        });
+
+        micSourceNode = audioCtx.createMediaStreamSource(micStream);
+        micAnalyser = audioCtx.createAnalyser();
+        micAnalyser.fftSize = 4096; // High buffer resolution for accurate low guitar E2 (82.4 Hz)
+        micTimeDomainBuffer = new Float32Array(micAnalyser.fftSize);
+        micSourceNode.connect(micAnalyser);
+
+        state.tunerActive = true;
+        toggleTunerPanel(true);
+
+        btn.className = 'px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-rose-900/30 transition flex items-center gap-1.5';
+        btnText.textContent = 'Stop Mic';
+        headerDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+
+        tunerLoop();
+      } catch (err) {
+        const errorText = document.getElementById('tunerErrorText');
+        errorText.textContent = `Could not access microphone: ${err.message || 'Permission denied.'}`;
+        errorBanner.classList.remove('hidden');
+      }
+    }
+
+    function captureMicNoteToStaff() {
+      if (state.tunerDetectedMidi === null) return;
+      // Fold low guitar pitches (below C3 = 48) into playable staff range C3–C6
+      let midi = state.tunerDetectedMidi;
+      while (midi < START_MIDI) midi += 12;
+      while (midi > END_MIDI) midi -= 12;
+
       setMode('sequence');
-      // A3(57), B3(59), C#4(61), D4(62), E4(64), D4(62), C#4(61), A3(57), B3(59)
-      const riffMidis = [57, 59, 61, 62, 64, 62, 61, 57, 59];
-      state.sequence = riffMidis.map((midi) => ({ midi, highlight: false }));
+      state.selectedNoteIndex = null;
+      updateSelectedNoteBanner();
+      state.sequence.push({
+        midi,
+        duration: state.selectedDuration,
+        highlight: false
+      });
+      saveCompositionToStorage();
       updateSequenceButtons();
-      updateReadoutBar(riffMidis[0]);
-      renderStaff();
+      updateReadoutBar(midi);
+      renderStaff(true);
+
+      // Brief visual feedback on capture button
+      const btn = document.getElementById('captureMicNoteBtn');
+      const info = midiToInfo(midi);
+      const display = state.tunerInstrument === 'trumpet' ? info.trumpetLabel : info.label;
+      btn.innerHTML = `<span>✓ Added ${display} to Staff!</span>`;
+      setTimeout(() => {
+        btn.innerHTML = '<span>➕ Add Detected Note to Staff</span>';
+      }, 1100);
     }
 
     // -------------------------------------------------------------------------
-    // 9. INITIALIZATION
+    // 10. INITIALIZATION
     // -------------------------------------------------------------------------
     window.addEventListener('DOMContentLoaded', () => {
-      drawStaticGrandStaff();
+      loadCompositionFromStorage();
+      drawStaticGrandStaff(960);
       buildPianoKeyboard();
       initPianoPointerEvents();
-      renderStaff();
-      updateSequenceButtons();
+      setSelectedDuration('quarter', false);
+      updateLoopButton();
+      setMode('sequence');
+      renderTunerTargetButtons();
+      if (state.sequence.length > 0) {
+        updateReadoutBar(state.sequence[state.sequence.length - 1].midi);
+      }
+
+      // Microphone Tuner Event Listeners
+      document.getElementById('toggleTunerPanelBtn').addEventListener('click', () => toggleTunerPanel());
+      document.getElementById('collapseTunerBtn').addEventListener('click', () => toggleTunerPanel(false));
+      document.getElementById('tunerMicToggleBtn').addEventListener('click', toggleMicTuner);
+      document.getElementById('tunerInstGuitarBtn').addEventListener('click', () => setTunerInstrument('guitar'));
+      document.getElementById('tunerInstTrumpetBtn').addEventListener('click', () => setTunerInstrument('trumpet'));
+      document.getElementById('captureMicNoteBtn').addEventListener('click', captureMicNoteToStaff);
+      document.getElementById('dismissTunerErrorBtn').addEventListener('click', () => {
+        document.getElementById('tunerErrorBanner').classList.add('hidden');
+      });
+
+      // Duration toolbar buttons
+      document.querySelectorAll('.duration-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setSelectedDuration(btn.dataset.duration, true);
+        });
+      });
+
+      document.getElementById('deselectNoteBtn').addEventListener('click', () => {
+        state.selectedNoteIndex = null;
+        updateSelectedNoteBanner();
+        renderStaff(false);
+      });
+
+      document.getElementById('deleteSelectedNoteBtn').addEventListener('click', () => {
+        if (state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
+          state.sequence.splice(state.selectedNoteIndex, 1);
+          state.selectedNoteIndex = null;
+          saveCompositionToStorage();
+          updateSelectedNoteBanner();
+          updateSequenceButtons();
+          renderStaff(false);
+        }
+      });
+
+      // Clicking empty background of the staff deselects any active note
+      document.getElementById('grandStaffSvg').addEventListener('click', () => {
+        if (state.selectedNoteIndex !== null) {
+          state.selectedNoteIndex = null;
+          updateSelectedNoteBanner();
+          renderStaff(false);
+        }
+      });
+
+      // Notation Tab Switchers (Concert Pitch vs B♭ Trumpet)
+      document.getElementById('tabConcertBtn').addEventListener('click', () => setNotationTab('concert'));
+      document.getElementById('tabTrumpetBtn').addEventListener('click', () => setNotationTab('trumpet'));
 
       // Wire up UI controls
       document.getElementById('modeLiveBtn').addEventListener('click', () => setMode('live'));
@@ -1235,24 +2272,36 @@
         applyLabelVisibility();
       });
 
+      document.getElementById('tempoInput').addEventListener('change', (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (!Number.isNaN(val)) {
+          state.tempoBpm = Math.min(240, Math.max(40, val));
+          e.target.value = state.tempoBpm;
+        }
+      });
+
       document.getElementById('loadRiffBtn').addEventListener('click', loadConcertRiffPreset);
-      document.getElementById('playSeqBtn').addEventListener('click', playSequence);
+      document.getElementById('playSeqBtn').addEventListener('click', togglePlaySequence);
+      document.getElementById('loopSeqBtn').addEventListener('click', () => {
+        state.isLooping = !state.isLooping;
+        updateLoopButton();
+      });
+      document.getElementById('copySeqBtn').addEventListener('click', copyCompositionNotes);
 
       document.getElementById('undoSeqBtn').addEventListener('click', () => {
         if (state.sequence.length > 0 && !state.isPlayingSequence) {
           state.sequence.pop();
+          if (state.selectedNoteIndex !== null && state.selectedNoteIndex >= state.sequence.length) {
+            state.selectedNoteIndex = null;
+            updateSelectedNoteBanner();
+          }
+          saveCompositionToStorage();
           updateSequenceButtons();
-          renderStaff();
+          renderStaff(true);
         }
       });
 
-      document.getElementById('clearSeqBtn').addEventListener('click', () => {
-        if (!state.isPlayingSequence) {
-          state.sequence = [];
-          updateSequenceButtons();
-          renderStaff();
-        }
-      });
+      document.getElementById('clearSeqBtn').addEventListener('click', clearComposition);
 
       // Scroll helpers for mobile/compact viewports
       const scrollContainer = document.getElementById('pianoScrollContainer');
