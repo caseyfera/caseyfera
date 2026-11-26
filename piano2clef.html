@@ -105,7 +105,7 @@
 
     /* Tuner Gauge Needle Smooth Transition */
     .tuner-needle {
-      transition: transform 0.08s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
     }
   </style>
 </head>
@@ -197,7 +197,7 @@
 
     <!-- Real-Time Microphone Chromatic Tuner Studio Panel -->
     <section id="tunerPanel" class="bg-zinc-900/95 border border-zinc-800 rounded-2xl p-3.5 sm:p-5 shadow-2xl transition-all">
-      <!-- Top Tuner Bar: Title, Instrument Selector, Start/Stop Mic -->
+      <!-- Top Tuner Bar: Title, Instrument Selector, Sustain Hold, Start/Stop Mic -->
       <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-zinc-800">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-base">
@@ -208,12 +208,26 @@
               Chromatic Microphone Tuner
             </h2>
             <p class="text-[11px] text-zinc-400">
-              Sub-cent autocorrelation pitch detection (E2 82.4 Hz – C6 1046.5 Hz)
+              Sustain-locked autocorrelation pitch detection (E2 82.4 Hz – C6 1046.5 Hz)
             </p>
           </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+          <!-- Sustain Hold Selector (keeps note locked while ringing/decaying) -->
+          <div class="flex items-center gap-1.5 bg-zinc-950 px-2.5 py-1.5 rounded-xl border border-zinc-800 text-xs">
+            <label for="tunerHoldSelect" class="text-zinc-400 font-medium">Hold:</label>
+            <select
+              id="tunerHoldSelect"
+              class="bg-zinc-900 text-emerald-300 font-mono-code font-bold rounded px-1.5 py-0.5 border border-zinc-700 focus:outline-none focus:border-emerald-500"
+              title="How long the tuner holds a detected note while sustaining or decaying"
+            >
+              <option value="1500">1.5s</option>
+              <option value="3000" selected>3.0s</option>
+              <option value="5000">5.0s</option>
+            </select>
+          </div>
+
           <!-- Instrument Mode Switcher -->
           <div class="inline-flex rounded-xl bg-zinc-950 p-1 border border-zinc-800" role="group" aria-label="Tuner Instrument Mode">
             <button
@@ -772,19 +786,6 @@
   </footer>
 
   <script>
-    /**
-     * ============================================================================
-     * CONCERT PITCH PIANO & GRAND STAFF STUDIO
-     * ============================================================================
-     * Features:
-     * 1. Web Audio API polyphonic warm piano synthesizer with natural envelope.
-     * 2. 3-Octave interactive piano (C3 to C6, covering E3 ~164.81 Hz up to C6).
-     * 3. Default Compose Mode that remembers every note pressed, persists to
-     *    localStorage, draws barlines every 4 notes, and scrolls horizontally.
-     * 4. Real-time B♭ Trumpet transposition (+2 semitones) and valve fingerings.
-     * 5. Clear, Undo, Play/Stop with BPM tempo control, and Copy Notes export.
-     */
-
     // -------------------------------------------------------------------------
     // 1. MUSICAL DATA & THEORY CONSTANTS
     // -------------------------------------------------------------------------
@@ -792,7 +793,6 @@
     const NOTE_NAMES_SHARP = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     const DIATONIC_STEP_MAP = { 'C': 0, 'D': 1, 'E': 2, 'F': 3, 'G': 4, 'A': 5, 'B': 6 };
 
-    // Supported Note Durations
     const DURATIONS = {
       whole:     { id: 'whole',     name: 'Whole',     beats: 4,    symbol: '𝅝', shortLabel: '1/1',  hollow: true,  hasStem: false, flags: 0 },
       half:      { id: 'half',      name: 'Half',      beats: 2,    symbol: '𝅗𝅥', shortLabel: '1/2',  hollow: true,  hasStem: true,  flags: 0 },
@@ -809,7 +809,6 @@
       '5': 'sixteenth'
     };
 
-    // B♭ Trumpet standard fingerings indexed by written MIDI pitch (54 = F#3 up to 96 = C7)
     const TRUMPET_FINGERINGS = {
       54: { valves: '1-2-3', hint: 'Low F♯3' },
       55: { valves: '1-3',   hint: 'Low G3' },
@@ -846,9 +845,8 @@
       86: { valves: '1',     hint: 'D6' }
     };
 
-    // Build keyboard keys from MIDI 48 (C3) to MIDI 84 (C6) -> 37 keys (3 full octaves)
-    const START_MIDI = 48; // C3 (130.81 Hz), includes E3 (52 = 164.81 Hz)
-    const END_MIDI = 84;   // C6 (1046.50 Hz)
+    const START_MIDI = 48;
+    const END_MIDI = 84;
 
     function midiToInfo(midi) {
       const pitchClass = midi % 12;
@@ -858,7 +856,6 @@
       const letter = fullName[0];
       const freq = 440 * Math.pow(2, (midi - 69) / 12);
 
-      // B♭ Trumpet transposes up a major second (+2 semitones)
       const trumpetMidi = midi + 2;
       const tPitchClass = trumpetMidi % 12;
       const tOctave = Math.floor(trumpetMidi / 12) - 1;
@@ -889,30 +886,29 @@
     // 2. APPLICATION STATE
     // -------------------------------------------------------------------------
     const state = {
-      mode: 'sequence',            // 'sequence' (Compose default) | 'live'
-      notationTab: 'concert',      // 'concert' (Grand Staff C) | 'trumpet' (B♭ Trumpet Treble +2)
-      activeMidis: new Set(),      // Currently held MIDI notes
-      lastPlayedMidi: null,        // Most recent note for readout bar
-      sequence: [],                // Array of { midi, duration, highlight } objects
-      selectedDuration: 'quarter', // Currently active note duration tool
-      selectedIndices: new Set(),  // Set of selected note indices for single or batch editing
-      selectionAnchor: null,       // Anchor index for Shift+Click range selection
-      isLooping: false,            // Continuous loop toggle for playback
+      mode: 'sequence',
+      notationTab: 'concert',
+      activeMidis: new Set(),
+      lastPlayedMidi: null,
+      sequence: [],
+      selectedDuration: 'quarter',
+      selectedIndices: new Set(),
+      selectionAnchor: null,
+      isLooping: false,
       showLabels: true,
-      keyboardBaseOctave: 4,       // Computer keyboard home row starts on C4
+      keyboardBaseOctave: 4,
       isPlayingSequence: false,
       tempoBpm: 120,
-      // Microphone Chromatic Tuner & Auto-Transcribe State
       tunerOpen: true,
       tunerActive: false,
-      autoMicRecord: false,        // Auto-write steady mic pitches (guitar/piano/trumpet) onto staff
-      tunerInstrument: 'guitar',   // 'guitar' (Concert C) | 'trumpet' (Written +2)
-      tunerDetectedMidi: null,     // Nearest concert MIDI note detected by mic
+      autoMicRecord: false,
+      tunerInstrument: 'guitar',
+      tunerDetectedMidi: null,
       tunerDetectedFreq: null,
-      tunerCents: 0
+      tunerCents: 0,
+      tunerHoldMs: 3000
     };
 
-    // Standard Reference Targets for Guitar (Concert) and B♭ Trumpet (Written)
     const GUITAR_TUNING_TARGETS = [
       { label: 'E2', sub: '82.4 Hz',  concertMidi: 40, playMidi: 40 },
       { label: 'A2', sub: '110.0 Hz', concertMidi: 45, playMidi: 45 },
@@ -1139,7 +1135,6 @@
     function updateSelectedNoteBanner() {
       const banner = document.getElementById('selectedNoteBanner');
       const label = document.getElementById('selectedNoteLabel');
-      // Prune any out-of-bounds indices
       for (const idx of Array.from(state.selectedIndices)) {
         if (idx < 0 || idx >= state.sequence.length) {
           state.selectedIndices.delete(idx);
@@ -1208,10 +1203,10 @@
     // -------------------------------------------------------------------------
     const SVG_NS = 'http://www.w3.org/2000/svg';
     const LINE_SPACING = 11;
-    const HALF_STEP_Y = LINE_SPACING / 2; // 5.5px per diatonic step
-    const TREBLE_TOP_Y = 48;              // F5 line
-    const BASS_TOP_Y = 148;               // A3 line
-    const TRUMPET_TOP_Y = 76;             // F5 line on single Trumpet staff
+    const HALF_STEP_Y = LINE_SPACING / 2;
+    const TREBLE_TOP_Y = 48;
+    const BASS_TOP_Y = 148;
+    const TRUMPET_TOP_Y = 76;
 
     function createSvgEl(tag, attrs = {}) {
       const el = document.createElementNS(SVG_NS, tag);
@@ -1230,7 +1225,6 @@
       staticLayer.innerHTML = '';
 
       if (state.notationTab === 'trumpet') {
-        // Single Treble Clef Staff for B♭ Trumpet
         for (let i = 0; i < 5; i++) {
           const y = TRUMPET_TOP_Y + i * LINE_SPACING;
           staticLayer.appendChild(createSvgEl('line', {
@@ -1238,7 +1232,6 @@
             stroke: '#44403c', 'stroke-width': '1.25'
           }));
         }
-        // Left & Right Barlines
         staticLayer.appendChild(createSvgEl('line', {
           x1: 24, y1: TRUMPET_TOP_Y, x2: 24, y2: TRUMPET_TOP_Y + 4 * LINE_SPACING,
           stroke: '#1c1917', 'stroke-width': '2.5'
@@ -1248,7 +1241,6 @@
           stroke: '#1c1917', 'stroke-width': '2.5'
         }));
 
-        // Treble Clef Glyph
         const clef = createSvgEl('text', {
           x: 32, y: TRUMPET_TOP_Y + 38,
           'font-size': '56', 'font-family': 'serif', fill: '#1c1917'
@@ -1265,7 +1257,6 @@
         return;
       }
 
-      // Grand Staff (Treble + Bass)
       for (let i = 0; i < 5; i++) {
         const ty = TREBLE_TOP_Y + i * LINE_SPACING;
         staticLayer.appendChild(createSvgEl('line', {
@@ -1280,7 +1271,6 @@
         }));
       }
 
-      // Grand Staff Left Brace & Barline
       staticLayer.appendChild(createSvgEl('line', {
         x1: 28, y1: TREBLE_TOP_Y, x2: 28, y2: BASS_TOP_Y + 4 * LINE_SPACING,
         stroke: '#1c1917', 'stroke-width': '2.5'
@@ -1296,7 +1286,6 @@
       brace.textContent = '{';
       staticLayer.appendChild(brace);
 
-      // Treble & Bass Clef Glyphs
       const trebleGlyph = createSvgEl('text', {
         x: 34, y: TREBLE_TOP_Y + 37, 'font-size': '54', 'font-family': 'serif', fill: '#1c1917'
       });
@@ -1322,7 +1311,6 @@
         }));
       }
 
-      // Ledger lines
       ledgerYs.forEach((ly) => {
         g.appendChild(createSvgEl('line', {
           x1: x - 12, y1: ly, x2: x + 12, y2: ly,
@@ -1330,7 +1318,6 @@
         }));
       });
 
-      // Sharp accidental
       if (isSharp) {
         const sharpEl = createSvgEl('text', {
           x: x - 17, y: y + 4.5,
@@ -1340,7 +1327,6 @@
         g.appendChild(sharpEl);
       }
 
-      // Notehead
       g.appendChild(createSvgEl('ellipse', {
         cx: x, cy: y, rx: 6.4, ry: 4.5,
         transform: `rotate(-18 ${x} ${y})`,
@@ -1349,7 +1335,6 @@
         'stroke-width': durObj.hollow ? '2.1' : '1.4'
       }));
 
-      // Stem & Flags
       if (durObj.hasStem) {
         const stemUp = y >= 92;
         const stemX = stemUp ? x + 5.6 : x - 5.6;
@@ -1371,7 +1356,6 @@
         }
       }
 
-      // Labels underneath note
       if (subTop) {
         const t1 = createSvgEl('text', {
           x, y: 224, 'text-anchor': 'middle',
@@ -1433,7 +1417,6 @@
     function computeNotePosition(midi, isTrumpetTab) {
       const info = midiToInfo(midi);
       if (isTrumpetTab) {
-        // Written pitch (+2 semitones). Fold octave up if lower than F#3 (written MIDI 54)
         let writtenMidi = info.trumpetMidi;
         let octaveShifted = false;
         while (writtenMidi < 54) {
@@ -1446,15 +1429,12 @@
         const wLetter = wName[0];
         const wIsSharp = wName.includes('#');
         const diat = wOct * 7 + DIATONIC_STEP_MAP[wLetter];
-        // F5 is octave 5, letter F -> diat = 5*7 + 3 = 38 -> TRUMPET_TOP_Y
         const y = TRUMPET_TOP_Y + (38 - diat) * HALF_STEP_Y;
 
         const ledgerYs = [];
-        // Bottom line E4 = diat 30 -> y = TRUMPET_TOP_Y + 44
         for (let d = 28; d >= diat; d -= 2) {
           ledgerYs.push(TRUMPET_TOP_Y + (38 - d) * HALF_STEP_Y);
         }
-        // Top line F5 = diat 38 -> above A5 (diat 40)
         for (let d = 40; d <= diat; d += 2) {
           ledgerYs.push(TRUMPET_TOP_Y + (38 - d) * HALF_STEP_Y);
         }
@@ -1468,18 +1448,14 @@
         };
       }
 
-      // Concert Pitch Grand Staff: >= C4 (MIDI 60) on Treble, < C4 on Bass
       const diat = getDiatonicIndex(info);
       const ledgerYs = [];
 
       if (midi >= 60) {
-        // Treble top line F5 = diat 38 -> TREBLE_TOP_Y
         const y = TREBLE_TOP_Y + (38 - diat) * HALF_STEP_Y;
-        // Middle C4 (diat 28) and below
         for (let d = 28; d >= diat; d -= 2) {
           ledgerYs.push(TREBLE_TOP_Y + (38 - d) * HALF_STEP_Y);
         }
-        // Above F5 (A5 = diat 40 and up)
         for (let d = 40; d <= diat; d += 2) {
           ledgerYs.push(TREBLE_TOP_Y + (38 - d) * HALF_STEP_Y);
         }
@@ -1491,13 +1467,10 @@
           subBottom: `Trp:${info.trumpetLabel}`
         };
       } else {
-        // Bass top line A3 = diat (3*7 + 5 = 26) -> BASS_TOP_Y
         const y = BASS_TOP_Y + (26 - diat) * HALF_STEP_Y;
-        // Above A3 (Middle C4 = diat 28)
         for (let d = 28; d <= diat; d += 2) {
           ledgerYs.push(BASS_TOP_Y + (26 - d) * HALF_STEP_Y);
         }
-        // Below G2 (diat 18 -> E2 = 16 and down)
         for (let d = 16; d >= diat; d -= 2) {
           ledgerYs.push(BASS_TOP_Y + (26 - d) * HALF_STEP_Y);
         }
@@ -1565,7 +1538,6 @@
           noteIndex: state.mode === 'sequence' ? idx : null
         });
 
-        // Draw 4/4 measure barlines every 4 beats in Compose mode
         if (state.mode === 'sequence') {
           beatCounter += durObj.beats;
           if (beatCounter >= 4 - 1e-6 && idx < items.length - 1) {
@@ -1723,9 +1695,8 @@
       window.addEventListener('pointerup', endPointer);
       window.addEventListener('pointercancel', endPointer);
 
-      // Computer Keyboard Bindings
       window.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
         if (e.key === 'Tab') {
           e.preventDefault();
@@ -1912,7 +1883,6 @@
     function loadConcertRiffPreset() {
       stopSequencePlayback();
       setMode('sequence');
-      // A3 B3 C#4 D4 E4 D4 C#4 A3 B3 (Concert pitch riff)
       const riffNotes = [
         { midi: 57, duration: 'eighth' },
         { midi: 59, duration: 'eighth' },
@@ -1932,7 +1902,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // 8. NOTATION TAB SWITCHING, MODE SWITCHING, PLAYBACK & PRESET RIFF
+    // 8. NOTATION TAB SWITCHING
     // -------------------------------------------------------------------------
     function setNotationTab(tabName) {
       if (tabName !== 'concert' && tabName !== 'trumpet') return;
@@ -1962,8 +1932,9 @@
 
       renderStaff(false);
     }
+
     // -------------------------------------------------------------------------
-    // 9. REAL-TIME MICROPHONE CHROMATIC TUNER (AUTOCORRELATION + PARABOLIC FIT)
+    // 9. REAL-TIME MICROPHONE CHROMATIC TUNER (SUSTAIN-LOCKED AUTOCORRELATION)
     // -------------------------------------------------------------------------
     let micStream = null;
     let micSourceNode = null;
@@ -1972,11 +1943,11 @@
     let tunerRafId = null;
     let smoothedCents = 0;
     let lastValidPitchTime = 0;
-    // Auto-transcribe stability tracker for Guitar / Piano / B♭ Trumpet
+    let lastSustainedFreq = null;
     let candidateMidi = null;
     let candidateStartTime = 0;
     let committedHoldMidi = null;
-    const AUTO_HOLD_MS = 140; // Require 140ms steady pitch lock before engraving note
+    const AUTO_HOLD_MS = 180;
 
     function playReferenceTone(freq) {
       try {
@@ -2074,7 +2045,7 @@
 
       renderTunerTargetButtons();
       if (state.tunerDetectedFreq) {
-        updateTunerDisplay(state.tunerDetectedFreq);
+        updateTunerDisplay(state.tunerDetectedFreq, false);
       }
     }
 
@@ -2088,10 +2059,6 @@
       }
     }
 
-    /**
-     * Normalized Autocorrelation Pitch Detection (YIN-inspired CMNDF + Parabolic Interpolation)
-     * Accurately resolves low guitar strings (E2 = 82.41 Hz) through high trumpet notes (~1200 Hz).
-     */
     function detectPitchAutocorrelation(buffer, sampleRate) {
       const SIZE = buffer.length;
       let rms = 0;
@@ -2100,15 +2067,13 @@
       }
       rms = Math.sqrt(rms / SIZE);
 
-      // Update live input level bar (0-100%)
-      const levelPercent = Math.min(100, Math.round(rms * 420));
+      const levelPercent = Math.min(100, Math.round(rms * 450));
       const levelBar = document.getElementById('tunerInputLevelBar');
       if (levelBar) levelBar.style.width = `${levelPercent}%`;
 
-      // Noise gate threshold to prevent room hiss from jumping needle
-      if (rms < 0.012) return null;
+      // Lowered threshold so sustained, decaying guitar and trumpet notes stay tracked
+      if (rms < 0.005) return null;
 
-      // Search lag range corresponding to ~65 Hz (below Low E2) up to ~1350 Hz
       const minLag = Math.max(2, Math.floor(sampleRate / 1350));
       const maxLag = Math.min(Math.floor(SIZE / 2), Math.floor(sampleRate / 65));
 
@@ -2122,7 +2087,6 @@
         diff[tau] = sum;
       }
 
-      // Cumulative Mean Normalized Difference Function (prevents octave-up errors on guitar)
       const cmndf = new Float32Array(maxLag + 1);
       cmndf[0] = 1;
       let runningSum = 0;
@@ -2131,8 +2095,7 @@
         cmndf[tau] = runningSum > 0 ? (diff[tau] * tau) / runningSum : 1;
       }
 
-      // Find first dip below clarity threshold (0.18)
-      const threshold = 0.18;
+      const threshold = 0.24;
       let bestTau = -1;
       for (let tau = minLag; tau <= maxLag; tau++) {
         if (cmndf[tau] < threshold) {
@@ -2144,7 +2107,6 @@
         }
       }
 
-      // Fallback to global minimum if clarity is moderate (e.g., soft acoustic pluck)
       if (bestTau === -1) {
         let minVal = 1;
         for (let tau = minLag; tau <= maxLag; tau++) {
@@ -2153,10 +2115,9 @@
             bestTau = tau;
           }
         }
-        if (minVal > 0.35 || bestTau === -1) return null;
+        if (minVal > 0.45 || bestTau === -1) return null;
       }
 
-      // Parabolic interpolation around bestTau for sub-cent precision
       let refinedTau = bestTau;
       if (bestTau > minLag && bestTau < maxLag) {
         const s0 = cmndf[bestTau - 1];
@@ -2171,7 +2132,7 @@
       return sampleRate / refinedTau;
     }
 
-    function updateTunerDisplay(freq) {
+    function updateTunerDisplay(freq, isFreshReading = true) {
       const noteEl = document.getElementById('tunerDetectedNote');
       const freqEl = document.getElementById('tunerDetectedFreq');
       const secEl = document.getElementById('tunerSecondaryInfo');
@@ -2181,10 +2142,13 @@
       const needleLine = document.getElementById('tunerNeedleLine');
       const needleTip = document.getElementById('tunerNeedleTip');
       const captureBtn = document.getElementById('captureMicNoteBtn');
+      const now = performance.now();
 
       if (!freq) {
-        // Reset note onset gate on silence so repeated notes of the same pitch re-trigger cleanly
-        if (performance.now() - lastValidPitchTime > 120) {
+        const elapsedSincePitch = now - lastValidPitchTime;
+
+        // Only reset auto-write lock after sustained silence so brief ring dips don't re-trigger
+        if (elapsedSincePitch > 650) {
           candidateMidi = null;
           candidateStartTime = 0;
           committedHoldMidi = null;
@@ -2192,35 +2156,43 @@
           if (lockBar) lockBar.style.width = '0%';
         }
 
-        // Hold last reading briefly (450ms) so pluck decay feels smooth
-        if (performance.now() - lastValidPitchTime > 450) {
-          state.tunerDetectedMidi = null;
-          state.tunerDetectedFreq = null;
-          noteEl.textContent = '--';
-          noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-zinc-500 tracking-tight';
-          freqEl.textContent = '-- Hz';
-          secEl.textContent = 'Listening... Play a note on Guitar, Piano, or B♭ Trumpet';
-          badgeEl.textContent = 'Listening';
-          badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950/70 text-emerald-300 border border-emerald-500/40';
-          centsEl.textContent = '0 cents';
-          needleGroup.setAttribute('transform', 'rotate(0 180 115)');
-          needleLine.setAttribute('stroke', '#71717a');
-          needleTip.setAttribute('fill', '#71717a');
-          captureBtn.disabled = true;
-          renderTunerTargetButtons();
+        // Keep last detected note visible across sustain hold window (default 3.0s)
+        if (lastSustainedFreq && elapsedSincePitch <= state.tunerHoldMs) {
+          const remainingSec = Math.max(0.1, ((state.tunerHoldMs - elapsedSincePitch) / 1000)).toFixed(1);
+          badgeEl.textContent = `Holding (${remainingSec}s)`;
+          badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-amber-950/70 text-amber-300 border border-amber-500/40';
+          return;
         }
+
+        lastSustainedFreq = null;
+        state.tunerDetectedMidi = null;
+        state.tunerDetectedFreq = null;
+        noteEl.textContent = '--';
+        noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-zinc-500 tracking-tight';
+        freqEl.textContent = '-- Hz';
+        secEl.textContent = 'Listening... Play and hold a note on Guitar, Piano, or B♭ Trumpet';
+        badgeEl.textContent = 'Listening';
+        badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950/70 text-emerald-300 border border-emerald-500/40';
+        centsEl.textContent = '0 cents';
+        needleGroup.setAttribute('transform', 'rotate(0 180 115)');
+        needleLine.setAttribute('stroke', '#71717a');
+        needleTip.setAttribute('fill', '#71717a');
+        captureBtn.disabled = true;
+        renderTunerTargetButtons();
         return;
       }
 
-      lastValidPitchTime = performance.now();
+      if (isFreshReading) {
+        lastValidPitchTime = now;
+        lastSustainedFreq = freq;
+      }
 
-      // Convert frequency to continuous MIDI float relative to A4 = 440 Hz
       const midiFloat = 69 + 12 * Math.log2(freq / 440);
       const nearestMidi = Math.round(midiFloat);
       const rawCents = Math.max(-50, Math.min(50, Math.round((midiFloat - nearestMidi) * 100)));
 
-      // Exponential smoothing for silky needle response
-      smoothedCents = smoothedCents * 0.55 + rawCents * 0.45;
+      // Stronger smoothing so needle stays steady while playing sustained notes
+      smoothedCents = smoothedCents * 0.72 + rawCents * 0.28;
       const displayCents = Math.round(smoothedCents);
 
       state.tunerDetectedMidi = nearestMidi;
@@ -2240,7 +2212,6 @@
 
       freqEl.textContent = `${freq.toFixed(1)} Hz`;
 
-      // Update Trumpet Valve Indicators in Tuner
       const valveTextEl = document.getElementById('tunerValveText');
       const tv1 = document.getElementById('tunerV1');
       const tv2 = document.getElementById('tunerV2');
@@ -2253,17 +2224,16 @@
       tv2.className = info.valves.includes('2') ? vOn : vOff;
       tv3.className = info.valves.includes('3') ? vOn : vOff;
 
-      // Accuracy color coding: ±5 cents = IN TUNE (Emerald), ±15 cents = CLOSE (Amber), >15 = FLAT/SHARP (Rose)
       const absCents = Math.abs(displayCents);
       let statusLabel = 'IN TUNE';
       let colorHex = '#10b981';
 
-      if (absCents <= 5) {
+      if (absCents <= 6) {
         statusLabel = '✓ IN TUNE';
         colorHex = '#10b981';
         noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-emerald-400 tracking-tight';
         badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/50';
-      } else if (absCents <= 15) {
+      } else if (absCents <= 16) {
         statusLabel = displayCents < 0 ? 'Slightly Flat ♭' : 'Slightly Sharp ♯';
         colorHex = '#f59e0b';
         noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-amber-400 tracking-tight';
@@ -2279,19 +2249,15 @@
       const sign = displayCents > 0 ? '+' : '';
       centsEl.textContent = `${sign}${displayCents} cents`;
 
-      // Map -50..+50 cents to -52..+52 degrees needle angle
       const angle = (smoothedCents / 50) * 52;
       needleGroup.setAttribute('transform', `rotate(${angle.toFixed(1)} 180 115)`);
       needleLine.setAttribute('stroke', colorHex);
       needleTip.setAttribute('fill', colorHex);
 
-      // Enable Capture to Staff if detected note fits within C3-C6 staff range (or octave-foldable)
       captureBtn.disabled = false;
       renderTunerTargetButtons();
 
-      // Automatic Live Transcription to Staff when Auto-Write is enabled
-      if (state.autoMicRecord && !state.isPlayingSequence) {
-        const now = performance.now();
+      if (state.autoMicRecord && !state.isPlayingSequence && isFreshReading) {
         const lockBar = document.getElementById('autoMicLockBar');
         const lockLabel = document.getElementById('autoMicLockLabel');
 
@@ -2317,7 +2283,7 @@
       if (!state.tunerActive || !micAnalyser || !micTimeDomainBuffer) return;
       micAnalyser.getFloatTimeDomainData(micTimeDomainBuffer);
       const freq = detectPitchAutocorrelation(micTimeDomainBuffer, audioCtx.sampleRate);
-      updateTunerDisplay(freq);
+      updateTunerDisplay(freq, Boolean(freq));
       tunerRafId = requestAnimationFrame(tunerLoop);
     }
 
@@ -2328,7 +2294,6 @@
       const errorBanner = document.getElementById('tunerErrorBanner');
 
       if (state.tunerActive) {
-        // Stop Microphone Stream
         state.tunerActive = false;
         if (tunerRafId) cancelAnimationFrame(tunerRafId);
         if (micSourceNode) {
@@ -2345,14 +2310,14 @@
         headerDot.className = 'w-2 h-2 rounded-full bg-zinc-500';
         document.getElementById('tunerInputLevelBar').style.width = '0%';
         lastValidPitchTime = 0;
-        updateTunerDisplay(null);
+        lastSustainedFreq = null;
+        updateTunerDisplay(null, false);
         document.getElementById('tunerStatusBadge').textContent = 'Idle';
         document.getElementById('tunerStatusBadge').className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-zinc-800 text-zinc-400 border border-zinc-700';
         document.getElementById('tunerSecondaryInfo').textContent = 'Press "Start Mic Tuner" and play a note';
         return;
       }
 
-      // Request Microphone Access
       errorBanner.classList.add('hidden');
       try {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -2370,7 +2335,7 @@
 
         micSourceNode = audioCtx.createMediaStreamSource(micStream);
         micAnalyser = audioCtx.createAnalyser();
-        micAnalyser.fftSize = 4096; // High buffer resolution for accurate low guitar E2 (82.4 Hz)
+        micAnalyser.fftSize = 4096;
         micTimeDomainBuffer = new Float32Array(micAnalyser.fftSize);
         micSourceNode.connect(micAnalyser);
 
@@ -2420,7 +2385,6 @@
 
     function captureMicNoteToStaff(fromAutoWrite = false) {
       if (state.tunerDetectedMidi === null) return;
-      // Fold low guitar pitches (below C3 = 48) into playable staff range C3–C6
       let midi = state.tunerDetectedMidi;
       while (midi < START_MIDI) midi += 12;
       while (midi > END_MIDI) midi -= 12;
@@ -2466,7 +2430,6 @@
         updateReadoutBar(state.sequence[state.sequence.length - 1].midi);
       }
 
-      // Microphone Tuner Event Listeners
       document.getElementById('toggleTunerPanelBtn').addEventListener('click', () => toggleTunerPanel());
       document.getElementById('collapseTunerBtn').addEventListener('click', () => toggleTunerPanel(false));
       document.getElementById('tunerMicToggleBtn').addEventListener('click', toggleMicTuner);
@@ -2474,11 +2437,16 @@
       document.getElementById('tunerInstTrumpetBtn').addEventListener('click', () => setTunerInstrument('trumpet'));
       document.getElementById('captureMicNoteBtn').addEventListener('click', () => captureMicNoteToStaff(false));
       document.getElementById('autoMicRecordBtn').addEventListener('click', toggleAutoMicRecord);
+      document.getElementById('tunerHoldSelect').addEventListener('change', (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (!Number.isNaN(val)) {
+          state.tunerHoldMs = val;
+        }
+      });
       document.getElementById('dismissTunerErrorBtn').addEventListener('click', () => {
         document.getElementById('tunerErrorBanner').classList.add('hidden');
       });
 
-      // Duration toolbar buttons
       document.querySelectorAll('.duration-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           setSelectedDuration(btn.dataset.duration, true);
@@ -2498,7 +2466,6 @@
 
       document.getElementById('deleteSelectedNoteBtn').addEventListener('click', deleteSelectedNotes);
 
-      // Clicking empty background of the staff deselects any active notes
       document.getElementById('grandStaffSvg').addEventListener('click', () => {
         if (state.selectedIndices.size > 0) {
           clearNoteSelection();
@@ -2506,11 +2473,9 @@
         }
       });
 
-      // Notation Tab Switchers (Concert Pitch vs B♭ Trumpet)
       document.getElementById('tabConcertBtn').addEventListener('click', () => setNotationTab('concert'));
       document.getElementById('tabTrumpetBtn').addEventListener('click', () => setNotationTab('trumpet'));
 
-      // Wire up UI controls
       document.getElementById('modeLiveBtn').addEventListener('click', () => setMode('live'));
       document.getElementById('modeSeqBtn').addEventListener('click', () => setMode('sequence'));
 
@@ -2550,7 +2515,6 @@
 
       document.getElementById('clearSeqBtn').addEventListener('click', clearComposition);
 
-      // Scroll helpers for mobile/compact viewports
       const scrollContainer = document.getElementById('pianoScrollContainer');
       document.getElementById('scrollToLowBtn').addEventListener('click', () => {
         scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
