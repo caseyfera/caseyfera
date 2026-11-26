@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -213,14 +212,39 @@
                 <h2 class="text-3xl font-black text-gray-900 mb-3">Spice Blend Master Quiz</h2>
                 <p class="text-gray-600 mb-8 max-w-md mx-auto text-sm sm:text-base">Test your knowledge on ingredient formulas for all 13 spice blends. Earn points and beat your personal best score!</p>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 text-left">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                     <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
-                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-circle-question mr-2"></i>Question Types</div>
-                        <p class="text-xs text-gray-600">Identify blends from ingredients & ingredients from blends.</p>
+                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-circle-question mr-2"></i>3 Question Modes</div>
+                        <p class="text-xs text-gray-600">Identify blends, match ingredient profiles, and spot missing spices.</p>
                     </div>
                     <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
                         <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-trophy mr-2"></i>High Score</div>
                         <p class="text-xs text-gray-600" id="quiz-high-score-display">0 Points Saved</p>
+                    </div>
+                </div>
+
+                <!-- Optional Timer Setting -->
+                <div class="bg-spice-50 border border-spice-200 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white border border-spice-200 text-spice-600 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-gray-900">Timed Challenge (Optional)</div>
+                            <p class="text-xs text-gray-500">Race the clock per question for speed pressure</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                        <select id="quiz-timer-duration" disabled class="bg-white border border-spice-200 text-gray-700 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-spice-500 disabled:opacity-40">
+                            <option value="10">10s / question</option>
+                            <option value="15" selected>15s / question</option>
+                            <option value="20">20s / question</option>
+                            <option value="30">30s / question</option>
+                        </select>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="quiz-timer-toggle" class="sr-only peer" onchange="toggleTimerSelect()">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-spice-600"></div>
+                        </label>
                     </div>
                 </div>
 
@@ -231,8 +255,15 @@
             </div>
 
             <div id="quiz-active-screen" class="hidden flex-col flex-1">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center justify-between mb-4 gap-2">
                     <span id="quiz-progress-text" class="text-xs font-bold uppercase tracking-wider text-spice-700 bg-spice-100 px-3 py-1.5 rounded-full">Question 1 of 10</span>
+                    
+                    <!-- Optional Timer Badge -->
+                    <div id="quiz-timer-badge" class="hidden items-center space-x-1.5 bg-white border border-spice-200 text-spice-700 px-3 py-1.5 rounded-full text-xs font-extrabold shadow-xs">
+                        <i class="fa-solid fa-stopwatch text-spice-500"></i>
+                        <span id="quiz-timer-text">15s</span>
+                    </div>
+
                     <div class="flex items-center space-x-4">
                         <span class="text-xs font-bold text-gray-500">Score: <span id="quiz-current-score" class="text-spice-700 font-extrabold text-sm">0</span></span>
                         <span class="text-xs font-bold text-gray-500">Streak: <span id="quiz-current-streak" class="text-orange-600 font-extrabold text-sm">0 🔥</span></span>
@@ -253,9 +284,9 @@
                         <!-- Populated dynamically -->
                     </div>
 
-                    <div id="quiz-feedback-box" class="mt-6 hidden p-4 rounded-2xl text-sm font-semibold flex items-center justify-between">
+                    <div id="quiz-feedback-box" class="mt-6 hidden p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3">
                         <span id="quiz-feedback-text">Correct!</span>
-                        <button onclick="nextQuizQuestion()" class="bg-gray-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-spice-700 transition">Next Question <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        <button onclick="nextQuizQuestion()" class="bg-gray-900 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-spice-700 transition shrink-0">Next Question <i class="fa-solid fa-arrow-right ml-1"></i></button>
                     </div>
                 </div>
             </div>
@@ -378,6 +409,9 @@
             }
         ];
 
+        // Master list of all unique ingredients across blends
+        const allIngredients = [...new Set(spiceData.flatMap(b => b.ingredients))];
+
         // Application State
         let currentDeck = [...spiceData];
         let currentCardIndex = 0;
@@ -389,6 +423,10 @@
         let quizScore = 0;
         let quizStreak = 0;
         let highScore = localStorage.getItem('spice_quiz_highscore') || 0;
+        let timerEnabled = false;
+        let timerDuration = 15;
+        let timeLeft = 15;
+        let timerInterval = null;
 
         // Initialize App
         window.onload = function() {
@@ -401,6 +439,10 @@
         };
 
         function switchTab(tabId) {
+            if (tabId !== 'quiz') {
+                stopQuestionTimer();
+            }
+
             document.getElementById('view-flashcards').classList.add('hidden');
             document.getElementById('view-quiz').classList.add('hidden');
             document.getElementById('view-library').classList.add('hidden');
@@ -506,6 +548,67 @@
         }
 
         // ==================== QUIZ LOGIC ====================
+        function toggleTimerSelect() {
+            const isChecked = document.getElementById('quiz-timer-toggle').checked;
+            document.getElementById('quiz-timer-duration').disabled = !isChecked;
+        }
+
+        function stopQuestionTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function startQuestionTimer() {
+            stopQuestionTimer();
+            const badge = document.getElementById('quiz-timer-badge');
+            const timerText = document.getElementById('quiz-timer-text');
+
+            if (!timerEnabled) {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+                return;
+            }
+
+            timeLeft = timerDuration;
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+            badge.className = 'flex items-center space-x-1.5 bg-white border border-spice-200 text-spice-700 px-3 py-1.5 rounded-full text-xs font-extrabold shadow-xs transition-colors';
+            timerText.innerText = `${timeLeft}s`;
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerText.innerText = `${timeLeft}s`;
+
+                if (timeLeft <= 5 && timeLeft > 0) {
+                    badge.className = 'flex items-center space-x-1.5 bg-rose-50 border border-rose-300 text-rose-600 px-3 py-1.5 rounded-full text-xs font-extrabold shadow-xs animate-pulse';
+                }
+
+                if (timeLeft <= 0) {
+                    stopQuestionTimer();
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function handleTimeUp() {
+            const q = quizQuestions[currentQuizIndex];
+            const buttons = document.getElementById('quiz-options-container').querySelectorAll('button');
+            buttons.forEach(b => {
+                b.disabled = true;
+                if (b.dataset.isCorrect === 'true') {
+                    b.className = b.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-emerald-50 border-emerald-500 text-emerald-900');
+                }
+            });
+
+            quizStreak = 0;
+            document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
+            document.getElementById('quiz-feedback-text').innerText = `Time's up! The correct answer was "${q.correctLabel}".`;
+            document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-amber-100 text-amber-900 border border-amber-200";
+            document.getElementById('quiz-feedback-box').classList.remove('hidden');
+        }
+
         function updateHighScoreDisplay() {
             document.getElementById('header-high-score').innerText = `${highScore} pts`;
             document.getElementById('quiz-high-score-display').innerText = `${highScore} Points Saved`;
@@ -515,25 +618,56 @@
             quizScore = 0;
             quizStreak = 0;
             currentQuizIndex = 0;
+            timerEnabled = document.getElementById('quiz-timer-toggle').checked;
+            timerDuration = parseInt(document.getElementById('quiz-timer-duration').value, 10) || 15;
             
-            // Generate 10 randomized quiz questions
+            // Generate 10 randomized quiz questions across all 3 modes
             quizQuestions = [];
             const shuffledDeck = [...spiceData].sort(() => Math.random() - 0.5);
+            const questionTypes = ['blend_from_ingredients', 'ingredients_from_blend', 'missing_ingredient'];
             
             for(let i = 0; i < Math.min(10, shuffledDeck.length); i++) {
                 const target = shuffledDeck[i];
-                const type = Math.random() > 0.5 ? 'blend_from_ingredients' : 'ingredients_from_blend';
+                const type = questionTypes[i % questionTypes.length];
                 
-                // Get 3 incorrect distractors
-                const distractors = spiceData.filter(s => s.name !== target.name).sort(() => Math.random() - 0.5).slice(0, 3);
-                const options = [...distractors, target].sort(() => Math.random() - 0.5);
+                if (type === 'missing_ingredient') {
+                    // Pick 1 ingredient to omit from the blend
+                    const missingIdx = Math.floor(Math.random() * target.ingredients.length);
+                    const missingIngredient = target.ingredients[missingIdx];
+                    const shownIngredients = target.ingredients.filter((_, idx) => idx !== missingIdx);
 
-                quizQuestions.push({
-                    type: type,
-                    target: target,
-                    options: options
-                });
+                    // Pick 3 ingredients NOT in this blend as distractors
+                    const distractorIngredients = allIngredients
+                        .filter(ing => !target.ingredients.includes(ing))
+                        .sort(() => Math.random() - 0.5)
+                        .slice(0, 3);
+
+                    const ingredientOptions = [...distractorIngredients, missingIngredient].sort(() => Math.random() - 0.5);
+
+                    quizQuestions.push({
+                        type: 'missing_ingredient',
+                        target: target,
+                        shownIngredients: shownIngredients,
+                        missingIngredient: missingIngredient,
+                        correctLabel: missingIngredient.replace(/\b\w/g, c => c.toUpperCase()),
+                        options: ingredientOptions
+                    });
+                } else {
+                    // Get 3 incorrect blend distractors
+                    const distractors = spiceData.filter(s => s.name !== target.name).sort(() => Math.random() - 0.5).slice(0, 3);
+                    const options = [...distractors, target].sort(() => Math.random() - 0.5);
+
+                    quizQuestions.push({
+                        type: type,
+                        target: target,
+                        correctLabel: target.name,
+                        options: options
+                    });
+                }
             }
+
+            // Shuffle question order so types aren't predictable
+            quizQuestions.sort(() => Math.random() - 0.5);
 
             document.getElementById('quiz-start-screen').classList.add('hidden');
             document.getElementById('quiz-results-screen').classList.add('hidden');
@@ -574,44 +708,81 @@
                 });
                 optionsContainer.appendChild(ingBox);
 
-                // Render options
+                // Render blend name options only
                 q.options.forEach(opt => {
+                    const isCorrect = opt.name === q.target.name;
                     const btn = document.createElement('button');
+                    btn.dataset.isCorrect = isCorrect;
                     btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-bold text-gray-800 transition flex items-center justify-between shadow-xs group';
                     btn.innerHTML = `<span>${opt.name}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition"></i>`;
-                    btn.onclick = () => selectQuizAnswer(opt.name === q.target.name, btn, q.target.name);
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
                     optionsContainer.appendChild(btn);
                 });
-            } else {
+            } else if (q.type === 'ingredients_from_blend') {
                 categoryTag.innerText = "Ingredient Verification";
                 titleEl.innerText = `Which ingredients belong to the "${q.target.name}" blend?`;
 
+                // Render ingredient sets only—no blend names
                 q.options.forEach(opt => {
+                    const isCorrect = opt.name === q.target.name;
                     const btn = document.createElement('button');
-                    btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-medium text-gray-800 transition flex flex-col space-y-2 shadow-xs group';
-                    
-                    const titleRow = document.createElement('div');
-                    titleRow.className = 'font-bold text-gray-900 flex justify-between items-center';
-                    titleRow.innerHTML = `<span>${opt.name}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition text-xs"></i>`;
-                    btn.appendChild(titleRow);
+                    btn.dataset.isCorrect = isCorrect;
+                    btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-medium text-gray-800 transition flex items-center justify-between gap-3 shadow-xs group';
 
                     const ingRow = document.createElement('div');
-                    ingRow.className = 'flex flex-wrap gap-1';
+                    ingRow.className = 'flex flex-wrap gap-1.5';
                     opt.ingredients.forEach(ing => {
                         const span = document.createElement('span');
-                        span.className = 'bg-spice-50 border border-spice-200 text-gray-600 text-[10px] px-2 py-0.5 rounded-lg capitalize';
+                        span.className = 'bg-spice-50 border border-spice-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-xl capitalize';
                         span.innerText = ing;
                         ingRow.appendChild(span);
                     });
                     btn.appendChild(ingRow);
 
-                    btn.onclick = () => selectQuizAnswer(opt.name === q.target.name, btn, q.target.name);
+                    const icon = document.createElement('i');
+                    icon.className = 'fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition text-xs shrink-0';
+                    btn.appendChild(icon);
+
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
+                    optionsContainer.appendChild(btn);
+                });
+            } else {
+                // Missing Ingredient Mode
+                categoryTag.innerText = "Missing Ingredient";
+                titleEl.innerText = `Which ingredient is missing from "${q.target.name}"?`;
+
+                const ingBox = document.createElement('div');
+                ingBox.className = 'bg-spice-50 border border-spice-200 p-4 rounded-2xl mb-4 flex flex-wrap gap-2 items-center';
+                q.shownIngredients.forEach(ing => {
+                    const pill = document.createElement('span');
+                    pill.className = 'bg-white border border-spice-200 text-spice-800 text-xs font-semibold px-3 py-1 rounded-xl shadow-xs capitalize';
+                    pill.innerText = ing;
+                    ingBox.appendChild(pill);
+                });
+
+                const missingSlot = document.createElement('span');
+                missingSlot.className = 'bg-spice-200/70 border border-dashed border-spice-500 text-spice-800 text-xs font-extrabold px-3 py-1 rounded-xl';
+                missingSlot.innerText = '+ ?';
+                ingBox.appendChild(missingSlot);
+                optionsContainer.appendChild(ingBox);
+
+                q.options.forEach(ingOpt => {
+                    const isCorrect = ingOpt === q.missingIngredient;
+                    const btn = document.createElement('button');
+                    btn.dataset.isCorrect = isCorrect;
+                    btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-bold text-gray-800 transition flex items-center justify-between shadow-xs group capitalize';
+                    btn.innerHTML = `<span>${ingOpt}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition"></i>`;
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
                     optionsContainer.appendChild(btn);
                 });
             }
+
+            startQuestionTimer();
         }
 
-        function selectQuizAnswer(isCorrect, selectedBtn, correctName) {
+        function selectQuizAnswer(isCorrect, selectedBtn, correctLabel) {
+            stopQuestionTimer();
+
             // Disable all option buttons
             const buttons = document.getElementById('quiz-options-container').querySelectorAll('button');
             buttons.forEach(b => b.disabled = true);
@@ -621,18 +792,18 @@
                 quizScore += 10;
                 quizStreak += 1;
                 document.getElementById('quiz-feedback-text').innerText = "Correct! Great job! 🎉";
-                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between bg-emerald-100 text-emerald-800 border border-emerald-200";
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-emerald-100 text-emerald-800 border border-emerald-200";
             } else {
                 selectedBtn.className = selectedBtn.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-rose-50 border-rose-500 text-rose-900');
                 quizStreak = 0;
                 // Highlight correct answer
                 buttons.forEach(b => {
-                    if(b.innerText.includes(correctName)) {
+                    if(b.dataset.isCorrect === 'true') {
                         b.className = b.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-emerald-50 border-emerald-500 text-emerald-900');
                     }
                 });
-                document.getElementById('quiz-feedback-text').innerText = `Incorrect. The correct answer was "${correctName}".`;
-                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between bg-rose-100 text-rose-800 border border-rose-200";
+                document.getElementById('quiz-feedback-text').innerText = `Incorrect. The correct answer was "${correctLabel}".`;
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-rose-100 text-rose-800 border border-rose-200";
             }
 
             document.getElementById('quiz-current-score').innerText = quizScore;
@@ -650,6 +821,7 @@
         }
 
         function finishQuiz() {
+            stopQuestionTimer();
             document.getElementById('quiz-active-screen').classList.add('hidden');
             document.getElementById('quiz-active-screen').classList.remove('flex');
             document.getElementById('quiz-results-screen').classList.remove('hidden');
@@ -718,4 +890,3 @@
     </script>
 </body>
 </html>
-```
