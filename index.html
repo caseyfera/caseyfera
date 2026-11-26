@@ -61,3 +61,616 @@
             .nav-menu {
                 position: fixed; left: -100%; top: 5rem; flex-direction: column;
                 background-color: #fff; width: 100%; border-radius: 10px; text-align: center;
+                transition: 0.3s; box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+            }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+            .nav-menu.active { left: 0; }
+            .nav-item { margin: 2rem 0; }
+            .hamburger { display: block; cursor: pointer; }
+            .bmc-nav-btn { margin-left: 1rem; font-size: 1.2rem; padding: 5px 10px; }
+        }
+
+        #TableSocial table th { border: 0; }
+        .logo { text-align: center; }
+        .center { text-align: center; }
+
+        /* TOP SLIDES */
+        .topSlides { display: none; }
+        .w3-content { margin: auto; width: 300px; height: 220px; background-color: black; }
+        .topSlides { width: 250px; }
+
+        .INFO h2 { margin: 25px; padding: 25px; color: #EFDA03; }
+
+        @media only screen and (max-width: 600px) {
+            iframe { width: 100%; }
+        }
+
+        /* ART SLIDESHOW */
+        .mySlides { display: none; }
+        .slideshow-container {
+            display: block; margin-left: auto; margin-right: auto; max-width: 500px;
+            height: 300px; position: relative; margin: auto;
+        }
+        .fit {
+            display: block; margin-left: auto; margin-right: auto; width: 40%;
+            max-width: 500px; height: 300px; object-fit: contain;
+        }
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; display: block; width: auto;
+            padding: 16px; margin-top: -22px; color: white; font-weight: bold; font-size: 18px;
+            transition: 0.6s ease; border-radius: 0 3px 3px 0; user-select: none; z-index: 101;
+        }
+        .next { right: 0; border-radius: 3px 0 0 3px; }
+        .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+        .text {
+            color: #f2f2f2; font-size: 15px; padding: 8px 12px; position: absolute;
+            bottom: 8px; width: 100%; text-align: center;
+        }
+        .numbertext {
+            color: #008080; font-size: 20px; padding: 8px 12px; position: absolute;
+            right: 200px; top: 10px; width: 100%; text-align: center; z-index: 100;
+        }
+        .dot {
+            cursor: pointer; height: 15px; width: 15px; margin: 0 2px; background-color: #bbb;
+            border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;
+        }
+        .active, .dot:hover { background-color: white; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from { opacity: .4; } to { opacity: 1; } }
+
+        /* LMH PODCAST LINKS */
+        .pod ul li { text-align: center; position: relative; display: inline-block; }
+        .pod ul li a {
+            text-align: center; font-family: volt; text-decoration: none; color: #999999;
+            margin: 1px; padding: 0 25px;
+        }
+        .pod ul li a:after {
+            content: ""; display: inline-block; position: absolute; left: 0; bottom: 0;
+            background-color: #2D576E; width: 0; height: 3px; transition: all 0.4s;
+        }
+        .pod ul li a:hover { color: purple; }
+        .pod ul li a:hover:after { width: 100%; }
+
+        /* TOOLS */
+        .tools-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; padding: 20px 20px 40px;
+        }
+        .tool-card {
+            background: rgba(0,0,0,0.15); border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px; padding: 28px 24px; width: 260px; text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .tool-card:hover { transform: translateY(-4px); border-color: #EFDA03; }
+        .tool-card .tool-icon { font-size: 3rem; margin-bottom: 12px; color: #EFDA03; }
+        .tool-card h3 { font-size: 2rem; color: #EFDA03; margin: 0 0 10px; }
+        .tool-card p { font-size: 1.3rem; color: #fff; line-height: 1.5; margin: 0 0 18px; }
+        .tool-btn {
+            display: inline-block; background: #EFDA03; color: #000 !important; font-weight: 700;
+            font-size: 1.3rem; padding: 8px 20px; border-radius: 20px; text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .tool-btn:hover { background: #fff; transform: scale(1.05); color: #000 !important; }
+
+        /* BIO */
+        .bio-body {
+            max-width: 800px; margin: 0 auto; padding: 0 20px 30px;
+            color: white; font-size: 1.6rem; line-height: 1.6;
+        }
+        .bio-body h3 { color: #EFDA03; font-size: 2.2rem; margin: 25px 0 8px; }
+        .bio-body a { color: #EFDA03; }
+
+        /* STAGES */
+        .stages-container {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 30px 15px;
+        }
+        .stage-profile {
+            background: rgba(0,0,0,0.25); border: 3px solid #EFDA03; border-radius: 16px;
+            overflow: hidden; width: 100%; max-width: 450px; text-align: left;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        .stage-header-banner {
+            background: #EFDA03; color: #000; padding: 15px; text-align: center; font-weight: bold;
+        }
+        .stage-header-banner h3 { color: #000; margin: 0; font-size: 2.4rem; }
+        .stage-body { padding: 25px; color: #fff; }
+        .stage-body p { font-size: 1.5rem; line-height: 1.6; margin-bottom: 15px; }
+        .stage-specs { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .stage-specs ul li {
+            list-style: square; margin-left: 20px; font-size: 1.4rem; margin-bottom: 8px; color: #fff;
+        }
+        .stage-footer { text-align: center; padding-bottom: 25px; }
+        .stages-link-banner {
+            background: #1d84d5; color: white; text-align: center; padding: 20px;
+            border-radius: 12px; margin: 30px auto; max-width: 800px;
+        }
+        .stages-link-banner p { font-size: 1.6rem; margin: 0 0 12px 0; }
+        .stages-cta-btn {
+            display: inline-block; background: #FFDD00; color: #000 !important; font-size: 1.6rem;
+            font-weight: bold; padding: 10px 25px; border-radius: 25px; transition: 0.2s ease;
+        }
+        .stages-cta-btn:hover { background: #fff; transform: scale(1.05); }
+
+        /* BUY ME A COFFEE FOOTER */
+        .bmc-footer {
+            background: #FFDD00; text-align: center; padding: 28px 20px;
+            position: relative; top: -125px;
+        }
+        .bmc-footer p { font-size: 1.6rem; font-weight: 700; color: #000; margin: 0 0 14px; }
+        .bmc-footer-btn {
+            display: inline-flex; align-items: center; gap: 10px; background: #000;
+            color: #FFDD00 !important; font-size: 1.6rem; font-weight: 700; padding: 12px 28px;
+            border-radius: 30px; text-decoration: none; transition: transform 0.2s, background 0.2s;
+        }
+        .bmc-footer-btn:hover { background: #222; transform: scale(1.05); color: #FFDD00 !important; }
+
+        /* RADIO / MUSIC text block */
+        .section-note {
+            font-size: 1.5rem; padding: 15px; background-color: lightgray;
+            text-align: center; border: solid 1px black; color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <nav class="navbar">
+        <a href="#" class="nav-logo">HOME</a>
+
+        <div id="TableSocial">
+            <table>
+                <tr>
+                    <th><a href="https://www.patreon.com/user/creators?u=3167713" target="_blank"><img src="images/social/patreon_logo_black.png" alt="patreon" width="50" height="50"/></a></th>
+                    <th><a href="https://www.pond5.com/artist/caseyfera" target="_blank"><img src="images/social/pond5.svg" alt="pond5" width="50" height="50"/></a></th>
+                    <th><a href="https://www.imdb.com/name/nm3225822/?ref_=fn_al_nm_1" target="_blank"><img src="images/social/imdb.svg" alt="imdb" width="50" height="50"/></a></th>
+                    <th><a href="https://www.youtube.com/user/caseyfera/featured?view_as=subscriber" target="_blank"><img src="images/social/youtube.svg" alt="youtube" width="50" height="50"/></a></th>
+                    <th><a href="https://m.facebook.com/casey.fera" target="_blank"><img src="images/social/facebook.svg" alt="facebook" width="50" height="50"/></a></th>
+                    <th><a href="https://www.instagram.com/caseyfera/" target="_blank"><img src="images/social/instagram-round.svg" alt="instagram" width="50" height="50"/></a></th>
+                </tr>
+            </table>
+        </div>
+
+        <a href="https://buymeacoffee.com/caseyfera" target="_blank" class="bmc-nav-btn">☕ Buy Me a Coffee</a>
+
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#s2" class="nav-link">VIDEOS</a></li>
+                <li class="nav-item"><a href="#s3" class="nav-link">MUSIC</a></li>
+                <li class="nav-item"><a href="#s7" class="nav-link">RADIO</a></li>
+                <li class="nav-item"><a href="#s4" class="nav-link">ART</a></li>
+                <li class="nav-item"><a href="#s5" class="nav-link">COMEDY</a></li>
+                <li class="nav-item"><a href="#s9" class="nav-link" style="color: #1d84d5; font-weight: bold;">STAGES</a></li>
+                <li class="nav-item"><a href="#s8" class="nav-link">TOOLS</a></li>
+                <li class="nav-item"><a href="#s6" class="nav-link">BIO</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </nav>
+</header>
+
+<!-- SPACER -->
+<br><br><br><br><br><br><br><br>
+<br><br><br>
+
+<!-- LOGO -->
+<div class="logo">
+    <div style="text-align: center;">
+        <img src="images/logo/cf logo with face-01.png" width="150" height="148" alt="Casey Fera logo"/>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br>
+
+<!-- TOP SLIDESHOW -->
+<div class="backgroundPurple">
+    <div class="w3-content w3-section" style="max-width:500px">
+        <img class="topSlides" src="images/art/z.jpg" style="width:100%; padding-top: 25px;">
+        <img class="topSlides" src="images/logo/lmh logo-02.png" style="width:100%; padding-top: 25px;">
+        <img class="topSlides" src="images/art/HDMitis.jfif" style="width:100%; padding-top: 25px;">
+        <img class="topSlides" src="images/art/Red Eye.webp" style="width:45%; transform: translate(85px, -0px);">
+        <img class="topSlides" src="images/art/HDMitis.jfif" style="width:100%; padding-top: 25px;">
+    </div>
+</div>
+
+<!-- VIDEOS -->
+<div class="backgroundPurple"><h2><a name="s2">VIDEO</a></h2>
+    <div style="text-align: center;">
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/G8b3M9IXTBQ?rel=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/c8Rzr16djqE?rel=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/kEmXePiGrko?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/3MB3UjzBlzs?si=qUkz6dK4Gqc-CekJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/TYqmrD5gdTU?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=6Dn3PKytQdgkh3SR&amp;list=PLms1pQ6FGqMXEfXWTURzRmqUD8Do3mQ4t" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- MUSIC -->
+<div class="backgroundPurple"><h2><a name="s3">MUSIC</a></h2>
+    <div style="text-align: center;">
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/a2wXoWC5R3I?si=LZLuTh6HTTuTc4eU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/526aIEa9jV8?si=1j6iccH8ojKmEA3_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/P-aVDWUktDE?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/KvzJfVmB42Q?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/SZTrAIjOzK0?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/lLm-1kkxPNk?rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- Spotify -->
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/0WytAjz8AF72hivUaFPrdT?utm_source=generator" width="100%" height="352" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+    <!-- Bandcamp -->
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=3200439742/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/never-really-had-innocence">Never Really Had Innocence by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=3759810398/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/rip-me-limb-from-limb">Rip Me Limb From Limb by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=2430037482/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/the-summer-is-over">The Summer Is Over by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=3841509614/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/fix-your-life">Fix Your Life by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=3457936170/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/give-yourslef-a-smack">Give Yourself A Smack by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=2235207285/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/the-bad-man">The Bad Man by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=2362343597/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/give-it-to-me-straight">Give It To Me Straight by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=766996552/size=large/bgcol=ffffff/linkcol=7137dc/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/body-rock">Body Rock by Casey Fera</a></iframe>
+    </div><p></p>
+    <div class="center">
+        <iframe loading="lazy" style="border: 0; width: 600px; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/track=3209676980/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://caseyfera.bandcamp.com/track/here-we-are">Here We Are by Casey Fera</a></iframe>
+    </div><p></p>
+
+    <!-- ReverbNation -->
+    <div class="center">
+        <iframe loading="lazy" width="600" height="350" scrolling="no" frameborder="no" src="https://www.reverbnation.com/widget_code/html_widget/artist_3154108?widget_id=55&pwc[included_songs]=1&context_type=page_object&spoid=artist_3154108&pwc[size]=small"></iframe>
+    </div>
+</div>
+
+<!-- RADIO -->
+<div class="backgroundPurple"><h2><a name="s7">RADIO</a></h2>
+    <h4 class="section-note" style="padding: 15px;">
+        This is The Local Music Hour playing your local music from Lompoc California and the surrounding city. I am your host Casey Fera. We play Alternative, Rock, Rap, Country, you name it, as long as it is local, we play it.
+    </h4>
+
+    <iframe allow="autoplay" width="100%" height="300" src="https://www.iheart.com/podcast/269-the-local-music-hour-63122589/?embed=true" frameborder="0"></iframe>
+
+    <!-- Elfsight Instagram Feed -->
+    <script src="https://static.elfsight.com/platform/platform.js" async></script>
+    <div class="elfsight-app-c7d31bdd-b02c-4429-83bc-dcc10e2dbbd5" data-elfsight-app-lazy></div>
+
+    <div class="center">
+        <iframe loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLms1pQ6FGqMWmF63_JNjEwFD_OwrNM7uB" frameborder="0" allow="accelerometer; autoplay; encrypted-media" allowfullscreen></iframe>
+        <p></p>
+
+        <!-- Podcast links -->
+        <div class="pod" style="display: inline;">
+            <ul>
+                <li><a target="_blank" href="https://podcasts.google.com/?feed=aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS85ODc5NzMucnNz" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -457px -45px; height: 40px; width: 172px;">Listen on Google Podcasts</a></li>
+                <li><a target="_blank" href="https://podcasts.apple.com/us/podcast/the-local-music-hour/id1507158092" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -45px; height: 40px; width: 172px;">Listen on Apple Podcasts</a></li>
+                <li><a target="_blank" href="https://www.stitcher.com/show/the-local-music-hour" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -110px; height: 40px; width: 116px;">Listen on Stitcher</a></li>
+                <li><a target="_blank" href="https://www.iheart.com/podcast/269-the-local-music-hour-63122589/" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -55px -245px; height: 40px; width: 152px;">Listen on iHeart</a></li>
+                <li><a target="_blank" href="https://feeds.buzzsprout.com/987973.rss" style="display: block; background-color: #000000; background-image: url(https://www.buzzsprout.com/images/help/listen-on.png); background-repeat: no-repeat; background-size: 700px 630px; border-radius: 5px; text-indent: -9000px; background-position: -457px -245px; height: 40px; width: 125px;">RSS Feed</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <h4 style="padding: 25px; background-color: purple; text-align: center; border: 1px solid blue; color: white; font-size: 1.6rem;">
+        Here is your chance to be on the radio!! Submit your music here.
+    </h4>
+
+    <!-- Podcast episodes -->
+    <div class="center">
+        <div style="display: inline-block; width: 100%; max-width: 600px;">
+            <div id="buzzsprout-large-player-987973">
+                <script type="text/javascript" charset="utf-8" src="https://www.buzzsprout.com/987973.js?container_id=buzzsprout-large-player-987973&player=large"></script>
+            </div>
+        </div>
+    </div>
+    <p></p>
+
+    <!-- Submit music form -->
+    <div class="center">
+        <iframe loading="lazy" src="https://docs.google.com/forms/d/e/1FAIpQLSfWkhDL2tPgscIubj4iCbTIjmnvBBhHPYzUEckoCd8vQ9c_tg/viewform?embedded=true" width="700" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    </div>
+    <p></p>
+
+    <!-- Upload link -->
+    <div class="center">
+        <a href="https://www.dropbox.com/request/RkCbvc3CwAzbGiMQjUOW">
+            <h2>UPLOAD <br> MUSIC / VIDEOS / ART</h2>
+            <img src="images/upload-to-cloud.png" width="100" height="100" alt=""/>
+        </a>
+    </div>
+</div>
+
+<!-- ART -->
+<div class="backgroundPurple"><h2><a name="s4">ART</a></h2>
+    <div class="center">
+
+        <!-- Elfsight feeds -->
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-aee906c1-3f2f-43cd-96d3-e69a53ac13e0" data-elfsight-app-lazy></div>
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-924f2fd6-1e80-4a65-b8b8-a6699f98e63b" data-elfsight-app-lazy></div>
+
+        <div class="slideshow-container">
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            <div class="mySlides fade">
+                <div class="numbertext">1 / 9</div>
+                <img class="fit" src="images/art/kneel before zod Cy4 done no reflection.jpg" style="width:100%">
+                <div class="text">Ritual</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">2 / 9</div>
+                <img class="fit" src="images/art/z.jpg" style="width:100%">
+                <div class="text">Glitch</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">3 / 9</div>
+                <img class="fit" src="images/art/cap.png" style="width:100%">
+                <div class="text">Captive</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">4 / 9</div>
+                <img class="fit" src="images/art/kneel before zod cy BLACK glass GLASS TUBE.png" style="width:100%">
+                <div class="text">Arrival</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">5 / 9</div>
+                <img class="fit" src="images/art/3.png" style="width:100%">
+                <div class="text">Alone Together</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">6 / 9</div>
+                <img class="fit" src="images/art/kneel before zod cy glass.png" style="width:100%">
+                <div class="text">Signals</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">7 / 9</div>
+                <img class="fit" src="images/art/untitled2.png" style="width:100%">
+                <div class="text">Sorted</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">8 / 9</div>
+                <img class="fit" src="images/art/Wide angle gun show wild3.jpg" style="width:100%">
+                <div class="text">Hand it Over</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">9 / 9</div>
+                <img class="fit" src="images/art/rabit.jpg" style="width:100%">
+                <div class="text">Jillalope</div>
+            </div>
+        </div>
+
+        <br>
+        <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+            <span class="dot" onclick="currentSlide(4)"></span>
+            <span class="dot" onclick="currentSlide(5)"></span>
+            <span class="dot" onclick="currentSlide(6)"></span>
+            <span class="dot" onclick="currentSlide(7)"></span>
+            <span class="dot" onclick="currentSlide(8)"></span>
+            <span class="dot" onclick="currentSlide(9)"></span>
+        </div>
+    </div>
+</div>
+
+<!-- COMEDY -->
+<div class="backgroundPurple"><h2><a name="s5">COMEDY</a></h2>
+    <div class="center">
+        <p style="color: white; font-size: 1.6rem; padding: 20px;">Coming soon... or maybe it already happened and you missed it.</p>
+    </div>
+</div>
+
+<!-- STAGES -->
+<div class="backgroundPurple">
+    <h2><a name="s9">STAGES LOMPOC</a></h2>
+    <p style="text-align:center; color: white; font-size: 1.6rem; padding: 0 20px 5px;">Premium Rehearsal Studio Stages in Lompoc, CA</p>
+
+    <div class="stages-container">
+        <div class="stage-profile">
+            <div class="stage-header-banner">
+                <h3>STAGE A - THE SHOWROOM</h3>
+            </div>
+            <div class="stage-body">
+                <p>Designed for full production mock-ups, massive bands, and detailed performance rehearsals with wide viewing angles.</p>
+                <div class="stage-specs">
+                    <ul>
+                        <li>Pro-tier sound system & multi-channel mixing setup</li>
+                        <li>Full ambient stage lighting rig</li>
+                        <li>Acoustically fine-tuned isolated space</li>
+                        <li>Backline equipment support available</li>
+                    </ul>
+                </div>
+                <div class="stage-footer">
+                    <a href="https://stageslompoc.com/" target="_blank" class="tool-btn">Check Availability</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage-profile">
+            <div class="stage-header-banner">
+                <h3>STAGE B - THE CORE ROOM</h3>
+            </div>
+            <div class="stage-body">
+                <p>The perfect space for indie bands, smaller groups, and high-energy collaborative writing or pre-production sessions.</p>
+                <div class="stage-specs">
+                    <ul>
+                        <li>High-end robust PA vocal system</li>
+                        <li>Sleek, close-knit creative vibe</li>
+                        <li>Full array of power setups & isolated channels</li>
+                        <li>Comfortable climate control layout</li>
+                    </ul>
+                </div>
+                <div class="stage-footer">
+                    <a href="https://stageslompoc.com/" target="_blank" class="tool-btn">Check Availability</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stages-link-banner">
+        <p>Need more space or booking details? Book your perfect rehearsal times directly over at our official studio portal.</p>
+        <a href="https://stageslompoc.com/" target="_blank" class="stages-cta-btn">Visit StagesLompoc.com ➔</a>
+    </div>
+</div>
+
+<!-- TOOLS -->
+<div class="backgroundPurple">
+    <h2><a name="s8">TOOLS</a></h2>
+    <p style="text-align:center; color: white; font-size: 1.5rem; padding: 0 20px 10px;">Stuff I built. Free to use.</p>
+
+    <div class="tools-grid">
+
+        <!-- Feral TTS -->
+        <div class="tool-card">
+            <div class="tool-icon">🗣️</div>
+            <h3>Feral TTS</h3>
+            <p>An advanced neural text-to-speech tool that turns your writing into expressive vocal tracks.</p>
+            <a href="https://caseyfera.com/Feral_TTS.exe" target="_blank" class="tool-btn">Download</a>
+        </div>
+
+        <!-- Baccarat -->
+        <div class="tool-card">
+            <div class="tool-icon">🃏</div>
+            <h3>Baccarat</h3>
+            <p>A baccarat training game to practice your play and sharpen your decisions.</p>
+            <a href="https://caseyfera.com/baccarat" target="_blank" class="tool-btn">Launch Tool</a>
+        </div>
+
+        <!-- Transparent PNG -->
+        <div class="tool-card">
+            <div class="tool-icon">🖼️</div>
+            <h3>Transparent PNG</h3>
+            <p>Make transparent PNG images quickly, right in your browser.</p>
+            <a href="https://caseyfera.com/Tpng" target="_blank" class="tool-btn">Launch Tool</a>
+        </div>
+
+        <!-- Spice Master -->
+        <div class="tool-card">
+            <div class="tool-icon">🌶️</div>
+            <h3>Spice Master</h3>
+            <p>A handy tool from Casey Fera. Free to use.</p>
+            <a href="https://caseyfera.com/spicemaster" target="_blank" class="tool-btn">Launch Tool</a>
+        </div>
+
+        <!-- Piano to Clef -->
+        <div class="tool-card">
+            <div class="tool-icon">🎼</div>
+            <h3>Piano to Clef</h3>
+            <p>Convert piano parts between treble and bass clef for easier reading and arranging.</p>
+            <a href="https://caseyfera.com/piano2clef.html" target="_blank" class="tool-btn">Launch Tool</a>
+        </div>
+
+        <!-- Premiere Plugins (coming soon) -->
+        <div class="tool-card">
+            <div class="tool-icon">🎬</div>
+            <h3>Premiere Plugins</h3>
+            <p>Plugins for Adobe Premiere Pro. Coming soon.</p>
+            <span class="tool-btn" style="background:#555; color:#fff; cursor:default;">Coming Soon</span>
+        </div>
+
+        <!-- DaVinci Resolve Plugins (coming soon) -->
+        <div class="tool-card">
+            <div class="tool-icon">🎞️</div>
+            <h3>DaVinci Resolve Plugins</h3>
+            <p>Plugins for DaVinci Resolve. Coming soon.</p>
+            <span class="tool-btn" style="background:#555; color:#fff; cursor:default;">Coming Soon</span>
+        </div>
+
+    </div>
+</div>
+
+<!-- BIO -->
+<div class="backgroundPurple">
+    <h2><a name="s6">BIO</a></h2>
+    <div class="bio-body">
+
+        <p>Casey Fera is a Santa Barbara County–based filmmaker, musician, photographer, comedy writer, radio host, and amateur coder. His creative work spans independent film production, local music advocacy, and experimental sound tools.</p>
+
+        <h3>Film & Video</h3>
+        <p>Has worked across camera, lighting, grip, sound, and producing roles on projects including Destination Wedding (2018), Coast (2021), Near Human (2019), Tiger Orange (2014), and Past God (2013). Credits are listed on <a href="https://www.imdb.com/name/nm3225822/" target="_blank">IMDb</a>.</p>
+
+        <h3>Music</h3>
+        <p>Has played in bands since high school, including the Santa Barbara County rock band Ze Jinx (formed around 2002). Releases solo music on <a href="https://caseyfera.bandcamp.com" target="_blank">Bandcamp</a> and <a href="https://open.spotify.com/artist/0WytAjz8AF72hivUaFPrdT" target="_blank">Spotify</a>.</p>
+
+        <h3>Radio & Local Scene</h3>
+        <p>Hosts The Local Music Hour, spotlighting local artists from Lompoc and the surrounding Santa Barbara County communities across rock, alternative, rap, and country.</p>
+
+        <h3>Studios & Business</h3>
+        <p>Runs Grand Illusion Entertainment and Stages Rehearsal Studio in Lompoc, offering rehearsal space for local bands.</p>
+
+        <h3>Photography & Tools</h3>
+        <p>Shares photography under the name Feral Photography. Builds free tools for creators and players, including Feral TTS text-to-speech, a baccarat training game, a transparent PNG maker, Spice Master, Piano to Clef, and plugins for Premiere Pro and DaVinci Resolve.</p>
+
+    </div>
+</div>
+
+<!-- BUY ME A COFFEE FOOTER -->
+<div class="bmc-footer">
+    <p>Enjoying the tools, radio shows, or music content?</p>
+    <a href="https://buymeacoffee.com/caseyfera" target="_blank" class="bmc-footer-btn">☕ Buy Me a Coffee</a>
+</div>
+
+<script>
+    // Top slideshow
+    var myIndex = 0;
+    carousel();
+    function carousel() {
+        var x = document.getElementsByClassName("topSlides");
+        for (var i = 0; i < x.length; i++) { x[i].style.display = "none"; }
+        myIndex++;
+        if (myIndex > x.length) { myIndex = 1; }
+        x[myIndex - 1].style.display = "block";
+        setTimeout(carousel, 2500);
+    }
+
+    // Art slideshow
+    var slideIndex = 1;
+    showSlides(slideIndex);
+    function plusSlides(n) { showSlides(slideIndex += n); }
+    function currentSlide(n) { showSlides(slideIndex = n); }
+    function showSlides(n) {
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        if (n > slides.length) { slideIndex = 1; }
+        if (n < 1) { slideIndex = slides.length; }
+        for (var i = 0; i < slides.length; i++) { slides[i].style.display = "none"; }
+        for (var j = 0; j < dots.length; j++) { dots[j].className = dots[j].className.replace(" active", ""); }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+    }
+
+    // Mobile hamburger menu
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav-menu");
+    hamburger.addEventListener("click", function () {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+    });
+    document.querySelectorAll(".nav-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        });
+    });
+</script>
+
+</body>
+</html>
