@@ -214,13 +214,33 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                     <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
-                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-circle-question mr-2"></i>3 Question Modes</div>
-                        <p class="text-xs text-gray-600">Identify blends, match ingredient profiles, and spot missing spices.</p>
+                        <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-circle-question mr-2"></i>4 Question Modes</div>
+                        <p class="text-xs text-gray-600">Identify blends, match profiles, spot missing spices, and build blends.</p>
                     </div>
                     <div class="bg-spice-50 p-4 rounded-2xl border border-spice-200">
                         <div class="text-spice-600 font-bold text-sm mb-1"><i class="fa-solid fa-trophy mr-2"></i>High Score</div>
                         <p class="text-xs text-gray-600" id="quiz-high-score-display">0 Points Saved</p>
                     </div>
+                </div>
+
+                <!-- Mode Filter Selector -->
+                <div class="bg-spice-50 border border-spice-200 rounded-2xl p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white border border-spice-200 text-spice-600 rounded-xl flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-mortar-pestle"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-gray-900">Quiz Mode</div>
+                            <p class="text-xs text-gray-500">Mix all modes or practice building blends directly</p>
+                        </div>
+                    </div>
+                    <select id="quiz-mode-select" class="w-full sm:w-auto bg-white border border-spice-200 text-gray-800 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-spice-500">
+                        <option value="mixed" selected>Mixed Modes</option>
+                        <option value="build_blend">Build a Blend (Multi-Select)</option>
+                        <option value="blend_from_ingredients">Blend Identification</option>
+                        <option value="ingredients_from_blend">Ingredient Verification</option>
+                        <option value="missing_ingredient">Missing Ingredient</option>
+                    </select>
                 </div>
 
                 <!-- Optional Timer Setting -->
@@ -427,6 +447,7 @@
         let timerDuration = 15;
         let timeLeft = 15;
         let timerInterval = null;
+        let selectedBuildIngredients = new Set();
 
         // Initialize App
         window.onload = function() {
@@ -620,17 +641,38 @@
             currentQuizIndex = 0;
             timerEnabled = document.getElementById('quiz-timer-toggle').checked;
             timerDuration = parseInt(document.getElementById('quiz-timer-duration').value, 10) || 15;
+            const selectedMode = document.getElementById('quiz-mode-select').value;
             
-            // Generate 10 randomized quiz questions across all 3 modes
+            // Generate 10 randomized quiz questions
             quizQuestions = [];
             const shuffledDeck = [...spiceData].sort(() => Math.random() - 0.5);
-            const questionTypes = ['blend_from_ingredients', 'ingredients_from_blend', 'missing_ingredient'];
+            const questionTypes = ['blend_from_ingredients', 'ingredients_from_blend', 'missing_ingredient', 'build_blend'];
             
             for(let i = 0; i < Math.min(10, shuffledDeck.length); i++) {
                 const target = shuffledDeck[i];
-                const type = questionTypes[i % questionTypes.length];
+                const type = selectedMode === 'mixed'
+                    ? questionTypes[i % questionTypes.length]
+                    : selectedMode;
                 
-                if (type === 'missing_ingredient') {
+                if (type === 'build_blend') {
+                    const requiredSet = new Set(target.ingredients);
+                    const poolCount = Math.min(allIngredients.length, Math.max(target.ingredients.length + 4, 12));
+                    const distractors = allIngredients
+                        .filter(ing => !requiredSet.has(ing))
+                        .sort(() => Math.random() - 0.5)
+                        .slice(0, poolCount - target.ingredients.length);
+
+                    const pool = [...target.ingredients, ...distractors].sort(() => Math.random() - 0.5);
+                    const formattedAnswer = target.ingredients.map(ing => ing.replace(/\b\w/g, c => c.toUpperCase())).join(', ');
+
+                    quizQuestions.push({
+                        type: 'build_blend',
+                        target: target,
+                        pool: pool,
+                        requiredCount: target.ingredients.length,
+                        correctLabel: formattedAnswer
+                    });
+                } else if (type === 'missing_ingredient') {
                     // Pick 1 ingredient to omit from the blend
                     const missingIdx = Math.floor(Math.random() * target.ingredients.length);
                     const missingIngredient = target.ingredients[missingIdx];
@@ -679,6 +721,7 @@
 
         function renderQuizQuestion() {
             const q = quizQuestions[currentQuizIndex];
+            selectedBuildIngredients = new Set();
             document.getElementById('quiz-progress-text').innerText = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
             document.getElementById('quiz-current-score').innerText = quizScore;
             document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
@@ -746,7 +789,7 @@
                     btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
                     optionsContainer.appendChild(btn);
                 });
-            } else {
+            } else if (q.type === 'missing_ingredient') {
                 // Missing Ingredient Mode
                 categoryTag.innerText = "Missing Ingredient";
                 titleEl.innerText = `Which ingredient is missing from "${q.target.name}"?`;
@@ -775,9 +818,126 @@
                     btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
                     optionsContainer.appendChild(btn);
                 });
+            } else {
+                // Build a Specific Blend Mode
+                categoryTag.innerText = "Build the Blend";
+                titleEl.innerText = `Select all ${q.requiredCount} ingredients that belong in "${q.target.name}":`;
+
+                const counterBar = document.createElement('div');
+                counterBar.className = 'flex items-center justify-between text-xs font-bold text-gray-500 mb-1';
+                counterBar.innerHTML = `
+                    <span>Tap ingredients to toggle</span>
+                    <span id="build-selected-count" class="text-spice-700 font-extrabold">0 / ${q.requiredCount} selected</span>
+                `;
+                optionsContainer.appendChild(counterBar);
+
+                const grid = document.createElement('div');
+                grid.id = 'build-ingredients-grid';
+                grid.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2.5';
+
+                const targetSet = new Set(q.target.ingredients);
+                q.pool.forEach(ing => {
+                    const isTargetIng = targetSet.has(ing);
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.dataset.ingredient = ing;
+                    btn.dataset.isCorrect = isTargetIng ? 'true' : 'false';
+                    btn.className = 'build-ing-btn p-3 rounded-2xl border border-spice-200 bg-white hover:bg-spice-50 text-gray-800 text-xs sm:text-sm font-bold capitalize transition flex items-center justify-between shadow-xs';
+                    btn.innerHTML = `<span>${ing}</span> <i class="fa-regular fa-square text-gray-300 build-check-icon"></i>`;
+
+                    btn.onclick = () => {
+                        if (selectedBuildIngredients.has(ing)) {
+                            selectedBuildIngredients.delete(ing);
+                            btn.className = 'build-ing-btn p-3 rounded-2xl border border-spice-200 bg-white hover:bg-spice-50 text-gray-800 text-xs sm:text-sm font-bold capitalize transition flex items-center justify-between shadow-xs';
+                            btn.querySelector('.build-check-icon').className = 'fa-regular fa-square text-gray-300 build-check-icon';
+                        } else {
+                            selectedBuildIngredients.add(ing);
+                            btn.className = 'build-ing-btn p-3 rounded-2xl border-2 border-spice-600 bg-spice-100 text-spice-900 text-xs sm:text-sm font-extrabold capitalize transition flex items-center justify-between shadow-xs';
+                            btn.querySelector('.build-check-icon').className = 'fa-solid fa-square-check text-spice-600 build-check-icon';
+                        }
+                        document.getElementById('build-selected-count').innerText = `${selectedBuildIngredients.size} / ${q.requiredCount} selected`;
+                    };
+
+                    grid.appendChild(btn);
+                });
+                optionsContainer.appendChild(grid);
+
+                const actionsRow = document.createElement('div');
+                actionsRow.className = 'flex gap-2.5 mt-3';
+
+                const clearBtn = document.createElement('button');
+                clearBtn.type = 'button';
+                clearBtn.id = 'build-clear-btn';
+                clearBtn.className = 'px-4 py-3.5 bg-white hover:bg-spice-50 text-gray-700 border border-spice-200 rounded-2xl font-bold text-sm transition';
+                clearBtn.innerText = 'Clear';
+                clearBtn.onclick = () => {
+                    selectedBuildIngredients.clear();
+                    document.getElementById('build-selected-count').innerText = `0 / ${q.requiredCount} selected`;
+                    grid.querySelectorAll('.build-ing-btn').forEach(b => {
+                        b.className = 'build-ing-btn p-3 rounded-2xl border border-spice-200 bg-white hover:bg-spice-50 text-gray-800 text-xs sm:text-sm font-bold capitalize transition flex items-center justify-between shadow-xs';
+                        b.querySelector('.build-check-icon').className = 'fa-regular fa-square text-gray-300 build-check-icon';
+                    });
+                };
+
+                const submitBtn = document.createElement('button');
+                submitBtn.type = 'button';
+                submitBtn.id = 'build-submit-btn';
+                submitBtn.className = 'flex-1 py-3.5 px-6 bg-spice-600 hover:bg-spice-700 text-white rounded-2xl font-extrabold text-sm shadow-lg shadow-spice-600/30 transition flex items-center justify-center space-x-2';
+                submitBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Submit Blend</span>`;
+                submitBtn.onclick = () => submitBuiltBlend(q);
+
+                actionsRow.appendChild(clearBtn);
+                actionsRow.appendChild(submitBtn);
+                optionsContainer.appendChild(actionsRow);
             }
 
             startQuestionTimer();
+        }
+
+        function submitBuiltBlend(q) {
+            stopQuestionTimer();
+
+            const targetSet = new Set(q.target.ingredients);
+            const isExactMatch =
+                selectedBuildIngredients.size === targetSet.size &&
+                [...selectedBuildIngredients].every(ing => targetSet.has(ing));
+
+            const grid = document.getElementById('build-ingredients-grid');
+            const buttons = grid.querySelectorAll('.build-ing-btn');
+            buttons.forEach(b => {
+                b.disabled = true;
+                const ing = b.dataset.ingredient;
+                const wasSelected = selectedBuildIngredients.has(ing);
+                const shouldBeSelected = targetSet.has(ing);
+
+                if (shouldBeSelected) {
+                    b.className = 'build-ing-btn p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950 text-xs sm:text-sm font-extrabold capitalize flex items-center justify-between';
+                    b.querySelector('.build-check-icon').className = 'fa-solid fa-check-circle text-emerald-600 build-check-icon';
+                } else if (wasSelected) {
+                    b.className = 'build-ing-btn p-3 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-950 text-xs sm:text-sm font-bold capitalize flex items-center justify-between';
+                    b.querySelector('.build-check-icon').className = 'fa-solid fa-circle-xmark text-rose-600 build-check-icon';
+                }
+            });
+
+            const submitBtn = document.getElementById('build-submit-btn');
+            const clearBtn = document.getElementById('build-clear-btn');
+            if (submitBtn) submitBtn.disabled = true;
+            if (clearBtn) clearBtn.disabled = true;
+
+            if (isExactMatch) {
+                quizScore += 10;
+                quizStreak += 1;
+                document.getElementById('quiz-feedback-text').innerText = `Spot on! You built ${q.target.name} 🎉`;
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-emerald-100 text-emerald-800 border border-emerald-200";
+            } else {
+                quizStreak = 0;
+                document.getElementById('quiz-feedback-text').innerText = `Not quite. ${q.target.name} uses: ${q.correctLabel}.`;
+                document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-rose-100 text-rose-800 border border-rose-200";
+            }
+
+            document.getElementById('quiz-current-score').innerText = quizScore;
+            document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
+            document.getElementById('quiz-feedback-box').classList.remove('hidden');
         }
 
         function selectQuizAnswer(isCorrect, selectedBtn, correctLabel) {
