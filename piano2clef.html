@@ -313,17 +313,33 @@
             </div>
           </div>
 
-          <!-- Capture Detected Pitch Directly onto Staff -->
-          <div class="flex items-center justify-between gap-2 pt-1 border-t border-zinc-800/80">
+          <!-- Capture & Live Auto-Transcribe Detected Pitch onto Staff -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2 border-t border-zinc-800/80">
             <button
               id="captureMicNoteBtn"
               type="button"
               disabled
-              class="w-full py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:pointer-events-none text-zinc-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+              class="flex-1 py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:pointer-events-none text-zinc-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
               title="Add the currently detected microphone pitch onto your staff composition"
             >
-              <span>➕ Add Detected Note to Staff</span>
+              <span>➕ Add Note</span>
             </button>
+            <button
+              id="autoMicRecordBtn"
+              type="button"
+              class="flex-1 py-2 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+              title="Automatically transcribe played guitar, piano, or B♭ trumpet notes directly onto the staff in real time"
+            >
+              <span id="autoMicRecordDot" class="w-2 h-2 rounded-full bg-zinc-500"></span>
+              <span id="autoMicRecordText">Auto-Write to Staff: OFF</span>
+            </button>
+          </div>
+          <!-- Auto-Write Hold Progress Indicator -->
+          <div id="autoMicProgressWrap" class="hidden items-center gap-2 text-[10px] font-mono-code text-zinc-400">
+            <span id="autoMicLockLabel" class="shrink-0">Hold note steady to write:</span>
+            <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div id="autoMicLockBar" class="h-full w-0 bg-amber-400 transition-all duration-75 rounded-full"></div>
+            </div>
           </div>
         </div>
 
@@ -614,15 +630,57 @@
           </button>
         </div>
 
-        <!-- Selected Note Context Banner -->
-        <div id="selectedNoteBanner" class="hidden items-center gap-2 bg-amber-100/90 border border-amber-300 px-2.5 py-1 rounded-lg text-xs text-amber-950">
-          <span id="selectedNoteLabel" class="font-semibold">Editing Note #1</span>
-          <span class="text-amber-800/80 hidden sm:inline">• Click a duration to change it</span>
+        <!-- Selected Note(s) Batch Context Banner -->
+        <div id="selectedNoteBanner" class="hidden flex-wrap items-center gap-1.5 bg-amber-100/95 border border-amber-400 px-2.5 py-1 rounded-lg text-xs text-amber-950 shadow-sm">
+          <span id="selectedNoteLabel" class="font-bold">1 Note Selected</span>
+          <span class="text-amber-800/80 hidden xl:inline text-[11px]">• Shift+Click range / Ctrl+Click toggle</span>
+          <div class="inline-flex items-center gap-1 ml-1">
+            <button
+              id="batchOctDownBtn"
+              type="button"
+              class="px-1.5 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 font-mono-code font-bold text-[10px]"
+              title="Transpose selected note(s) down 1 octave (-12 semitones)"
+            >
+              -8va
+            </button>
+            <button
+              id="batchSemiDownBtn"
+              type="button"
+              class="px-1.5 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-white font-mono-code font-bold text-[10px]"
+              title="Transpose selected note(s) down 1 semitone"
+            >
+              -1st
+            </button>
+            <button
+              id="batchSemiUpBtn"
+              type="button"
+              class="px-1.5 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-white font-mono-code font-bold text-[10px]"
+              title="Transpose selected note(s) up 1 semitone"
+            >
+              +1st
+            </button>
+            <button
+              id="batchOctUpBtn"
+              type="button"
+              class="px-1.5 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-amber-300 font-mono-code font-bold text-[10px]"
+              title="Transpose selected note(s) up 1 octave (+12 semitones)"
+            >
+              +8va
+            </button>
+          </div>
+          <button
+            id="selectAllNotesBtn"
+            type="button"
+            class="px-1.5 py-0.5 rounded bg-sky-700 hover:bg-sky-800 text-white font-bold text-[10px]"
+            title="Select all notes on the staff (Ctrl+A)"
+          >
+            All
+          </button>
           <button
             id="deleteSelectedNoteBtn"
             type="button"
             class="px-1.5 py-0.5 rounded bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px]"
-            title="Remove this note from the staff"
+            title="Delete selected note(s) (Delete / Backspace)"
           >
             Delete
           </button>
@@ -666,7 +724,7 @@
           </div>
         </div>
         <div class="text-[11px] text-stone-500 shrink-0">
-          Click a note on staff to audition &amp; edit duration • Keys <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">1-5</kbd> duration • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">Space</kbd> play
+          Click note • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">Shift+Click</kbd> range • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">1-5</kbd> duration • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">↑/↓</kbd> pitch • <kbd class="px-1 py-0.5 bg-stone-200 rounded text-stone-700 font-mono-code">Space</kbd> play
         </div>
       </div>
     </section>
@@ -837,15 +895,17 @@
       lastPlayedMidi: null,        // Most recent note for readout bar
       sequence: [],                // Array of { midi, duration, highlight } objects
       selectedDuration: 'quarter', // Currently active note duration tool
-      selectedNoteIndex: null,     // Index of note clicked on staff for duration editing
+      selectedIndices: new Set(),  // Set of selected note indices for single or batch editing
+      selectionAnchor: null,       // Anchor index for Shift+Click range selection
       isLooping: false,            // Continuous loop toggle for playback
       showLabels: true,
       keyboardBaseOctave: 4,       // Computer keyboard home row starts on C4
       isPlayingSequence: false,
       tempoBpm: 120,
-      // Microphone Chromatic Tuner State
+      // Microphone Chromatic Tuner & Auto-Transcribe State
       tunerOpen: true,
       tunerActive: false,
+      autoMicRecord: false,        // Auto-write steady mic pitches (guitar/piano/trumpet) onto staff
       tunerInstrument: 'guitar',   // 'guitar' (Concert C) | 'trumpet' (Written +2)
       tunerDetectedMidi: null,     // Nearest concert MIDI note detected by mic
       tunerDetectedFreq: null,
@@ -1023,14 +1083,81 @@
       document.getElementById('trumpetSequenceText').textContent = trumpetStr;
     }
 
+    function clearNoteSelection() {
+      state.selectedIndices.clear();
+      state.selectionAnchor = null;
+      updateSelectedNoteBanner();
+    }
+
+    function selectAllNotes() {
+      if (state.mode !== 'sequence' || state.sequence.length === 0) return;
+      state.selectedIndices.clear();
+      for (let i = 0; i < state.sequence.length; i++) {
+        state.selectedIndices.add(i);
+      }
+      state.selectionAnchor = 0;
+      updateSelectedNoteBanner();
+      renderStaff(false);
+    }
+
+    function transposeSelectedNotes(semitones) {
+      if (state.selectedIndices.size === 0) return;
+      let changed = false;
+      let lastMidi = null;
+      const sorted = Array.from(state.selectedIndices).sort((a, b) => a - b);
+      sorted.forEach((idx) => {
+        const noteObj = state.sequence[idx];
+        if (!noteObj) return;
+        const nextMidi = Math.min(END_MIDI, Math.max(START_MIDI, noteObj.midi + semitones));
+        if (nextMidi !== noteObj.midi) {
+          noteObj.midi = nextMidi;
+          changed = true;
+        }
+        lastMidi = noteObj.midi;
+      });
+      if (changed) {
+        saveCompositionToStorage();
+        updateSequenceButtons();
+        updateSelectedNoteBanner();
+        if (lastMidi !== null) {
+          updateReadoutBar(lastMidi);
+          playPianoTone(lastMidi, 0.32);
+        }
+        renderStaff(false);
+      }
+    }
+
+    function deleteSelectedNotes() {
+      if (state.selectedIndices.size === 0) return;
+      state.sequence = state.sequence.filter((_, idx) => !state.selectedIndices.has(idx));
+      clearNoteSelection();
+      saveCompositionToStorage();
+      updateSequenceButtons();
+      renderStaff(false);
+    }
+
     function updateSelectedNoteBanner() {
       const banner = document.getElementById('selectedNoteBanner');
       const label = document.getElementById('selectedNoteLabel');
-      if (state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
-        const noteObj = state.sequence[state.selectedNoteIndex];
-        const info = midiToInfo(noteObj.midi);
-        const name = state.notationTab === 'trumpet' ? info.trumpetLabel : info.label;
-        label.textContent = `Editing #${state.selectedNoteIndex + 1} (${name})`;
+      // Prune any out-of-bounds indices
+      for (const idx of Array.from(state.selectedIndices)) {
+        if (idx < 0 || idx >= state.sequence.length) {
+          state.selectedIndices.delete(idx);
+        }
+      }
+
+      const count = state.selectedIndices.size;
+      if (count > 0) {
+        if (count === 1) {
+          const singleIdx = Array.from(state.selectedIndices)[0];
+          const noteObj = state.sequence[singleIdx];
+          const info = midiToInfo(noteObj.midi);
+          const name = state.notationTab === 'trumpet' ? info.trumpetLabel : info.label;
+          label.textContent = `Editing #${singleIdx + 1} (${name})`;
+        } else {
+          const sorted = Array.from(state.selectedIndices).sort((a, b) => a - b);
+          label.textContent = `${count} Notes Selected (#${sorted[0] + 1}–#${sorted[sorted.length - 1] + 1})`;
+        }
         banner.classList.remove('hidden');
         banner.classList.add('flex');
       } else {
@@ -1051,11 +1178,19 @@
         }
       });
 
-      if (applyToSelectedNote && state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
-        state.sequence[state.selectedNoteIndex].duration = durId;
-        saveCompositionToStorage();
-        updateSequenceButtons();
-        renderStaff(false);
+      if (applyToSelectedNote && state.selectedIndices.size > 0) {
+        let updated = false;
+        state.selectedIndices.forEach((idx) => {
+          if (state.sequence[idx]) {
+            state.sequence[idx].duration = durId;
+            updated = true;
+          }
+        });
+        if (updated) {
+          saveCompositionToStorage();
+          updateSequenceButtons();
+          renderStaff(false);
+        }
       }
     }
 
@@ -1259,12 +1394,35 @@
       if (typeof noteIndex === 'number') {
         g.addEventListener('click', (e) => {
           e.stopPropagation();
-          state.selectedNoteIndex = noteIndex;
+          if (e.shiftKey && state.selectionAnchor !== null) {
+            const start = Math.min(state.selectionAnchor, noteIndex);
+            const end = Math.max(state.selectionAnchor, noteIndex);
+            if (!e.ctrlKey && !e.metaKey) {
+              state.selectedIndices.clear();
+            }
+            for (let i = start; i <= end; i++) {
+              state.selectedIndices.add(i);
+            }
+          } else if (e.ctrlKey || e.metaKey) {
+            if (state.selectedIndices.has(noteIndex)) {
+              state.selectedIndices.delete(noteIndex);
+            } else {
+              state.selectedIndices.add(noteIndex);
+            }
+            state.selectionAnchor = noteIndex;
+          } else {
+            state.selectedIndices.clear();
+            state.selectedIndices.add(noteIndex);
+            state.selectionAnchor = noteIndex;
+          }
+
           const item = state.sequence[noteIndex];
-          setSelectedDuration(item.duration, false);
+          if (item) {
+            setSelectedDuration(item.duration, false);
+            updateReadoutBar(item.midi);
+            playPianoTone(item.midi, 0.4);
+          }
           updateSelectedNoteBanner();
-          updateReadoutBar(item.midi);
-          playPianoTone(item.midi, 0.45);
           renderStaff(false);
         });
       }
@@ -1389,7 +1547,7 @@
         const x = state.mode === 'live' ? 140 + idx * 38 : startX + idx * stepX;
         const pos = computeNotePosition(item.midi, isTrumpetTab);
 
-        const isSelected = state.mode === 'sequence' && state.selectedNoteIndex === idx;
+        const isSelected = state.mode === 'sequence' && state.selectedIndices.has(idx);
         const isActive = Boolean(item.highlight);
         const color = isActive ? '#b45309' : (isSelected ? '#0369a1' : (isTrumpetTab ? '#0c4a6e' : '#1c1917'));
 
@@ -1499,8 +1657,7 @@
       updateReadoutBar(midi);
 
       if (state.mode === 'sequence' && !state.isPlayingSequence) {
-        state.selectedNoteIndex = null;
-        updateSelectedNoteBanner();
+        clearNoteSelection();
         state.sequence.push({
           midi,
           duration: state.selectedDuration,
@@ -1580,6 +1737,36 @@
           e.preventDefault();
           if (state.sequence.length > 0) togglePlaySequence();
           return;
+        }
+
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && state.mode === 'sequence' && state.sequence.length > 0) {
+          e.preventDefault();
+          selectAllNotes();
+          return;
+        }
+
+        if (state.selectedIndices.size > 0) {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            clearNoteSelection();
+            renderStaff(false);
+            return;
+          }
+          if (e.key === 'Delete' || e.key === 'Backspace') {
+            e.preventDefault();
+            deleteSelectedNotes();
+            return;
+          }
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            transposeSelectedNotes(e.shiftKey ? 12 : 1);
+            return;
+          }
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            transposeSelectedNotes(e.shiftKey ? -12 : -1);
+            return;
+          }
         }
 
         if (DURATION_SHORTCUTS[e.key]) {
@@ -1675,9 +1862,8 @@
     function clearComposition() {
       stopSequencePlayback();
       state.sequence = [];
-      state.selectedNoteIndex = null;
+      clearNoteSelection();
       saveCompositionToStorage();
-      updateSelectedNoteBanner();
       updateSequenceButtons();
       renderStaff(false);
     }
@@ -1786,6 +1972,11 @@
     let tunerRafId = null;
     let smoothedCents = 0;
     let lastValidPitchTime = 0;
+    // Auto-transcribe stability tracker for Guitar / Piano / B♭ Trumpet
+    let candidateMidi = null;
+    let candidateStartTime = 0;
+    let committedHoldMidi = null;
+    const AUTO_HOLD_MS = 140; // Require 140ms steady pitch lock before engraving note
 
     function playReferenceTone(freq) {
       try {
@@ -1992,6 +2183,15 @@
       const captureBtn = document.getElementById('captureMicNoteBtn');
 
       if (!freq) {
+        // Reset note onset gate on silence so repeated notes of the same pitch re-trigger cleanly
+        if (performance.now() - lastValidPitchTime > 120) {
+          candidateMidi = null;
+          candidateStartTime = 0;
+          committedHoldMidi = null;
+          const lockBar = document.getElementById('autoMicLockBar');
+          if (lockBar) lockBar.style.width = '0%';
+        }
+
         // Hold last reading briefly (450ms) so pluck decay feels smooth
         if (performance.now() - lastValidPitchTime > 450) {
           state.tunerDetectedMidi = null;
@@ -1999,7 +2199,7 @@
           noteEl.textContent = '--';
           noteEl.className = 'text-4xl sm:text-5xl font-bold font-mono-code text-zinc-500 tracking-tight';
           freqEl.textContent = '-- Hz';
-          secEl.textContent = 'Listening... Play a note on Guitar or B♭ Trumpet';
+          secEl.textContent = 'Listening... Play a note on Guitar, Piano, or B♭ Trumpet';
           badgeEl.textContent = 'Listening';
           badgeEl.className = 'px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950/70 text-emerald-300 border border-emerald-500/40';
           centsEl.textContent = '0 cents';
@@ -2088,6 +2288,29 @@
       // Enable Capture to Staff if detected note fits within C3-C6 staff range (or octave-foldable)
       captureBtn.disabled = false;
       renderTunerTargetButtons();
+
+      // Automatic Live Transcription to Staff when Auto-Write is enabled
+      if (state.autoMicRecord && !state.isPlayingSequence) {
+        const now = performance.now();
+        const lockBar = document.getElementById('autoMicLockBar');
+        const lockLabel = document.getElementById('autoMicLockLabel');
+
+        if (nearestMidi !== candidateMidi) {
+          candidateMidi = nearestMidi;
+          candidateStartTime = now;
+          if (lockBar) lockBar.style.width = '15%';
+          if (lockLabel) lockLabel.textContent = `Locking ${isTrumpet ? info.trumpetLabel : info.label}...`;
+        } else if (committedHoldMidi !== nearestMidi) {
+          const heldMs = now - candidateStartTime;
+          const pct = Math.min(100, Math.round((heldMs / AUTO_HOLD_MS) * 100));
+          if (lockBar) lockBar.style.width = `${pct}%`;
+          if (heldMs >= AUTO_HOLD_MS) {
+            committedHoldMidi = nearestMidi;
+            if (lockLabel) lockLabel.textContent = `✓ Wrote ${isTrumpet ? info.trumpetLabel : info.label}`;
+            captureMicNoteToStaff(true);
+          }
+        }
+      }
     }
 
     function tunerLoop() {
@@ -2166,16 +2389,46 @@
       }
     }
 
-    function captureMicNoteToStaff() {
+    function toggleAutoMicRecord() {
+      state.autoMicRecord = !state.autoMicRecord;
+      const btn = document.getElementById('autoMicRecordBtn');
+      const dot = document.getElementById('autoMicRecordDot');
+      const txt = document.getElementById('autoMicRecordText');
+      const progWrap = document.getElementById('autoMicProgressWrap');
+
+      candidateMidi = null;
+      candidateStartTime = 0;
+      committedHoldMidi = null;
+
+      if (state.autoMicRecord) {
+        btn.className = 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400 text-amber-300 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
+        txt.textContent = 'Auto-Write to Staff: ON';
+        progWrap.classList.remove('hidden');
+        progWrap.classList.add('flex');
+        if (!state.tunerActive) {
+          toggleMicTuner();
+        }
+      } else {
+        btn.className = 'flex-1 py-2 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm';
+        dot.className = 'w-2 h-2 rounded-full bg-zinc-500';
+        txt.textContent = 'Auto-Write to Staff: OFF';
+        progWrap.classList.add('hidden');
+        progWrap.classList.remove('flex');
+      }
+    }
+
+    function captureMicNoteToStaff(fromAutoWrite = false) {
       if (state.tunerDetectedMidi === null) return;
       // Fold low guitar pitches (below C3 = 48) into playable staff range C3–C6
       let midi = state.tunerDetectedMidi;
       while (midi < START_MIDI) midi += 12;
       while (midi > END_MIDI) midi -= 12;
 
-      setMode('sequence');
-      state.selectedNoteIndex = null;
-      updateSelectedNoteBanner();
+      if (state.mode !== 'sequence') {
+        setMode('sequence');
+      }
+      clearNoteSelection();
       state.sequence.push({
         midi,
         duration: state.selectedDuration,
@@ -2186,14 +2439,15 @@
       updateReadoutBar(midi);
       renderStaff(true);
 
-      // Brief visual feedback on capture button
-      const btn = document.getElementById('captureMicNoteBtn');
-      const info = midiToInfo(midi);
-      const display = state.tunerInstrument === 'trumpet' ? info.trumpetLabel : info.label;
-      btn.innerHTML = `<span>✓ Added ${display} to Staff!</span>`;
-      setTimeout(() => {
-        btn.innerHTML = '<span>➕ Add Detected Note to Staff</span>';
-      }, 1100);
+      if (!fromAutoWrite) {
+        const btn = document.getElementById('captureMicNoteBtn');
+        const info = midiToInfo(midi);
+        const display = state.tunerInstrument === 'trumpet' ? info.trumpetLabel : info.label;
+        btn.innerHTML = `<span>✓ Added ${display}</span>`;
+        setTimeout(() => {
+          btn.innerHTML = '<span>➕ Add Note</span>';
+        }, 1000);
+      }
     }
 
     // -------------------------------------------------------------------------
@@ -2218,7 +2472,8 @@
       document.getElementById('tunerMicToggleBtn').addEventListener('click', toggleMicTuner);
       document.getElementById('tunerInstGuitarBtn').addEventListener('click', () => setTunerInstrument('guitar'));
       document.getElementById('tunerInstTrumpetBtn').addEventListener('click', () => setTunerInstrument('trumpet'));
-      document.getElementById('captureMicNoteBtn').addEventListener('click', captureMicNoteToStaff);
+      document.getElementById('captureMicNoteBtn').addEventListener('click', () => captureMicNoteToStaff(false));
+      document.getElementById('autoMicRecordBtn').addEventListener('click', toggleAutoMicRecord);
       document.getElementById('dismissTunerErrorBtn').addEventListener('click', () => {
         document.getElementById('tunerErrorBanner').classList.add('hidden');
       });
@@ -2230,28 +2485,23 @@
         });
       });
 
+      document.getElementById('batchOctDownBtn').addEventListener('click', () => transposeSelectedNotes(-12));
+      document.getElementById('batchSemiDownBtn').addEventListener('click', () => transposeSelectedNotes(-1));
+      document.getElementById('batchSemiUpBtn').addEventListener('click', () => transposeSelectedNotes(1));
+      document.getElementById('batchOctUpBtn').addEventListener('click', () => transposeSelectedNotes(12));
+      document.getElementById('selectAllNotesBtn').addEventListener('click', selectAllNotes);
+
       document.getElementById('deselectNoteBtn').addEventListener('click', () => {
-        state.selectedNoteIndex = null;
-        updateSelectedNoteBanner();
+        clearNoteSelection();
         renderStaff(false);
       });
 
-      document.getElementById('deleteSelectedNoteBtn').addEventListener('click', () => {
-        if (state.selectedNoteIndex !== null && state.sequence[state.selectedNoteIndex]) {
-          state.sequence.splice(state.selectedNoteIndex, 1);
-          state.selectedNoteIndex = null;
-          saveCompositionToStorage();
-          updateSelectedNoteBanner();
-          updateSequenceButtons();
-          renderStaff(false);
-        }
-      });
+      document.getElementById('deleteSelectedNoteBtn').addEventListener('click', deleteSelectedNotes);
 
-      // Clicking empty background of the staff deselects any active note
+      // Clicking empty background of the staff deselects any active notes
       document.getElementById('grandStaffSvg').addEventListener('click', () => {
-        if (state.selectedNoteIndex !== null) {
-          state.selectedNoteIndex = null;
-          updateSelectedNoteBanner();
+        if (state.selectedIndices.size > 0) {
+          clearNoteSelection();
           renderStaff(false);
         }
       });
@@ -2291,10 +2541,7 @@
       document.getElementById('undoSeqBtn').addEventListener('click', () => {
         if (state.sequence.length > 0 && !state.isPlayingSequence) {
           state.sequence.pop();
-          if (state.selectedNoteIndex !== null && state.selectedNoteIndex >= state.sequence.length) {
-            state.selectedNoteIndex = null;
-            updateSelectedNoteBanner();
-          }
+          updateSelectedNoteBanner();
           saveCompositionToStorage();
           updateSequenceButtons();
           renderStaff(true);
