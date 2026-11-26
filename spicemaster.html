@@ -569,6 +569,17 @@
         }
 
         // ==================== QUIZ LOGIC ====================
+        function formatIngredientList(ingredients) {
+            return ingredients.map(ing => ing.replace(/\b\w/g, c => c.toUpperCase())).join(', ');
+        }
+
+        function getWrongAnswerMessage(q) {
+            if (q.type === 'ingredients_from_blend') {
+                return `Incorrect. The right combination for "${q.target.name}" is: ${q.correctLabel}.`;
+            }
+            return `Incorrect. The correct answer was "${q.correctLabel}".`;
+        }
+
         function toggleTimerSelect() {
             const isChecked = document.getElementById('quiz-timer-toggle').checked;
             document.getElementById('quiz-timer-duration').disabled = !isChecked;
@@ -625,7 +636,10 @@
 
             quizStreak = 0;
             document.getElementById('quiz-current-streak').innerText = `${quizStreak} 🔥`;
-            document.getElementById('quiz-feedback-text').innerText = `Time's up! The correct answer was "${q.correctLabel}".`;
+            const timeUpMsg = q.type === 'ingredients_from_blend'
+                ? `Time's up! The right combination for "${q.target.name}" was: ${q.correctLabel}.`
+                : `Time's up! The correct answer was "${q.correctLabel}".`;
+            document.getElementById('quiz-feedback-text').innerText = timeUpMsg;
             document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-amber-100 text-amber-900 border border-amber-200";
             document.getElementById('quiz-feedback-box').classList.remove('hidden');
         }
@@ -663,14 +677,13 @@
                         .slice(0, poolCount - target.ingredients.length);
 
                     const pool = [...target.ingredients, ...distractors].sort(() => Math.random() - 0.5);
-                    const formattedAnswer = target.ingredients.map(ing => ing.replace(/\b\w/g, c => c.toUpperCase())).join(', ');
 
                     quizQuestions.push({
                         type: 'build_blend',
                         target: target,
                         pool: pool,
                         requiredCount: target.ingredients.length,
-                        correctLabel: formattedAnswer
+                        correctLabel: formatIngredientList(target.ingredients)
                     });
                 } else if (type === 'missing_ingredient') {
                     // Pick 1 ingredient to omit from the blend
@@ -702,7 +715,9 @@
                     quizQuestions.push({
                         type: type,
                         target: target,
-                        correctLabel: target.name,
+                        correctLabel: type === 'ingredients_from_blend'
+                            ? formatIngredientList(target.ingredients)
+                            : target.name,
                         options: options
                     });
                 }
@@ -758,7 +773,7 @@
                     btn.dataset.isCorrect = isCorrect;
                     btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-bold text-gray-800 transition flex items-center justify-between shadow-xs group';
                     btn.innerHTML = `<span>${opt.name}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition"></i>`;
-                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q);
                     optionsContainer.appendChild(btn);
                 });
             } else if (q.type === 'ingredients_from_blend') {
@@ -786,7 +801,7 @@
                     icon.className = 'fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition text-xs shrink-0';
                     btn.appendChild(icon);
 
-                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q);
                     optionsContainer.appendChild(btn);
                 });
             } else if (q.type === 'missing_ingredient') {
@@ -815,7 +830,7 @@
                     btn.dataset.isCorrect = isCorrect;
                     btn.className = 'w-full text-left p-4 bg-white hover:bg-spice-50 border border-spice-200 rounded-2xl font-bold text-gray-800 transition flex items-center justify-between shadow-xs group capitalize';
                     btn.innerHTML = `<span>${ingOpt}</span> <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-spice-600 transition"></i>`;
-                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q.correctLabel);
+                    btn.onclick = () => selectQuizAnswer(isCorrect, btn, q);
                     optionsContainer.appendChild(btn);
                 });
             } else {
@@ -940,7 +955,7 @@
             document.getElementById('quiz-feedback-box').classList.remove('hidden');
         }
 
-        function selectQuizAnswer(isCorrect, selectedBtn, correctLabel) {
+        function selectQuizAnswer(isCorrect, selectedBtn, q) {
             stopQuestionTimer();
 
             // Disable all option buttons
@@ -962,7 +977,7 @@
                         b.className = b.className.replace('bg-white hover:bg-spice-50 border-spice-200', 'bg-emerald-50 border-emerald-500 text-emerald-900');
                     }
                 });
-                document.getElementById('quiz-feedback-text').innerText = `Incorrect. The correct answer was "${correctLabel}".`;
+                document.getElementById('quiz-feedback-text').innerText = getWrongAnswerMessage(q);
                 document.getElementById('quiz-feedback-box').className = "mt-6 p-4 rounded-2xl text-sm font-semibold flex items-center justify-between gap-3 bg-rose-100 text-rose-800 border border-rose-200";
             }
 
